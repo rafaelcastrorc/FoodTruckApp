@@ -5,4 +5,9 @@ package com.example.dspace.foodtruckapp;
  */
 
 public class Register {
+
+    private static void hello(){
+        System.out.println("hello");
+    }
+
 }
