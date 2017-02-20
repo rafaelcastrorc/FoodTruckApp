@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">FoodTruckApp</string>
+    <color name="BLACK">#000000</color>
+    <color name="WHITE">#FFFFFF</color>
+</resources>
