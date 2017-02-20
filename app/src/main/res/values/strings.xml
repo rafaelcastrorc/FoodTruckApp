@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Foodtruck App</string>
+    <string name="app_name">350S17-45-FoodTrucks</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
