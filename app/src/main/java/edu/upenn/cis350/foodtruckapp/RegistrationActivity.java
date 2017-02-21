@@ -30,6 +30,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private EditText name;
+    private String type;
 
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
@@ -55,7 +56,22 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    public void btnRegistrationUser_Click(View v) {
+    //Register as Vendor
+    public void btnRegistrationVendor_Click(View v) {
+        type = "Vendor";
+        userRegister(v);
+
+    }
+
+    //Register as Costumer
+    public void btnRegistrationCostumer_Click(View v) {
+        type = "Costumer";
+        userRegister(v);
+    }
+
+
+
+    private void userRegister(View v){
         // email cannot be empty
         if (TextUtils.isEmpty(email.getText().toString())) {
             email.setError("This field cannot be empty");
@@ -67,6 +83,13 @@ public class RegistrationActivity extends AppCompatActivity {
             password.setError("This field cannot be empty");
             return;
         }
+
+        //password cannot be empty.
+        if (TextUtils.isEmpty(name.getText().toString())) {
+            name.setError("This field cannot be empty");
+            return;
+        }
+
         final ProgressDialog progressDialog = ProgressDialog.show(RegistrationActivity.this, "Please wait", "Processing", true);
         (mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()))
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -84,9 +107,11 @@ public class RegistrationActivity extends AppCompatActivity {
                             //To represent users without clons, we use the UID
                             String uniqueID = user.getUid();
                             //Creates a new user
-                            writeNewUser(name.getText().toString(), uniqueID, "Costumer");
+                            writeNewUser(name.getText().toString(), uniqueID, type, email.getText().toString());
 
                             //Destination where the user should go once register successfully
+                            //Depends on the type of user
+                            //TODO: Vendor Main Menu page 
                             Intent i = new Intent(RegistrationActivity.this, CustomerMainMenuActivity.class);
                             startActivity(i);
 
@@ -98,36 +123,34 @@ public class RegistrationActivity extends AppCompatActivity {
                 });
     }
 
-
-    private boolean isValidPassword() {
-        return false;
-    }
-
-    private void writeNewUser(String name, String uniqueName, String type) {
-        User user = new User(name, uniqueName, type);
+    private void writeNewUser(String name, String uniqueName, String type, String email) {
+        User user = new User(name, uniqueName, type, email);
 
         databaseRef.child(user.dUniqueName).child("UniqueID").setValue(user.dUniqueName);
         databaseRef.child(user.dUniqueName).child("Name").setValue(user.dName);
         databaseRef.child(user.dUniqueName).child("Type").setValue(user.dType);
-        databaseRef.child(user.dUniqueName).child("Email").setValue(email.getText().toString());
+        databaseRef.child(user.dUniqueName).child("Email").setValue(user.dEmail);
     }
 
     @IgnoreExtraProperties
     public class User {
 
-        public String dName;
-        public String dUniqueName;
-        public String dType;
+        private String dName;
+        private String dUniqueName;
+        private String dType;
+        private String dEmail;
+
 
 
         public User() {
             // Default constructor required for calls to DataSnapshot.getValue(User.class)
         }
 
-        public User(String name, String uniqueName, String typeOfUser ) {
+        private User(String name, String uniqueName, String typeOfUser, String email) {
             this.dName = name;
             this.dUniqueName = uniqueName;
             this.dType = typeOfUser;
+            this.dEmail = email;
 
         }
 
