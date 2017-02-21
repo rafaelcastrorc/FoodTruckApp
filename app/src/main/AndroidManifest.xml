@@ -17,7 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegistrationActivity" />
+
+
+
+        <activity android:name=".RegistrationActivity" android:exported="true" />
         <activity android:name=".FavoritesActivity" android:label="Favorites" />
     </application>
 

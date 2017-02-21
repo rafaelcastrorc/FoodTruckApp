@@ -104,7 +104,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Registration"
+        android:text="Register"
         android:id="@+id/btnRegistrationUser"
         android:onClick="btnRegistrationUser_Click"
         android:layout_centerHorizontal="true" />
