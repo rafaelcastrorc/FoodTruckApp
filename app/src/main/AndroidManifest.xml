@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" android:label="Login" />
-        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".RegistrationActivity" android:label="Register" android:exported="true" />
         <activity android:name=".FavoritesActivity" android:label="Favorites" />
     </application>
 
