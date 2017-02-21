@@ -62,7 +62,7 @@ public class RegistrationActivity extends AppCompatActivity {
             return;
         }
 
-        //password cannot be empty
+        //password cannot be empty.
         if (TextUtils.isEmpty(password.getText().toString())) {
             password.setError("This field cannot be empty");
             return;
