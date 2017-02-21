@@ -54,7 +54,6 @@
             android:id="@+id/nameField" />
     </LinearLayout>
 
- //Since Firebase has pre built login for email, we are not using users anymore
     <LinearLayout
 
         android:layout_width="match_parent"
@@ -78,11 +77,32 @@
             android:id="@+id/emailField" />
     </LinearLayout>
 
+
     <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation = "horizontal">
+        <TextView
+            android:textColor="@color/WHITE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/userType"
+            android:layout_centerHorizontal="true"
+            android:text="User Type:" />
+
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation = "horizontal">
+
         <TextView
             android:textColor="@color/WHITE"
             android:layout_width="wrap_content"

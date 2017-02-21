@@ -52,6 +52,7 @@ public class RegistrationActivity extends AppCompatActivity {
         databaseRef = database.getReference("Users");
 
 
+
     }
 
     public void btnRegistrationUser_Click(View v) {
