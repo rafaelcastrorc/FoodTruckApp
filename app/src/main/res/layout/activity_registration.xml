@@ -54,6 +54,7 @@
             android:id="@+id/nameField" />
     </LinearLayout>
 
+ //Since Firebase has pre built login for email, we are not using users anymore
     <LinearLayout
 
         android:layout_width="match_parent"
@@ -63,18 +64,18 @@
             android:textColor="@color/WHITE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/username"
+            android:id="@+id/email"
             android:layout_centerHorizontal="true"
-            android:text="Username:" />
+            android:text="Email:" />
 
         <EditText
             android:textColor="@color/WHITE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Username"
+            android:text="Email"
             android:ems="10"
-            android:id="@+id/usernameField" />
+            android:id="@+id/emailField" />
     </LinearLayout>
 
     <LinearLayout
@@ -100,5 +101,12 @@
             android:id="@+id/passwordField" />
     </LinearLayout>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registration"
+        android:id="@+id/btnRegistrationUser"
+        android:onClick="btnRegistrationUser_Click"
+        android:layout_centerHorizontal="true" />
 
 </LinearLayout>
