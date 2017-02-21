@@ -22,6 +22,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
 
+
     private EditText email;
     private EditText password;
     private FirebaseAuth mAuth;
@@ -37,7 +38,7 @@ public class RegistrationActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public void btnRegistrationUser_Click(View v) {
+    private void btnRegistrationUser_Click(View v) {
 
         final ProgressDialog progressDialog = ProgressDialog.show(RegistrationActivity.this, "Please wait", "Processing", true);
         (mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()))
@@ -59,6 +60,11 @@ public class RegistrationActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+
+    private boolean isValidPassword() {
+        return false;
     }
 }
 
