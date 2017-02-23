@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/BLACK"
+    android:orientation = "vertical"
+    android:id="@+id/activity_registration"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="edu.upenn.cis350.foodtruckapp.RegistrationVendor">
+
+
+    <TextView
+        android:textColor="@color/WHITE"
+        android:text="Welcome New Vendor!"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:id="@+id/welcome"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:textColor="@color/WHITE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:id="@+id/pleaseFill"
+        android:layout_centerHorizontal="true"
+        android:text="Please Fill In the Fields Below" />
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation = "horizontal">
+        <TextView
+            android:textColor="@color/WHITE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:layout_centerHorizontal="true"
+            android:text="Name:" />
+
+        <EditText
+            android:textColor="@color/WHITE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/nameField" />
+    </LinearLayout>
+
+    //Since Firebase has pre built login for email, we are not using users anymore
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation = "horizontal">
+        <TextView
+            android:textColor="@color/WHITE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/email"
+            android:layout_centerHorizontal="true"
+            android:text="Email:" />
+
+        <EditText
+            android:textColor="@color/WHITE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Email"
+            android:ems="10"
+            android:id="@+id/emailField" />
+    </LinearLayout>
+
+    <LinearLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation = "horizontal">
+    <TextView
+        android:textColor="@color/WHITE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/password"
+        android:layout_centerHorizontal="true"
+        android:text="Password:" />
+
+    <EditText
+        android:textColor="@color/WHITE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Password"
+        android:ems="10"
+        android:id="@+id/passwordField" />
+</LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation = "horizontal">
+        <TextView
+            android:textColor="@color/WHITE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/truckName"
+            android:layout_centerHorizontal="true"
+            android:text="Name of Food Truck:" />
+
+        <EditText
+            android:textColor="@color/WHITE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Truck Name"
+            android:ems="10"
+            android:id="@+id/truckNameField" />
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation = "horizontal">
+        <TextView
+            android:textColor="@color/WHITE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/foodType"
+            android:layout_centerHorizontal="true"
+            android:text="Type Of Food Served:" />
+
+        <EditText
+            android:textColor="@color/WHITE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Food Type"
+            android:ems="10"
+            android:id="@+id/foodTypeField" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Photo of Truck From Gallery"
+        android:background="@color/RED"
+        android:id="@+id/truckPhoto"
+        android:onClick="btnUploadTruckPhoto"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:id="@+id/btnRegistrationUser"
+        android:onClick="btnRegistrationUser_Click"
+        android:layout_centerHorizontal="true" />
+
+</LinearLayout>

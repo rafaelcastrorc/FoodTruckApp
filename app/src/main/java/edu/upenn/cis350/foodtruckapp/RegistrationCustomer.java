@@ -18,7 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class RegistrationActivity extends AppCompatActivity {
+public class RegistrationCustomer extends AppCompatActivity {
 
 
 
@@ -30,7 +30,7 @@ public class RegistrationActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
+        setContentView(R.layout.activity_registration_customer);
 
         mAuth = FirebaseAuth.getInstance();
         email = (EditText) findViewById(R.id.emailField);
@@ -40,7 +40,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void btnRegistrationUser_Click(View v) {
 
-        final ProgressDialog progressDialog = ProgressDialog.show(RegistrationActivity.this, "Please wait", "Processing", true);
+        final ProgressDialog progressDialog = ProgressDialog.show(RegistrationCustomer.this, "Please wait", "Processing", true);
         (mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()))
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -48,15 +48,15 @@ public class RegistrationActivity extends AppCompatActivity {
                         progressDialog.dismiss();
 
                         if (task.isSuccessful()) {
-                            Toast.makeText(RegistrationActivity.this, "Registration successful", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegistrationCustomer.this, "Registration successful", Toast.LENGTH_LONG).show();
                             //The activity it is supposed to go. Depends on the person who is working on this
                             //Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
-                           // startActivity(i);
+                            // startActivity(i);
                         }
                         else
                         {
                             Log.e("There is an error", task.getException().toString());
-                            Toast.makeText(RegistrationActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegistrationCustomer.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });

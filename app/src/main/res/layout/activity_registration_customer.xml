@@ -10,26 +10,26 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.upenn.cis350.foodtruckapp.RegistrationActivity">
+    tools:context="edu.upenn.cis350.foodtruckapp.RegistrationCustomer">
 
 
-        <TextView
-            android:textColor="@color/WHITE"
-            android:text="Welcome New User!"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:id="@+id/welcome"
-            android:layout_centerHorizontal="true" />
+    <TextView
+        android:textColor="@color/WHITE"
+        android:text="Welcome New User!"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:id="@+id/welcome"
+        android:layout_centerHorizontal="true" />
 
-        <TextView
-            android:textColor="@color/WHITE"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:id="@+id/pleaseFill"
-            android:layout_centerHorizontal="true"
-            android:text="Please Fill In the Fields Below" />
+    <TextView
+        android:textColor="@color/WHITE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:id="@+id/pleaseFill"
+        android:layout_centerHorizontal="true"
+        android:text="Please Fill In the Fields Below" />
 
     <LinearLayout
 
@@ -54,7 +54,7 @@
             android:id="@+id/nameField" />
     </LinearLayout>
 
- //Since Firebase has pre built login for email, we are not using users anymore
+    //Since Firebase has pre built login for email, we are not using users anymore
     <LinearLayout
 
         android:layout_width="match_parent"
@@ -102,9 +102,10 @@
     </LinearLayout>
 
     <Button
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Registration"
+        android:text="Register"
         android:id="@+id/btnRegistrationUser"
         android:onClick="btnRegistrationUser_Click"
         android:layout_centerHorizontal="true" />
