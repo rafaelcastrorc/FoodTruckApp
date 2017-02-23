@@ -72,7 +72,7 @@
             android:textColor="@color/WHITE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textEmailAddress"
             android:text="Email"
             android:ems="10"
             android:id="@+id/emailField" />
@@ -156,13 +156,14 @@
         android:onClick="btnUploadTruckPhoto"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:id="@+id/btnRegistrationUser"
-        android:onClick="btnRegistrationUser_Click"
-        android:layout_centerHorizontal="true" />
+        <Button
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:id="@+id/btnRegistrationUser"
+            android:onClick="btnRegistrationUser_Click"
+            android:layout_centerHorizontal="true" />
+
 
 </LinearLayout>

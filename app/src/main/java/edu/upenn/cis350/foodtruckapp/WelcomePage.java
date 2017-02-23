@@ -17,7 +17,7 @@ public class WelcomePage extends AppCompatActivity{
     //If the button Register is pressed.
     //TODO: Add a button
     private void buttonRegisterPressed(View v) {
-        Intent i = new Intent(WelcomePage.this, RegistrationActivity.class);
+        Intent i = new Intent(WelcomePage.this, RegistrationCustomer.class);
         startActivity(i);
 
     }
