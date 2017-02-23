@@ -35,6 +35,8 @@ public class RegistrationActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
     private FirebaseDatabase database;
+    boolean isSecure = false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,9 +53,6 @@ public class RegistrationActivity extends AppCompatActivity {
         //Database
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
-
-
-
     }
 
     //Register as Vendor
@@ -70,8 +69,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 
-
-    private void userRegister(View v){
+    private void userRegister(View v) {
         // email cannot be empty
         if (TextUtils.isEmpty(email.getText().toString())) {
             email.setError("This field cannot be empty");
@@ -90,37 +88,60 @@ public class RegistrationActivity extends AppCompatActivity {
             return;
         }
 
-        final ProgressDialog progressDialog = ProgressDialog.show(RegistrationActivity.this, "Please wait", "Processing", true);
-        (mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()))
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressDialog.dismiss();
 
-                        if (task.isSuccessful()) {
+        //password needs to contain one number
+        if (!isSecure(password)) {
+            password.setError("You need at leat one number in your password");
 
-                            //If user is able to register
-                            Toast.makeText(RegistrationActivity.this, "Registration successful", Toast.LENGTH_LONG).show();
+        }
 
-                            // Write the user info to the database
-                            FirebaseUser user = task.getResult().getUser();
-                            //To represent users without clons, we use the UID
-                            String uniqueID = user.getUid();
-                            //Creates a new user
-                            writeNewUser(name.getText().toString(), uniqueID, type, email.getText().toString());
 
-                            //Destination where the user should go once register successfully
-                            //Depends on the type of user
-                            //TODO: Vendor Main Menu page 
-                            Intent i = new Intent(RegistrationActivity.this, CustomerMainMenuActivity.class);
-                            startActivity(i);
+        if (isSecure) {
+            final ProgressDialog progressDialog = ProgressDialog.show(RegistrationActivity.this, "Please wait", "Processing", true);
+            (mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()))
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            progressDialog.dismiss();
 
-                        } else {
-                            Log.e("There is an error", task.getException().toString());
-                            Toast.makeText(RegistrationActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            if (task.isSuccessful()) {
+
+                                //If user is able to register
+                                Toast.makeText(RegistrationActivity.this, "Registration successful", Toast.LENGTH_LONG).show();
+
+                                // Write the user info to the database
+
+                                FirebaseUser user = task.getResult().getUser();
+                                //To represent users without clons, we use the UID
+                                String uniqueID = user.getUid();
+                                //Creates a new user
+                                writeNewUser(name.getText().toString(), uniqueID, type, email.getText().toString());
+
+                                //Destination where the user should go once register successfully
+                                //Depends on the type of user
+                                //TODO: Vendor Main Menu page
+                                Intent i = new Intent(RegistrationActivity.this, CustomerMainMenuActivity.class);
+                                startActivity(i);
+
+                            } else {
+                                Log.e("There is an error", task.getException().toString());
+                                Toast.makeText(RegistrationActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
+                    });
+        }
+    }
+
+    private boolean isSecure(EditText password) {
+        String currPassword = password.getText().toString();
+        for (char c : currPassword.toCharArray()) {
+            if (Character.isDigit(c)) {
+                isSecure = true;
+                return true;
+            }
+        }
+        isSecure = false;
+        return false;
     }
 
     private void writeNewUser(String name, String uniqueName, String type, String email) {
@@ -139,7 +160,6 @@ public class RegistrationActivity extends AppCompatActivity {
         private String dUniqueName;
         private String dType;
         private String dEmail;
-
 
 
         public User() {
