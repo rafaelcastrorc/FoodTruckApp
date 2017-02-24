@@ -13,6 +13,23 @@ public class RegisterChoiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register_choice);
     }
 
+    public void button_vendor_click(View v) {
+        Intent i = new Intent(RegisterChoiceActivity.this, RegistrationActivity.class);
+        Bundle b = new Bundle();
+        b.putString("type", "Vendor");
+        i.putExtras(b);
+        startActivity(i);
+        finish();
+    }
+    public void button_costumer_click(View v) {
+        Intent i = new Intent(RegisterChoiceActivity.this, RegistrationActivity.class);
+        Bundle b = new Bundle();
+        b.putString("type", "Costumer");
+        i.putExtras(b);
+        startActivity(i);
+        finish();
+    }
+
     public void registerVendor(View view) {
         Intent i = new Intent(this, RegistrationVendor.class);
         startActivity(i);

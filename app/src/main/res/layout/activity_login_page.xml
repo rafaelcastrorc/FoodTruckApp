@@ -5,18 +5,49 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/email_login_field"
+        tools:text="Email"
+        android:layout_marginBottom="34dp"
+        android:layout_above="@+id/password_field_login"
+        android:layout_alignRight="@+id/email_field_login"
+        android:layout_alignEnd="@+id/email_field_login" />
+
     <TextView
         android:text="Email:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
+        android:id="@+id/textView5"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:layout_alignBaseline="@+id/editText2"
-        android:layout_alignBottom="@+id/editText2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_alignBottom="@+id/email_login_field"
+        android:layout_toLeftOf="@+id/email_login_field"
+        android:layout_toStartOf="@+id/email_login_field"
+        android:textColor="@color/BLACK" />
+
+    <Button
+        android:text="Register"
+        android:textSize="12pt"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:background="@drawable/button_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/main_register_button"
+        android:height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/textView5"
+        android:layout_alignStart="@+id/textView5"
+        android:layout_marginBottom="19dp"
+        android:layout_toStartOf="@+id/password_field_login"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="main_register_button_click" />
 
     <Button
         android:text="Login"
@@ -26,39 +57,25 @@
         android:background="@drawable/button_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button_favs"
-        android:height = "120dp"
-        android:layout_marginBottom="38dp"
-        android:layout_marginRight="18dp"
-        android:layout_marginEnd="18dp"
-        android:layout_alignParentBottom="true"
+        android:id="@+id/main_login_button"
+        android:onClick="main_login_button_click"
+        android:height="100dp"
+        android:layout_below="@+id/textView3"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/textView3"
-        android:layout_toEndOf="@+id/textView3" />
+        android:layout_alignLeft="@+id/main_register_button"
+        android:layout_alignStart="@+id/main_register_button" />
 
     <TextView
-        android:text="Please login below."
+        android:text="Please login or register below."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/email_field_login"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@color/BLACK"
-        android:layout_alignParentTop="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="24sp"
+        android:layout_above="@+id/email_login_field"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/editText2"
-        tools:text="Email"
-        android:layout_marginBottom="34dp"
-        android:layout_above="@+id/password_field_login"
-        android:layout_alignRight="@+id/email_field_login"
-        android:layout_alignEnd="@+id/email_field_login" />
+        android:layout_marginBottom="50dp" />
 
     <TextView
         android:text="Password:"
@@ -67,20 +84,9 @@
         android:id="@+id/textView3"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/BLACK"
-        android:layout_alignBottom="@+id/password_field_login"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
-
-    <TextView
-        android:text="Email:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView5"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:layout_alignBaseline="@+id/textView"
-        android:layout_alignBottom="@+id/textView"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
+        android:layout_below="@+id/email_login_field"
+        android:layout_alignLeft="@+id/main_login_button"
+        android:layout_alignStart="@+id/main_login_button" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -91,9 +97,9 @@
         android:layout_weight="0.43"
         android:text="Password"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/textView3"
-        android:layout_toEndOf="@+id/textView3"
-        android:layout_marginLeft="11dp"
-        android:layout_marginStart="11dp" />
+        android:layout_toRightOf="@+id/textView5"
+        android:layout_toEndOf="@+id/textView5"
+        android:layout_marginLeft="57dp"
+        android:layout_marginStart="57dp" />
 
 </RelativeLayout>

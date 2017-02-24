@@ -53,18 +53,21 @@ public class RegistrationActivity extends AppCompatActivity {
         //Database
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
+        Bundle b = getIntent().getExtras();
+        String typeSelected = "";
+        if(b != null)
+            typeSelected = b.getString("type");
+        if (typeSelected.equals("Costumer")) {
+            type = "Costumer";
+        }
+        else {
+            type = "Vendor";
+        }
     }
 
-    //Register as Vendor
-    public void btnRegistrationVendor_Click(View v) {
-        type = "Vendor";
-        userRegister(v);
 
-    }
-
-    //Register as Costumer
+    //Register a
     public void btnRegistrationCostumer_Click(View v) {
-        type = "Costumer";
         userRegister(v);
     }
 
