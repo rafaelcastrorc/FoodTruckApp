@@ -8,6 +8,6 @@ public class RegisterChoiceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(Rlayout.activity_register_choice);
+        setContentView(R.layout.activity_register_choice);
     }
 }

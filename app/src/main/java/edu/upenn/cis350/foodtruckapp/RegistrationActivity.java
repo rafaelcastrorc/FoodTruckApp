@@ -60,35 +60,12 @@ public class RegistrationActivity extends AppCompatActivity {
         type = "Vendor";
         userRegister(v);
 
-<<<<<<< HEAD:app/src/main/java/edu/upenn/cis350/foodtruckapp/RegistrationCustomer.java
-        final ProgressDialog progressDialog = ProgressDialog.show(RegistrationCustomer.this, "Please wait", "Processing", true);
-        (mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()))
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressDialog.dismiss();
-
-                        if (task.isSuccessful()) {
-                            Toast.makeText(RegistrationCustomer.this, "Registration successful", Toast.LENGTH_LONG).show();
-                            //The activity it is supposed to go. Depends on the person who is working on this
-                            //Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
-                            // startActivity(i);
-                        }
-                        else
-                        {
-                            Log.e("There is an error", task.getException().toString());
-                            Toast.makeText(RegistrationCustomer.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-=======
     }
 
     //Register as Costumer
     public void btnRegistrationCostumer_Click(View v) {
         type = "Costumer";
         userRegister(v);
->>>>>>> refs/remotes/origin/master:app/src/main/java/edu/upenn/cis350/foodtruckapp/RegistrationActivity.java
     }
 
 
