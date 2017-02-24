@@ -56,10 +56,12 @@ public class LoginActivity extends AppCompatActivity {
         //  }//
         Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
         startActivity(i);
+        finish();
 
     }
     public void main_register_button_click(View v){
         Intent i = new Intent(LoginActivity.this, RegisterChoiceActivity.class);
         startActivity(i);
+        finish();
     }
 }
