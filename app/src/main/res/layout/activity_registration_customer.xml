@@ -10,8 +10,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.upenn.cis350.foodtruckapp.RegistrationActivity"
-    android:weightSum="1">
+    tools:context="edu.upenn.cis350.foodtruckapp.RegistrationActivity">
 
 
         <TextView
@@ -55,6 +54,7 @@
             android:id="@+id/nameField" />
     </LinearLayout>
 
+ //Since Firebase has pre built login for email, we are not using users anymore
     <LinearLayout
 
         android:layout_width="match_parent"
@@ -78,16 +78,11 @@
             android:id="@+id/emailField" />
     </LinearLayout>
 
-
-
-
-
     <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation = "horizontal">
-
         <TextView
             android:textColor="@color/WHITE"
             android:layout_width="wrap_content"
@@ -109,17 +104,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register as Costumer"
+        android:text="Registration"
         android:id="@+id/btnRegistrationUser"
-        android:onClick="btnRegistrationCostumer_Click"
+        android:onClick="btnRegistrationUser_Click"
         android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="Register as vendor"
-        android:layout_width="179dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnRegistrationVendor"
-        android:layout_weight="0.02"
-        android:onClick="btnRegistrationVendor_Click" />
 
 </LinearLayout>

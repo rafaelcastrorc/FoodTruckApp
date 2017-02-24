@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">FoodTruckApp</string>
-    <color name="BLACK">#000000</color>
-    <color name="WHITE">#ffffff</color>
     <string name="title_activity_user_main_menu">UserMainMenuActivity</string>
 
     <string name="typeOfUser_prompt">Choose a country</string>
