@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">FoodTruckApp</string>
     <string name="title_activity_user_main_menu">UserMainMenuActivity</string>
-
+    <string name="type_of_register_prompt">Register as:</string>
     <string name="typeOfUser_prompt">Choose a country</string>
-
 
 
 </resources>
