@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_register_choice"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="edu.upenn.cis350.foodtruckapp.RegisterChoiceActivity">
+
+    <Button
+        android:text="Customer"
+        android:textSize="12pt"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:background="@drawable/button_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_top_trucks"
+        android:height = "120dp"
+        android:layout_below="@+id/button_near_me"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="36dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/textView2"
+        tools:text="@string/type_of_register_prompt"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:textColor="@color/BLACK"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="29dp" />
+
+    <Button
+        android:text="Vendor"
+        android:textSize="12pt"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:background="@drawable/button_style"
+        android:id="@+id/button_near_me"
+        android:height = "120dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>
