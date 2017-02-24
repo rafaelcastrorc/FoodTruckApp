@@ -64,11 +64,7 @@
         android:layout_alignLeft="@+id/textView5"
         android:layout_alignStart="@+id/textView5"
         android:layout_marginBottom="19dp"
-<<<<<<< HEAD
         android:onClick="main_register_button_click"
-        android:layout_toStartOf="@+id/password_field_login"
-=======
->>>>>>> refs/remotes/origin/master
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
          />

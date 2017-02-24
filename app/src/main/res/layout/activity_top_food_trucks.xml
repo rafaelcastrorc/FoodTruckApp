@@ -13,12 +13,7 @@
     android:weightSum="1">
 
 
-    <!--<LinearLayout-->
-        <!--android:id="@+id/linearLayout1"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:layout_marginTop="49dp">-->
+
 
     <ListView
         android:layout_width="113dp"
@@ -32,25 +27,22 @@
         android:minHeight="@dimen/top_food_trucks_min_height"/>
 
 
-<<<<<<< HEAD
+
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-=======
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
     <TextView
         android:text="Rating"
         android:layout_width="wrap_content"
->>>>>>> origin/master
+
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText2"
-        android:orientation="vertical">
+        android:orientation="vertical"/>
 
-        <!--<Button-->
-            <!--android:id="@+id/button1"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Button1" />-->
+
 
         <RatingBar
             android:id="@+id/ratingBar"
@@ -154,12 +146,7 @@
             android:layout_weight="0.02"
             android:layout_marginTop="10dp" />
 
-        <!--<Button-->
-            <!--android:id="@+id/button2"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Button2" />-->
+
 
     </LinearLayout>
 </LinearLayout>
