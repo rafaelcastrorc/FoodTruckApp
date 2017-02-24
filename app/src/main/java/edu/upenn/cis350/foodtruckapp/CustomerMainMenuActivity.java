@@ -18,8 +18,8 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
         nearMeButton.setOnClickListener(new AdapterView.OnClickListener() {
 
             public void onClick(View view) {
-//                Intent i = new Intent(CustomerMainMenuActivity.this, null);
-//                startActivity(i);
+                Intent i = new Intent(CustomerMainMenuActivity.this, NearMeActivity.class);
+                startActivity(i);
             }
         });
 
@@ -40,5 +40,6 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
     }
 }
