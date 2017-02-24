@@ -40,5 +40,14 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        Button nearMeButton = (Button) findViewById(R.id.button_near_me);
+        nearMeButton.setOnClickListener(new AdapterView.OnClickListener() {
+
+            public void onClick(View view) {
+                Intent i = new Intent(CustomerMainMenuActivity.this, NearMeActivity.class);
+                startActivity(i);
+            }
+        });
     }
 }
