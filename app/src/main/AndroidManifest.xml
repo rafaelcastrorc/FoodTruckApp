@@ -31,6 +31,9 @@
             android:name=".RegistrationVendor"
             android:label="Registration Vendor" />
         <activity
+            android:name=".RegisterChoiceActivity"
+            android:label="Type of user" />
+        <activity
             android:name=".FavoritesActivity"
             android:label="Favorites" />
         <activity android:name=".TopFoodTrucksActivity" android:label="Top Food Trucks"></activity>
