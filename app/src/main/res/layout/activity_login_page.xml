@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:id="@+id/editText2"
+        android:id="@+id/email_field_login"
         tools:text="Email"
         android:layout_marginBottom="34dp"
         android:layout_above="@+id/password_field_login"
