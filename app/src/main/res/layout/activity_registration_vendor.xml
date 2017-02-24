@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/BLACK"
+    android:background="@color/WHITE"
     android:orientation = "vertical"
     android:id="@+id/activity_registration"
     android:layout_width="match_parent"
@@ -14,22 +14,25 @@
 
 
     <TextView
-        android:textColor="@color/WHITE"
+        android:textColor="@color/BLACK"
         android:text="Welcome New Vendor!"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
         android:id="@+id/welcome"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textSize="18sp"
+        android:textAlignment="center" />
 
     <TextView
-        android:textColor="@color/WHITE"
+        android:textColor="@color/BLACK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
         android:id="@+id/pleaseFill"
         android:layout_centerHorizontal="true"
-        android:text="Please Fill In the Fields Below" />
+        android:text="Please Fill In the Fields Below"
+        android:textAlignment="center" />
 
 
     <LinearLayout
@@ -54,7 +57,7 @@
         android:layout_height="wrap_content"
         android:orientation = "horizontal">
         <TextView
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/truckName"
@@ -62,7 +65,7 @@
             android:text="Name of Food Truck:" />
 
         <EditText
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
@@ -77,7 +80,7 @@
         android:layout_height="wrap_content"
         android:orientation = "horizontal">
         <TextView
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/foodType"
@@ -85,7 +88,7 @@
             android:text="Type Of Food Served:" />
 
         <EditText
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
@@ -95,19 +98,30 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Upload Photo of Truck From Gallery"
-        android:background="@color/RED"
+        android:textSize="18sp"
+        android:textAllCaps="false"
+        android:background="@drawable/button_style"
         android:id="@+id/truckPhoto"
         android:onClick="btnUploadTruckPhoto"
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="REGISTER"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:background="@drawable/button_style"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:height = "120dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:id="@+id/btnRegistrationVendor2"
         android:layout_centerHorizontal="true"
         android:onClick="btnRegistrationVendor2_Click" />

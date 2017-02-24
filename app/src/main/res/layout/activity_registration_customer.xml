@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/BLACK"
+    android:background="@color/WHITE"
     android:orientation = "vertical"
     android:id="@+id/activity_registration"
     android:layout_width="match_parent"
@@ -14,22 +14,25 @@
 
 
         <TextView
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:text="Welcome New User!"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
             android:id="@+id/welcome"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"
+            android:textAlignment="center" />
 
         <TextView
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
             android:id="@+id/pleaseFill"
             android:layout_centerHorizontal="true"
-            android:text="Please Fill In the Fields Below" />
+            android:text="Please Fill In the Fields Below"
+            android:textAlignment="center" />
 
     <LinearLayout
 
@@ -37,7 +40,7 @@
         android:layout_height="wrap_content"
         android:orientation = "horizontal">
         <TextView
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/name"
@@ -45,7 +48,7 @@
             android:text="Name:" />
 
         <EditText
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
@@ -61,7 +64,7 @@
         android:layout_height="wrap_content"
         android:orientation = "horizontal">
         <TextView
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/email"
@@ -69,7 +72,7 @@
             android:text="Email:" />
 
         <EditText
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
@@ -84,7 +87,7 @@
         android:layout_height="wrap_content"
         android:orientation = "horizontal">
         <TextView
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/password"
@@ -92,7 +95,7 @@
             android:text="Password:" />
 
         <EditText
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName|textWebPassword"
@@ -102,11 +105,20 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register!"
-        android:id="@+id/btnRegistrationCostumer"
+        android:text="REGISTER"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:background="@drawable/button_style"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:height = "120dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:onClick="btnRegistrationCostumer_Click"
-        android:layout_centerHorizontal="true" />
+        />
 
 </LinearLayout>

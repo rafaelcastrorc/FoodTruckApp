@@ -25,15 +25,24 @@
         </activity>
 
         <activity
-            android:name=".RegistrationActivity" android:label="Registration"
-            android:exported="true" />
+            android:name=".RegistrationActivity"
+            android:exported="true"
+            android:label="Registration" />
         <activity
             android:name=".RegistrationVendor"
             android:label="Registration Vendor" />
         <activity
             android:name=".FavoritesActivity"
             android:label="Favorites" />
-        <activity android:name=".TopFoodTrucksActivity" android:label="Top Food Trucks"></activity>
+        <activity
+            android:name=".TopFoodTrucksActivity"
+            android:label="Top Food Trucks" />
+        <activity
+            android:name=".NearMeActivity"
+            android:label="Food trucks near me"/>
+        <activity
+            android:name=".RegisterChoiceActivity"
+            android:label="Type of user" />
     </application>
 
 </manifest>

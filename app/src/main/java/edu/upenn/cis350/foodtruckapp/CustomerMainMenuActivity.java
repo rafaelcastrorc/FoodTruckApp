@@ -14,15 +14,16 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_main_menu);
 
+        // add click listener to Food Trucks near me button
         Button nearMeButton = (Button) findViewById(R.id.button_near_me);
         nearMeButton.setOnClickListener(new AdapterView.OnClickListener() {
-
             public void onClick(View view) {
-//                Intent i = new Intent(CustomerMainMenuActivity.this, null);
-//                startActivity(i);
+                Intent i = new Intent(CustomerMainMenuActivity.this, NearMeActivity.class);
+                startActivity(i);
             }
         });
 
+        // add click listener to favorites button
         Button favsButton = (Button) findViewById(R.id.button_favs);
         favsButton.setOnClickListener(new AdapterView.OnClickListener() {
 
@@ -32,20 +33,11 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
             }
         });
 
+        // add click listener to top food trucks button
         Button topTrucksButton = (Button) findViewById(R.id.button_top_trucks);
         topTrucksButton.setOnClickListener(new AdapterView.OnClickListener() {
-
             public void onClick(View view) {
                 Intent i = new Intent(CustomerMainMenuActivity.this, TopFoodTrucksActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button nearMeButton = (Button) findViewById(R.id.button_near_me);
-        nearMeButton.setOnClickListener(new AdapterView.OnClickListener() {
-
-            public void onClick(View view) {
-                Intent i = new Intent(CustomerMainMenuActivity.this, NearMeActivity.class);
                 startActivity(i);
             }
         });
