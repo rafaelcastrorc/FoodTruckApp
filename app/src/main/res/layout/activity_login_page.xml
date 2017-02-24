@@ -38,7 +38,7 @@
         android:background="@drawable/button_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button4"
+        android:id="@+id/main_register_button"
         android:height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/textView5"
@@ -46,7 +46,8 @@
         android:layout_marginBottom="19dp"
         android:layout_toStartOf="@+id/password_field_login"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="main_register_button_click" />
 
     <Button
         android:text="Login"
@@ -56,13 +57,14 @@
         android:background="@drawable/button_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button3"
+        android:id="@+id/main_login_button"
+        android:onClick="main_login_button_click"
         android:height="100dp"
         android:layout_below="@+id/textView3"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/button4"
-        android:layout_alignStart="@+id/button4" />
+        android:layout_alignLeft="@+id/main_register_button"
+        android:layout_alignStart="@+id/main_register_button" />
 
     <TextView
         android:text="Please login or register below."
@@ -83,8 +85,8 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/BLACK"
         android:layout_below="@+id/email_login_field"
-        android:layout_alignLeft="@+id/button3"
-        android:layout_alignStart="@+id/button3" />
+        android:layout_alignLeft="@+id/main_login_button"
+        android:layout_alignStart="@+id/main_login_button" />
 
     <EditText
         android:layout_width="wrap_content"
