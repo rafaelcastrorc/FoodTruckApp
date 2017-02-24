@@ -31,51 +31,13 @@
         android:layout_centerHorizontal="true"
         android:text="Please Fill In the Fields Below" />
 
+
     <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation = "horizontal">
-        <TextView
-            android:textColor="@color/WHITE"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/name"
-            android:layout_centerHorizontal="true"
-            android:text="Name:" />
 
-        <EditText
-            android:textColor="@color/WHITE"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="Name"
-            android:ems="10"
-            android:id="@+id/nameField" />
-    </LinearLayout>
-
-    //Since Firebase has pre built login for email, we are not using users anymore
-    <LinearLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation = "horizontal">
-        <TextView
-            android:textColor="@color/WHITE"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/email"
-            android:layout_centerHorizontal="true"
-            android:text="Email:" />
-
-        <EditText
-            android:textColor="@color/WHITE"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:text="Email"
-            android:ems="10"
-            android:id="@+id/emailField" />
     </LinearLayout>
 
     <LinearLayout
@@ -83,23 +45,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation = "horizontal">
-    <TextView
-        android:textColor="@color/WHITE"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/password"
-        android:layout_centerHorizontal="true"
-        android:text="Password:" />
 
-    <EditText
-        android:textColor="@color/WHITE"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Password"
-        android:ems="10"
-        android:id="@+id/passwordField" />
-</LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
 
@@ -156,14 +103,14 @@
         android:onClick="btnUploadTruckPhoto"
         android:layout_centerHorizontal="true" />
 
-        <Button
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Register"
-            android:id="@+id/btnRegistrationUser"
-            android:onClick="btnRegistrationUser_Click"
-            android:layout_centerHorizontal="true" />
+    <Button
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:id="@+id/btnRegistrationVendor2"
+        android:layout_centerHorizontal="true"
+        android:onClick="btnRegistrationVendor2_Click" />
 
 
 </LinearLayout>

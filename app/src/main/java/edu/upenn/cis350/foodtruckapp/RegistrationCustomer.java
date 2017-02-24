@@ -142,9 +142,20 @@ public class RegistrationCustomer extends AppCompatActivity {
 
                                 //Destination where the user should go once register successfully
                                 //Depends on the type of user
-                                //TODO: Vendor Main Menu page
-                                Intent i = new Intent(RegistrationActivity.this, CustomerMainMenuActivity.class);
-                                startActivity(i);
+                                if (type.equals("Costumer")) {
+                                    Intent i = new Intent(RegistrationActivity.this, CustomerMainMenuActivity.class);
+                                    startActivity(i);
+                                    finish();
+                                }
+                                else {
+                                    //If it is a vendor, it goes here
+                                    Intent i = new Intent(RegistrationActivity.this, RegistrationVendor.class);
+                                    Bundle b = new Bundle();
+                                    b.putString("UserId", uniqueID); //Vendor user id to next
+                                    i.putExtras(b); //Put your id to your next Intent
+                                    startActivity(i);
+                                    finish();
+                                }
 
                             } else {
                                 Log.e("There is an error", task.getException().toString());
