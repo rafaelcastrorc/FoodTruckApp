@@ -9,7 +9,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.upenn.cis350.foodtruckapp.RegisterChoiceActivity">
-
     <TextView
         android:layout_width="match_parent"
         android:id="@+id/textView2"
@@ -22,6 +21,22 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="29dp" />
+
+    <Button
+        android:text="Customer"
+        android:textSize="12pt"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:background="@drawable/button_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_costumer"
+        android:height = "120dp"
+        android:layout_marginTop="36dp"
+        android:layout_below="@+id/button_vendor"
+        android:layout_alignParentLeft="true"
+        android:onClick="button_costumer_click"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:text="Vendor"
@@ -39,19 +54,5 @@
         android:onClick="button_vendor_click"
         android:layout_alignParentStart="true" />
 
-    <Button
-        android:text="Customer"
-        android:textSize="12pt"
-        android:textStyle="bold"
-        android:textAllCaps="false"
-        android:background="@drawable/button_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_costumer"
-        android:height = "120dp"
-        android:layout_marginTop="36dp"
-        android:layout_below="@+id/button_vendor"
-        android:layout_alignParentLeft="true"
-        android:onClick="button_costumer_click"
-        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

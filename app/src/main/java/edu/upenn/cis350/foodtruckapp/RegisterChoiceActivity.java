@@ -29,4 +29,14 @@ public class RegisterChoiceActivity extends AppCompatActivity {
         startActivity(i);
         finish();
     }
+
+    public void registerVendor(View view) {
+        Intent i = new Intent(this, RegistrationVendor.class);
+        startActivity(i);
+    }
+
+    public void registerCustomer(View view) {
+        Intent i = new Intent(this, RegistrationActivity.class);
+        startActivity(i);
+    }
 }
