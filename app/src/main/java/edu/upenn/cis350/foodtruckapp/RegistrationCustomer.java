@@ -25,7 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
 
-public class RegistrationCustomer extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity {
 
     private EditText email;
     private EditText password;

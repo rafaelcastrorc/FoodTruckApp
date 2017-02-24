@@ -10,13 +10,6 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-<<<<<<< HEAD:app/src/main/res/layout/activity_registration_customer.xml
-    tools:context="edu.upenn.cis350.foodtruckapp.RegistrationCustomer">
-=======
-    tools:context="edu.upenn.cis350.foodtruckapp.RegistrationActivity"
-    android:weightSum="1">
->>>>>>> refs/remotes/origin/master:app/src/main/res/layout/activity_registration.xml
-
 
     <TextView
         android:textColor="@color/WHITE"
@@ -59,10 +52,7 @@
             android:id="@+id/nameField" />
     </LinearLayout>
 
-<<<<<<< HEAD:app/src/main/res/layout/activity_registration_customer.xml
-    //Since Firebase has pre built login for email, we are not using users anymore
-=======
->>>>>>> refs/remotes/origin/master:app/src/main/res/layout/activity_registration.xml
+
     <LinearLayout
 
         android:layout_width="match_parent"
@@ -118,14 +108,7 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-<<<<<<< HEAD:app/src/main/res/layout/activity_registration_customer.xml
-        android:text="Register"
-=======
-        android:text="Register as Costumer"
->>>>>>> refs/remotes/origin/master:app/src/main/res/layout/activity_registration.xml
-        android:id="@+id/btnRegistrationUser"
-        android:onClick="btnRegistrationCostumer_Click"
-        android:layout_centerHorizontal="true" />
+
 
     <Button
         android:text="Register as vendor"
