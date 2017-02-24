@@ -32,9 +32,15 @@
         android:minHeight="@dimen/top_food_trucks_min_height"/>
 
 
+<<<<<<< HEAD
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
+=======
+    <TextView
+        android:text="Rating"
+        android:layout_width="wrap_content"
+>>>>>>> origin/master
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText2"
         android:orientation="vertical">
