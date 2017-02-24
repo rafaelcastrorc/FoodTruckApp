@@ -22,6 +22,4 @@ public class RegisterChoiceActivity extends AppCompatActivity {
         Intent i = new Intent(this, RegistrationActivity.class);
         startActivity(i);
     }
-
-
 }
