@@ -19,5 +19,17 @@
         android:layout_marginTop="31dp"
         android:id="@+id/top_food_trucks_list" />
 
+    <TextView
+        android:text="Rating:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="42dp"
+        android:layout_marginEnd="42dp" />
+
 
 </RelativeLayout>
