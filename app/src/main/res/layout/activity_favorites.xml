@@ -26,5 +26,6 @@
         android:id="@+id/favs_list"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/favs_text" />
 </RelativeLayout>
