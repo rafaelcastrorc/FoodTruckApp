@@ -21,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText txtEmailLogin;
     private EditText txtPwd;
-    private FirebaseAuth firebaseAuth;
+   //private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
