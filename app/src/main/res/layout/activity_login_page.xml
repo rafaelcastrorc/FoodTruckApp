@@ -5,62 +5,11 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/editText2"
-        android:layout_marginTop="107dp"
-        tools:text="Email"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_toEndOf="@+id/textView"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp" />
-
     <TextView
         android:text="Email:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:layout_alignBaseline="@+id/editText2"
-        android:layout_alignBottom="@+id/editText2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:text="Password:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/password_field_login"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView"
-        android:id="@+id/textView3"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@color/BLACK" />
-
-    <TextView
-        android:text="Email:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView5"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:layout_alignBaseline="@+id/editText2"
-        android:layout_alignBottom="@+id/editText2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:text="Email:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView4"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:layout_marginLeft="13dp"
         android:layout_marginStart="13dp"
@@ -94,9 +43,44 @@
         android:layout_height="wrap_content"
         android:id="@+id/email_field_login"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:layout_above="@+id/textView"
+        android:textColor="@color/BLACK"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/BLACK" />
+        android:layout_marginTop="56dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/editText2"
+        tools:text="Email"
+        android:layout_marginBottom="34dp"
+        android:layout_above="@+id/password_field_login"
+        android:layout_alignRight="@+id/email_field_login"
+        android:layout_alignEnd="@+id/email_field_login" />
+
+    <TextView
+        android:text="Password:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/BLACK"
+        android:layout_alignBottom="@+id/password_field_login"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView" />
+
+    <TextView
+        android:text="Email:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_alignBaseline="@+id/textView"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -105,8 +89,11 @@
         android:ems="10"
         android:id="@+id/password_field_login"
         android:layout_weight="0.43"
+        android:text="Password"
         android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:text="Password" />
+        android:layout_toRightOf="@+id/textView3"
+        android:layout_toEndOf="@+id/textView3"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp" />
+
 </RelativeLayout>
