@@ -95,7 +95,7 @@
             android:textColor="@color/WHITE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textWebPassword"
             android:text="Password"
             android:ems="10"
             android:id="@+id/passwordField" />
@@ -104,9 +104,16 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Registration"
-        android:id="@+id/btnRegistrationUser"
-        android:onClick="btnRegistrationUser_Click"
+        android:text="Register as User"
+        android:id="@+id/btnRegistrationCostumer"
+        android:onClick="btnRegistrationCostumer_Click"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register as Vendor"
+        android:id="@+id/btnRegistrationVendor"
+        android:onClick="btnRegistrationVendor_Click"
+        android:layout_centerHorizontal="true" />
 </LinearLayout>

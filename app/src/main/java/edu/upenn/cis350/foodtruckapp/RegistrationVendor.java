@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,31 +21,43 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrationVendor extends AppCompatActivity {
 
     private static final int IMAGE_GALLERY = 10;
 
     private Button uploadButton;
-    private FirebaseAuth mAuth;
-    private EditText email;
-    private EditText password;
+    private DatabaseReference databaseRef;
+    private FirebaseDatabase database;
+    private String userID;
+    EditText typeOfFood;
+    EditText nameOfFoodTruck;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_vendor);
         uploadButton = (Button) findViewById(R.id.truckPhoto);
-        mAuth = FirebaseAuth.getInstance();
-        email = (EditText) findViewById(R.id.emailField);
-        password = (EditText) findViewById(R.id.passwordField);
+        database = FirebaseDatabase.getInstance();
+        databaseRef = database.getReference("Users");
+        Bundle b = getIntent().getExtras();
+        String user = ""; // or other values
+        if(b != null)
+            userID = b.getString("UserId");
+        typeOfFood = (EditText) findViewById(R.id.foodTypeField);
+        nameOfFoodTruck = (EditText) findViewById(R.id.truckNameField);
     }
 
     protected void btnUploadTruckPhoto(View view){
         Intent choosePhoto = new Intent(Intent.ACTION_PICK);
         //intent to pick a picture from gallery
 
-       String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
         //get path where images are stored
 
         Uri pictureDirectory = Uri.parse(path);
@@ -72,26 +85,30 @@ public class RegistrationVendor extends AppCompatActivity {
         }
     }
 
-    protected void btnRegistrationUser_Click(View view){
-        final ProgressDialog progressDialog = ProgressDialog.show(RegistrationVendor.this, "Please wait", "Processing", true);
-        (mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()))
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressDialog.dismiss();
+    //Once regiter button is pressed
+    public void btnRegistrationVendor2_Click(View v) {
 
-                        if (task.isSuccessful()) {
-                            Toast.makeText(RegistrationVendor.this, "Registration successful", Toast.LENGTH_LONG).show();
-                            //The activity it is supposed to go. Depends on the person who is working on this
-                            //Intent i = new Intent(RegistrationActivity.this, LoginActivity.class);
-                            // startActivity(i);
-                        }
-                        else
-                        {
-                            Log.e("There is an error", task.getException().toString());
-                            Toast.makeText(RegistrationVendor.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+        // typeOfFood cannot be empty
+        if (TextUtils.isEmpty(typeOfFood.getText().toString())) {
+            typeOfFood.setError("This field cannot be empty");
+            return;
+        }
+
+        // typeOfFood cannot be empty
+        if (TextUtils.isEmpty(nameOfFoodTruck.getText().toString())) {
+            nameOfFoodTruck.setError("This field cannot be empty");
+            return;
+        }
+        String tof = typeOfFood.getText().toString();
+        String noft = nameOfFoodTruck.getText().toString();
+
+        //Adds this info to the user database
+        databaseRef.child(userID).child("Type Of Food").setValue(tof);
+        databaseRef.child(userID).child("Name Of Food Truck").setValue(noft);
+
+        //Todo: Vendor page
+        Intent i = new Intent(RegistrationVendor.this, CustomerMainMenuActivity.class);
+        startActivity(i);
     }
+
 }
