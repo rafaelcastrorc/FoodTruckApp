@@ -27,5 +27,5 @@ public class FavoritesActivity extends AppCompatActivity {
             }
         });
         list.setDividerHeight(10);
-    }
+    }//
 }
