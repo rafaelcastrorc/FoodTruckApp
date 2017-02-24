@@ -36,8 +36,8 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
         topTrucksButton.setOnClickListener(new AdapterView.OnClickListener() {
 
             public void onClick(View view) {
-//                Intent i = new Intent(CustomerMainMenuActivity.this, null);
-//                startActivity(i);
+                Intent i = new Intent(CustomerMainMenuActivity.this, TopFoodTrucksActivity.class);
+                startActivity(i);
             }
         });
     }
