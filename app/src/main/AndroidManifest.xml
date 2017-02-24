@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".RegistrationActivity" android:label="Registration"
             android:exported="true" />
         <activity
             android:name=".RegistrationVendor"
@@ -28,7 +28,7 @@
         <activity
             android:name=".FavoritesActivity"
             android:label="Favorites" />
-        <activity android:name=".TopFoodTrucksActivity"></activity>
+        <activity android:name=".TopFoodTrucksActivity" android:label="Top Food Trucks"></activity>
     </application>
 
 </manifest>
