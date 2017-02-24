@@ -2,24 +2,33 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.upenn.cis350.foodtruckapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CustomerMainMenuActivity" android:label="Main Menu">
-
+        <activity
+            android:name=".CustomerMainMenuActivity"
+            android:label="Main Menu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegistrationActivity" android:exported="true" />
-        <activity android:name="RegistrationVendor" android:label = "Registration Vendor"/>
-        <activity android:name=".FavoritesActivity" android:label="Favorites" />
+        <activity
+            android:name=".RegistrationActivity" android:label="Registration"
+            android:exported="true" />
+        <activity
+            android:name=".RegistrationVendor"
+            android:label="Registration Vendor" />
+        <activity
+            android:name=".FavoritesActivity"
+            android:label="Favorites" />
+        <activity android:name=".TopFoodTrucksActivity" android:label="Top Food Trucks"></activity>
     </application>
 
 </manifest>
