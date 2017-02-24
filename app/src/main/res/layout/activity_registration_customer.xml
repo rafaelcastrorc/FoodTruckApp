@@ -104,16 +104,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register as User"
+        android:text="Register!"
         android:id="@+id/btnRegistrationCostumer"
         android:onClick="btnRegistrationCostumer_Click"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register as Vendor"
-        android:id="@+id/btnRegistrationVendor"
-        android:onClick="btnRegistrationVendor_Click"
-        android:layout_centerHorizontal="true" />
 </LinearLayout>

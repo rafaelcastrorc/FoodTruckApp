@@ -3,6 +3,7 @@ package edu.upenn.cis350.foodtruckapp;
 import android.content.Intent;
 import android.support.annotation.MainThread;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.View;
 
 /**
@@ -10,6 +11,14 @@ import android.view.View;
  */
 
 public class WelcomePage extends AppCompatActivity{
+
+    //Right now it directed to the register choose page
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Intent i = new Intent(WelcomePage.this, RegisterChoiceActivity.class);
+        startActivity(i);
+        return true;
+    }
 
 
     //Handles database  login and register
