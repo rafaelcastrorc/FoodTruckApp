@@ -20,7 +20,7 @@
         android:id="@+id/top_food_trucks_list" />
 
     <TextView
-        android:text="Rating:"
+        android:text="Rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView"
