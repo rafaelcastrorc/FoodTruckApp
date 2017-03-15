@@ -64,4 +64,14 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:onClick="favesOnClick (CustomerMainMenuActivity)" />
+
+    <Button
+        android:text="Sign Out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/sign_out"
+        android:onClick="sign_out_onClick" />
 </RelativeLayout>

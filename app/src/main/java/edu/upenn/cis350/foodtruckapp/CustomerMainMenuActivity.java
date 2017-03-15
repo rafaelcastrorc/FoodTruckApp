@@ -7,12 +7,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class CustomerMainMenuActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_main_menu);
+        mAuth = FirebaseAuth.getInstance();
+
 
         // add click listener to Food Trucks near me button
         Button nearMeButton = (Button) findViewById(R.id.button_near_me);
@@ -44,5 +49,12 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void sign_out_onClick(View v) {
+        mAuth.signOut();
+        Intent i = new Intent(CustomerMainMenuActivity.this, LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 }
