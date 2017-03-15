@@ -26,7 +26,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="46dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="topFoodTrucksOnClick (CustomerMainMenuActivity)" />
 
     <Button
         android:text="Food Trucks Near Me"
@@ -43,7 +44,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="23dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="nearMeOnClick (CustomerMainMenuActivity)" />
 
     <Button
         android:text="My Favorite Trucks"
@@ -60,5 +62,6 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="25dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="favesOnClick (CustomerMainMenuActivity)" />
 </RelativeLayout>
