@@ -3,6 +3,79 @@
     <string name="title_activity_user_main_menu">UserMainMenuActivity</string>
     <string name="type_of_register_prompt">Register as:</string>
     <string name="typeOfUser_prompt">Choose a country</string>
+    <string name="title_activity_vendor_profile_practice">VendorProfilePracticeActivity</string>
+    <string-array name="vendor_open_time_options">
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+
+    <string-array name="vendor_close_time_options">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+
+    <string-array name="vendor_open_period_options">
+        <item>AM</item>
+        <item>PM</item>
+    </string-array>
+
+    <string-array name="vendor_close_period_options">
+        <item>PM</item>
+    </string-array>
+
+    <string name="Hours"><u>Hours</u></string>
+    <string name="Menu"><u>Menu</u></string>
+    <string name="Weekdays"><i>Mondays - Fridays:</i></string>
+    <string name="Weekends"><i>Saturdays and Sundays:</i></string>
+    <string name="Reviews"><u>My Reviews</u></string>
+
+
+
+
+
+
+
+    <string name="large_text">
+        "Material is the metaphor.\n\n"
+
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic.\n"
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
+        "flexibility of the material creates new affordances that supercede those in the physical "
+        "world, without breaking the rules of physics.\n"
+        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
+        "interact, and exist in space and in relation to each other. Realistic lighting shows "
+        "seams, divides space, and indicates moving parts.\n\n"
+    </string>
+
+    <string name="large_text_1">
+    "Light and shadow.\n\n"
+
+        "Within the material environment, virtual lights illuminate the scene. Key lights create "
+        "directional shadows, while ambient light creates soft shadows from all angles.\n"
+        "Shadows in the material environment are cast by these two light sources. In Android "
+        "development, shadows occur when light sources are blocked by sheets of material at "
+        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
+        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
+    </string>
+
+
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_vendor_profile">VendorProfileActivity</string>
 
 
 </resources>
