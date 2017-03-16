@@ -43,9 +43,6 @@
         <activity
             android:name=".NearMeActivity"
             android:label="Food trucks near me"/>
-        <activity
-            android:name=".RegisterChoiceActivity"
-            android:label="Type of user" />
     </application>
 
 </manifest>
