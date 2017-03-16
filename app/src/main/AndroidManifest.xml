@@ -32,6 +32,10 @@
             android:name=".RegistrationVendor"
             android:label="Registration Vendor" />
         <activity
+            android:name=".FoodTruckOrderMGM"
+            android:label="FoodTruckOrderMGM"
+            android:exported="true"/>
+        <activity
             android:name=".RegisterChoiceActivity"
             android:label="Type of user" />
         <activity
