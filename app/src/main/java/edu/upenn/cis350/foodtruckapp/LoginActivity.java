@@ -30,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.d("User is signed in",  user.getUid());
+                    Log.d("User is signed in", user.getUid());
                 } else {
                     // User is signed out
                     Log.d("User is signed out", "onAuthStateChanged:signed_out");
@@ -73,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     // [END on_stop_remove_listener]
-
 
 
     public void main_login_button_click(View v) {
@@ -125,8 +123,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
 }
 
 
-//have to add remember me thing

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:text="Accept Order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/accept_order"
+        android:layout_weight="1"
+        android:onClick="accept_order_onClick" />
+
+    <Button
+        android:text="Decline ORder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/decline_order"
+        android:layout_weight="1"
+        android:onClick="decline_order_onClick" />
+
+    <Button
+        android:text="Order is Ready"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/order_done"
+        android:layout_weight="1"
+        android:onClick="order_done_onClick" />
+
+</LinearLayout>
