@@ -3,6 +3,8 @@
     package="edu.upenn.cis350.foodtruckapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
     <application
         android:allowBackup="true"
@@ -16,9 +18,7 @@
         <activity
             android:name=".VendorMainMenuActivity"
             android:exported="true"
-            android:label="Main Menu">
-
-        </activity>
+            android:label="Main Menu"></activity>
         <activity
             android:name=".RegistrationActivity"
             android:exported="true"
@@ -39,13 +39,17 @@
             android:name=".RegisterChoiceActivity"
             android:label="Type of User" />
         <activity
+            android:name=".FoodTruckOrderMGM"
+            android:exported="true"
+            android:label="Notifications" />
+        <activity
             android:name=".LoginActivity"
             android:label="Login">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity
@@ -54,9 +58,23 @@
         <activity
             android:name=".VendorProfileActivity"
             android:label="@string/title_activity_vendor_profile"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-    </application>
+            android:theme="@style/AppTheme.NoActionBar" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+        <service
+            android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+
+        <service
+            android:name=".MyFirebaseInstanceIDService">
+        <intent-filter>
+            <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+        </intent-filter>
+        </service>
+
+    </application>
 
 </manifest>

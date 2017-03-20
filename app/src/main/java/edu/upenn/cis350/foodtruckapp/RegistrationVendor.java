@@ -107,7 +107,7 @@ public class RegistrationVendor extends AppCompatActivity {
         databaseRef.child(userID).child("Name Of Food Truck").setValue(noft);
 
         //Todo: Vendor page
-        Intent i = new Intent(RegistrationVendor.this, CustomerMainMenuActivity.class);
+        Intent i = new Intent(RegistrationVendor.this, VendorMainMenuActivity.class);
         startActivity(i);
     }
 

@@ -16,6 +16,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by rafaelcastro on 2/20/17.
@@ -28,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailLogin;
     private EditText pswd;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference databaseRef;
+    private FirebaseDatabase database;
 
 
     @Override
@@ -37,6 +44,10 @@ public class LoginActivity extends AppCompatActivity {
         emailLogin = (EditText) findViewById(R.id.email_login_field);
         pswd = (EditText) findViewById(R.id.password_field_login);
         firebaseAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        databaseRef = database.getReference("Users");
+
+
 
         // [START auth_state_listener]
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -116,9 +127,37 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
-            i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
-            startActivity(i);
+            //Checks for the type of user to log in in correct page
+
+            DatabaseReference userType = databaseRef.child(user.getUid()).child("Type");
+
+            userType.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String type = dataSnapshot.getValue(String.class);
+                    if (type.equals("Vendor")) {
+                        Intent i = new Intent(LoginActivity.this, VendorMainMenuActivity.class);
+                        i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
+                        startActivity(i);
+                        finish();
+                    }
+                    else {
+                        Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
+                        i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
+                        startActivity(i);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+
         }
     }
 

@@ -38,4 +38,14 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+    <Button
+        android:id="@+id/sign_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:onClick="sign_out_Vendor_onClick"
+        android:text="Sign Out" />
+
 </RelativeLayout>
