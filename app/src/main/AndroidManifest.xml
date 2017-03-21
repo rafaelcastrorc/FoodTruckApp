@@ -14,11 +14,21 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".CustomerMainMenuActivity"
-            android:label="Main Menu" />
+            android:label="Main Menu"/>
+
         <activity
             android:name=".VendorMainMenuActivity"
             android:exported="true"
             android:label="Main Menu"></activity>
+            android:name=".LoginActivity" android:label="Login"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".RegistrationActivity"
             android:exported="true"
@@ -58,6 +68,7 @@
         <activity
             android:name=".VendorProfileActivity"
             android:label="@string/title_activity_vendor_profile"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
@@ -76,5 +87,7 @@
         </service>
 
     </application>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>
