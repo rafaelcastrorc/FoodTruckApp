@@ -43,9 +43,7 @@
         <activity
             android:name=".RegisterChoiceActivity"
             android:label="Type of User" />
-        <activity
-            android:name=".LoginActivity"
-            android:label="Login" />
+
         <activity
             android:name=".VendorOrdersActivity"
             android:label="My Orders" />
