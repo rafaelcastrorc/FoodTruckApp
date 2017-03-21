@@ -1,5 +1,10 @@
 package edu.upenn.cis350.foodtruckapp;
 import android.util.Log;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -9,6 +14,10 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private static final String TAG = "MyFirebaseIIDService";
+    private FirebaseAuth mAuth;
+    private DatabaseReference databaseRef;
+    private FirebaseDatabase database;
+
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -33,8 +42,10 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to our app server.
-        //Todo: Link token to user account
-        //Todo: If token changes, send to server
+        database = FirebaseDatabase.getInstance();
+        databaseRef = FirebaseDatabase.getInstance().getReference("Users");
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        databaseRef.child(user.getUid()).child("InstanceID").setValue(FirebaseInstanceId.getInstance().getId());
     }
 }

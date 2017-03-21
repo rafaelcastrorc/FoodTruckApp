@@ -10,6 +10,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -41,6 +43,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentText("Please come pick it up!");
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         manager.notify(0, builder.build());
+
+
 
 
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ

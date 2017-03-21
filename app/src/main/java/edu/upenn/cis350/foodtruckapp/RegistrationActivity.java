@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -159,6 +160,8 @@ public class RegistrationActivity extends AppCompatActivity {
         databaseRef.child(user.dUniqueName).child("Name").setValue(user.dName);
         databaseRef.child(user.dUniqueName).child("Type").setValue(user.dType);
         databaseRef.child(user.dUniqueName).child("Email").setValue(user.dEmail);
+        databaseRef.child(user.dUniqueName).child("InstanceID").setValue(FirebaseInstanceId.getInstance().getId());
+
     }
 
     @IgnoreExtraProperties

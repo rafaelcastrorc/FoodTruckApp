@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         emailLogin = (EditText) findViewById(R.id.email_login_field);
         pswd = (EditText) findViewById(R.id.password_field_login);
         firebaseAuth = FirebaseAuth.getInstance();
+
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
 
