@@ -19,6 +19,7 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
+
         // add click listener to Food Trucks near me button
         Button nearMeButton = (Button) findViewById(R.id.button_near_me);
         nearMeButton.setOnClickListener(new AdapterView.OnClickListener() {

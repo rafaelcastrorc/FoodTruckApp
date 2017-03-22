@@ -124,7 +124,7 @@ public class VendorProfileActivity extends AppCompatActivity {
     }
 
     // used for handling mouseclick in menu
-   @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getTitle().equals("Edit")) {
             for (int i = 0; i < allIds.size(); i++) {
@@ -132,14 +132,14 @@ public class VendorProfileActivity extends AppCompatActivity {
                 view.setEnabled(true);
             }
         }
-       else if (item.getTitle().equals("Save")) {
-           for (int i = 0; i < allIds.size(); i++) {
-               View view = findViewById(allIds.get(i));
-               view.setEnabled(false);
-               appendDollarSigns();
-           }
-       }
-       return true;
+        else if (item.getTitle().equals("Save")) {
+            for (int i = 0; i < allIds.size(); i++) {
+                View view = findViewById(allIds.get(i));
+                view.setEnabled(false);
+                appendDollarSigns();
+            }
+        }
+        return true;
     }
 
     // used for appending dollar signs to text in price fields once 'Save' is clicked

@@ -30,8 +30,8 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
 
-    public FoodTruckOrderMGM(String username) {
-        this.username  = username;
+    public FoodTruckOrderMGM(String userWhoOrdered) {
+        this.username  = userWhoOrdered;
     }
 
     protected void orderDone() {
@@ -48,8 +48,8 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
     }
 
     private void sendOrder() {
-        String uniqueUID = mAuth.getCurrentUser().getUid();
-        DatabaseReference nameofft = databaseRef.child(uniqueUID).child("Name Of Food Truck");
+        String currVendor = mAuth.getCurrentUser().getUid();
+        DatabaseReference nameofft = databaseRef.child(currVendor).child("Name Of Food Truck");
 
         nameofft.addValueEventListener(new ValueEventListener() {
             @Override

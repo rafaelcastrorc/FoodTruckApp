@@ -3,28 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:text="Accept Order"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/accept_order"
-        android:layout_weight="1"
-        android:onClick="accept_order_onClick" />
+    <ListView
+        android:id="@+id/order_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
     <Button
-        android:text="Decline ORder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/decline_order"
-        android:layout_weight="1"
-        android:onClick="decline_order_onClick" />
-
-    <Button
-        android:text="Order is Ready"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/order_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:onClick="order_done_onClick" />
+        android:onClick="order_done_onClick"
+        android:text="Order is Ready" />
 
 </LinearLayout>
