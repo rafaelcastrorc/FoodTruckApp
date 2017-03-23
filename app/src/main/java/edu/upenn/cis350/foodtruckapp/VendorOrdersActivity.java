@@ -16,19 +16,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
-import java.lang.reflect.Array;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
 
-/**
- * Created by desmondhoward on 3/13/17.
- */
 
 public class VendorOrdersActivity extends AppCompatActivity {
 
@@ -66,7 +58,6 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     String order = "";
                     if (type.equals("CostumerInstanceId")) {
                         instanceId = (String) values.get(type);
-                        Log.d("fuck - 0", instanceId);
 
                     }
                     else if (type.equals("Order")) {
@@ -95,7 +86,6 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     String order = "";
                     if (type.equals("CostumerInstanceId")) {
                         instanceId = (String) values.get(type);
-                        Log.d("fuck - 0", instanceId);
 
                     } else if (type.equals("Order")) {
                         order = (String) values.get(type);
@@ -123,11 +113,11 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
     //Todo: Handle user cancels order, vendor rej order, vendor accepts order, vendor finish order
 
-
-
     //Button associated to a given user
-    public void order_done_userx_onClick(View v) {
+    public void order_done_onClick(View v) {
+
         String idOfCostumer = "the id of the user who sent the order";
+        idOfCostumer = FirebaseInstanceId.getInstance().getId(); // for testing purposes
         FoodTruckOrderMGM notifications = new FoodTruckOrderMGM(idOfCostumer);
         notifications.orderDone();
     }
