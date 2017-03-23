@@ -1,19 +1,13 @@
 package edu.upenn.cis350.foodtruckapp;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
@@ -23,6 +17,8 @@ import java.util.Map;
  * Created by rafaelcastro on 3/14/17.
  */
 
+
+//NOTE TO EVERYONE: DO NOT MODIFY THIS FILE, THANKS
 public class FoodTruckOrderMGM extends AppCompatActivity  {
 
     private String username;
@@ -35,15 +31,14 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
     }
 
     protected void orderDone() {
-
+        FirebaseMessaging.getInstance().subscribeToTopic("user_"+username); //For testing purposes
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         mAuth = FirebaseAuth.getInstance();
         sendOrder();
 
         //for testing purposes we are going to send the notification to the same device we are testing
         //Do this part inside the client send order part
-        String username = FirebaseInstanceId.getInstance().getId();
-        FirebaseMessaging.getInstance().subscribeToTopic("user_"+username);
+        //
         ///////////////////////
     }
 
