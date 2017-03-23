@@ -56,13 +56,17 @@ public class VendorOrdersActivity extends AppCompatActivity {
                 for (String type: values.keySet()) {
                     String instanceId = "";
                     String order = "";
+                    String costumerName = "";
                     if (type.equals("CostumerInstanceId")) {
                         instanceId = (String) values.get(type);
 
                     }
                     else if (type.equals("Order")) {
                         order = (String) values.get(type);
-                        Order costumerOrder = new Order(instanceId, order);
+                    }
+                    else if (type.equals("CostumerName")){
+                        costumerName = (String) values.get(type);
+                        Order costumerOrder = new Order(instanceId, order, costumerName);
                         orders.add(costumerOrder);
                     }
 
@@ -84,12 +88,17 @@ public class VendorOrdersActivity extends AppCompatActivity {
                 for (String type: values.keySet()) {
                     String instanceId = "";
                     String order = "";
+                    String costumerName = "";
                     if (type.equals("CostumerInstanceId")) {
                         instanceId = (String) values.get(type);
 
                     } else if (type.equals("Order")) {
                         order = (String) values.get(type);
-                        Order costumerOrder = new Order(instanceId, order);
+
+                    }
+                    else if (type.equals("CostumerName")) {
+                        costumerName = (String) values.get(type);
+                        Order costumerOrder = new Order(instanceId, order, costumerName);
                         orders.remove(costumerOrder);
                     }
 
@@ -125,10 +134,12 @@ public class VendorOrdersActivity extends AppCompatActivity {
     public class Order {
         protected  String costumerInstanceID;
         protected  String order;
+        protected String costumerName;
 
-        Order(String costumerInstanceID, String order ) {
+        Order(String costumerInstanceID, String order, String name ) {
             this.costumerInstanceID = costumerInstanceID;
             this.order = order;
+            this.costumerName = name;
         }
 
         String getCostumerInstanceID() {
@@ -137,6 +148,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
         String getCostumerOrder() {
             return order;
         }
+        String getCostumername() {return costumerName;}
 
         @Override
         public boolean equals(Object o) {
