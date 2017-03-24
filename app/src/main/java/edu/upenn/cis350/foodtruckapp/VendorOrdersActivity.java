@@ -328,7 +328,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 twoLineListItem = (TwoLineListItem) inflater.inflate(
-                        android.R.layout.simple_list_item_2, null);
+                        android.R.layout.simple_list_item_1, null);
             } else {
                 twoLineListItem = (TwoLineListItem) convertView;
             }
