@@ -70,8 +70,6 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         topTrucksRating[7] = eighthVendorRating;
 
         // Todo: Populate TextViews to have name of vendors
-        // I put the names of the TextViews in an array because I think that Firebase will return
-        // an ArrayList of the Vendors & it'll be an easy conversion
 
 //        dinosaursRef.orderByChild("height").addChildEventListener(new ChildEventListener() {
 //            @Override
@@ -173,4 +171,8 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
 //        }
 
     }
+
+
+    //Get all the vendors names
+
 }

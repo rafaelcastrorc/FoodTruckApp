@@ -30,6 +30,7 @@ public class RegistrationVendor extends AppCompatActivity {
 
     private Button uploadButton;
     private DatabaseReference databaseRef;
+    private DatabaseReference databaseRatings;
     private FirebaseDatabase database;
     private String userID;
     EditText typeOfFood;
@@ -45,6 +46,8 @@ public class RegistrationVendor extends AppCompatActivity {
         uploadButton = (Button) findViewById(R.id.truckPhoto);
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
+        databaseRatings = database.getReference("Ratings");
+
         Bundle b = getIntent().getExtras();
         String user = ""; // or other values
         if(b != null)
@@ -105,8 +108,13 @@ public class RegistrationVendor extends AppCompatActivity {
         //Adds this info to the user database
         databaseRef.child(userID).child("Type Of Food").setValue(tof);
         databaseRef.child(userID).child("Name Of Food Truck").setValue(noft);
-        databaseRef.child(userID).child("Rating").child("RatingHolder").child("CurrentRating").setValue(0);
-        databaseRef.child(userID).child("Rating").child("RatingHolder").child("Counter").setValue(0);
+        Double avrgRat = 0.000001;
+        databaseRatings.child(userID).child("AverageRating").setValue(avrgRat);
+        databaseRatings.child(userID).child("Counter").setValue(0);
+        databaseRatings.child(userID).child("UniqueUserID").setValue(userID);
+        databaseRatings.child(userID).child("NameOfFoodTruck").setValue(nameOfFoodTruck.getText().toString());
+
+
 
         //Todo: Vendor page
         Intent i = new Intent(RegistrationVendor.this, VendorMainMenuActivity.class);
