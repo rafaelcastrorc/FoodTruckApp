@@ -1,19 +1,13 @@
 package edu.upenn.cis350.foodtruckapp;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
@@ -32,8 +26,8 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
 
-    public FoodTruckOrderMGM(String userWhoOrdered) {
-        this.username  = userWhoOrdered;
+    public FoodTruckOrderMGM(String username) {
+        this.username  = username;
     }
 
     protected void orderDone() {
@@ -49,8 +43,8 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
     }
 
     private void sendOrder() {
-        String currVendor = mAuth.getCurrentUser().getUid();
-        DatabaseReference nameofft = databaseRef.child(currVendor).child("Name Of Food Truck");
+        String uniqueUID = mAuth.getCurrentUser().getUid();
+        DatabaseReference nameofft = databaseRef.child(uniqueUID).child("Name Of Food Truck");
 
         nameofft.addValueEventListener(new ValueEventListener() {
             @Override

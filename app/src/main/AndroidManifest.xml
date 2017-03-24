@@ -14,13 +14,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".CustomerMainMenuActivity"
-            android:label="Main Menu"/>
-
+            android:label="Main Menu" />
         <activity
             android:name=".VendorMainMenuActivity"
             android:exported="true"
             android:label="Main Menu"></activity>
-        />
         <activity
             android:name=".RegistrationActivity"
             android:exported="true"
@@ -56,7 +54,6 @@
         <activity
             android:name=".VendorProfileActivity"
             android:label="@string/title_activity_vendor_profile"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
@@ -69,15 +66,13 @@
 
         <service
             android:name=".MyFirebaseInstanceIDService">
-        <intent-filter>
-            <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-        </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
         </service>
 
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     </application>
 
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>
