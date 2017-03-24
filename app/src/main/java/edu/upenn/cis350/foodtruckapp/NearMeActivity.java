@@ -1,9 +1,11 @@
 package edu.upenn.cis350.foodtruckapp;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,7 +19,7 @@ public class NearMeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ftnear_me);
 
-        ListView list = (ListView) findViewById(R.id.favs_list);
+        final ListView list = (ListView) findViewById(R.id.favs_list);
 
         // data to be pulled from Firebase
         String[] user_near_trucks = {"Bui's", "Yasmin", "Hemo's", "Magic Carpet", "Yuh Kee's", "Mexicali",
@@ -34,6 +36,22 @@ public class NearMeActivity extends AppCompatActivity {
                 return view;
             }
         });
+
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                Intent truckIntent = new Intent(NearMeActivity.this, TruckActivity.class);
+                TextView textView = (TextView) list.getChildAt(position);
+                String truckName = textView.getText().toString();
+                truckIntent.putExtra("truckName", truckName);
+                startActivity(truckIntent);
+            }
+
+        });
+
         list.setDividerHeight(10);
     }
 }
