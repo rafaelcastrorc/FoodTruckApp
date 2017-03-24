@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Name"
+            android:hint="Name"
             android:ems="10"
             android:id="@+id/nameField" />
     </LinearLayout>
@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Email"
+            android:hint="Email"
             android:ems="10"
             android:id="@+id/emailField" />
     </LinearLayout>
@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName|textWebPassword"
-            android:text="Password"
+            android:hint="Password"
             android:ems="10"
             android:id="@+id/passwordField" />
     </LinearLayout>

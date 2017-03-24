@@ -24,16 +24,20 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:stepSize="1.0"
+            android:max="4"
+            android:numStars="4"
             android:layout_toEndOf="@+id/top_trucks_vendor_one" />
 
         <TextView
             android:layout_height="wrap_content"
-            android:hint="Item #1"
+            android:hint="Food truck #1"
             android:id="@+id/top_trucks_vendor_one"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:layout_width="140dp"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/BLACK"/>
 
     </RelativeLayout>
 
@@ -51,11 +55,12 @@
 
         <TextView
             android:layout_height="wrap_content"
-            android:hint="Item #1"
+            android:hint="Food truck #2"
             android:id="@+id/top_trucks_vendor_two"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
-            android:layout_width="140dp" />
+            android:layout_width="140dp"
+            android:textColor="@color/BLACK"/>
 
         <RatingBar
             android:layout_width="wrap_content"
@@ -65,6 +70,10 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:stepSize="1.0"
+            android:max="4"
+            android:numStars="4"
+
             android:layout_toEndOf="@+id/top_trucks_vendor_two" />
 
     </RelativeLayout>
@@ -83,11 +92,12 @@
 
         <TextView
             android:layout_height="wrap_content"
-            android:hint="Item #1"
+            android:hint="Food truck #3"
             android:id="@+id/top_trucks_vendor_three"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
-            android:layout_width="140dp" />
+            android:layout_width="140dp"
+            android:textColor="@color/BLACK" />
 
         <RatingBar
             android:layout_width="wrap_content"
@@ -97,6 +107,9 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:stepSize="1.0"
+            android:max="4"
+            android:numStars="4"
             android:layout_toEndOf="@+id/top_trucks_vendor_three" />
 
     </RelativeLayout>
@@ -115,11 +128,12 @@
 
         <TextView
             android:layout_height="wrap_content"
-            android:hint="Item #1"
+            android:hint="Food truck #4"
             android:id="@+id/top_trucks_vendor_four"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
-            android:layout_width="140dp" />
+            android:layout_width="140dp"
+            android:textColor="@color/BLACK"/>
 
         <RatingBar
             android:layout_width="wrap_content"
@@ -147,11 +161,12 @@
 
         <TextView
             android:layout_height="wrap_content"
-            android:hint="Item #1"
+            android:hint="Food truck #5"
             android:id="@+id/top_trucks_vendor_five"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
-            android:layout_width="140dp" />
+            android:layout_width="140dp"
+            android:textColor="@color/BLACK"/>
 
         <RatingBar
             android:layout_width="wrap_content"
@@ -179,11 +194,12 @@
 
         <TextView
             android:layout_height="wrap_content"
-            android:hint="Item #1"
+            android:hint="Food truck #6"
             android:id="@+id/top_trucks_vendor_six"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
-            android:layout_width="140dp" />
+            android:layout_width="140dp"
+            android:textColor="@color/BLACK"/>
 
         <RatingBar
             android:layout_width="wrap_content"
@@ -211,11 +227,12 @@
 
         <TextView
             android:layout_height="wrap_content"
-            android:hint="Item #1"
+            android:hint="Food truck #7"
             android:id="@+id/top_trucks_vendor_seven"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
-            android:layout_width="140dp" />
+            android:layout_width="140dp"
+            android:textColor="@color/BLACK"/>
 
         <RatingBar
             android:layout_width="wrap_content"
@@ -243,11 +260,12 @@
 
         <TextView
             android:layout_height="wrap_content"
-            android:hint="Item #1"
+            android:hint="Food truck #8"
             android:id="@+id/top_trucks_vendor_eight"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
-            android:layout_width="140dp" />
+            android:layout_width="140dp"
+            android:textColor="@color/BLACK" />
 
         <RatingBar
             android:layout_width="wrap_content"
