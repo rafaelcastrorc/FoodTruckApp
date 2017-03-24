@@ -52,6 +52,9 @@
             android:name=".VendorOrdersActivity"
             android:label="My Orders" />
         <activity
+            android:name=".TruckActivity"
+            android:label="Rate Food Truck" />
+        <activity
             android:name=".VendorProfileActivity"
             android:label="@string/title_activity_vendor_profile"
             android:theme="@style/AppTheme.NoActionBar" />
