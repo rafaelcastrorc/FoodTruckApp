@@ -164,16 +164,16 @@ public class VendorOrdersActivity extends AppCompatActivity {
         // setup Complete Order popup
         AlertDialog.Builder confirmPopupBuilder = new AlertDialog.Builder(this);
         confirmPopupBuilder.setTitle("Complete Order");
-        confirmPopupBuilder.setMessage("Are you sure you want to complete " + selectedOrder.getCostumerName().toString()
+        confirmPopupBuilder.setMessage("Are you sure you want to complete " + selectedOrder.getCustomerName().toString()
                 + "'s order?");
 
         confirmPopupBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCostumerName() + " has been" +
+                Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCustomerName() + " has been" +
                         " notified of their order!", Toast.LENGTH_LONG).show();
 
-                String customerInstanceId = selectedOrder.getCostumerInstanceID();
+                String customerInstanceId = selectedOrder.getCustomerInstanceID();
                 customerInstanceId = FirebaseInstanceId.getInstance().getId();          // for testing purposes
                 FoodTruckOrderMGM notifications = new FoodTruckOrderMGM(customerInstanceId);
                 notifications.orderDone();
@@ -213,15 +213,15 @@ public class VendorOrdersActivity extends AppCompatActivity {
         // setup Cancelled popup
         AlertDialog.Builder cancelledPopupBuilder = new AlertDialog.Builder(this);
         cancelledPopupBuilder.setTitle("Cancel Order");
-        cancelledPopupBuilder.setMessage("Are you sure you want to cancel " + selectedOrder.getCostumerName().toString()
+        cancelledPopupBuilder.setMessage("Are you sure you want to cancel " + selectedOrder.getCustomerName().toString()
                 + "'s order?");
 
         cancelledPopupBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCostumerName() + "'s " +
+                Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCustomerName() + "'s " +
                         " order has been cancelled", Toast.LENGTH_LONG).show();
-                String customerInstanceId = selectedOrder.getCostumerInstanceID();
+                String customerInstanceId = selectedOrder.getCustomerInstanceID();
                 customerInstanceId = FirebaseInstanceId.getInstance().getId();          // for testing purposes
                 FoodTruckOrderMGM notifications = new FoodTruckOrderMGM(customerInstanceId);
                 notifications.orderDone();

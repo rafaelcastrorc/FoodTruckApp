@@ -40,24 +40,24 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         topTrucks[6] = seventhVendorName;
         topTrucks[7] = eighthVendorName;
 
-        RatingBar firstVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_one_rating);
-        RatingBar secondVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_two_rating);
-        RatingBar thirdVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_three_rating);
-        RatingBar fourthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_four_rating);
-        RatingBar fifthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_five_rating);
-        RatingBar sixthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_six_rating);
-        RatingBar seventhVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_seven_rating);
-        RatingBar eighthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_eight_rating);
+//        RatingBar firstVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_one_rating);
+//        RatingBar secondVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_two_rating);
+//        RatingBar thirdVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_three_rating);
+//        RatingBar fourthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_four_rating);
+//        RatingBar fifthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_five_rating);
+//        RatingBar sixthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_six_rating);
+//        RatingBar seventhVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_seven_rating);
+//        RatingBar eighthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_eight_rating);
 
-        RatingBar[] topTrucksRating = new RatingBar[8];
-        topTrucksRating[0] = firstVendorRating;
-        topTrucksRating[1] = secondVendorRating;
-        topTrucksRating[2] = thirdVendorRating;
-        topTrucksRating[3] = fourthVendorRating;
-        topTrucksRating[4] = fifthVendorRating;
-        topTrucksRating[5] = sixthVendorRating;
-        topTrucksRating[6] = seventhVendorRating;
-        topTrucksRating[7] = eighthVendorRating;
+//        RatingBar[] topTrucksRating = new RatingBar[8];
+//        topTrucksRating[0] = firstVendorRating;
+//        topTrucksRating[1] = secondVendorRating;
+//        topTrucksRating[2] = thirdVendorRating;
+//        topTrucksRating[3] = fourthVendorRating;
+//        topTrucksRating[4] = fifthVendorRating;
+//        topTrucksRating[5] = sixthVendorRating;
+//        topTrucksRating[6] = seventhVendorRating;
+//        topTrucksRating[7] = eighthVendorRating;
 
         // Todo: Populate TextViews to have name of vendors
         // I put the names of the TextViews in an array because I think that Firebase will return
@@ -70,7 +70,7 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         // Todo: Populate RatingBars to have ratings of vendors
 
         for (int i = 0; i < 8; i++) {
-            topTrucksRating[i].setRating(4);
+//            topTrucksRating[i].setRating(4);
         }
 
     }

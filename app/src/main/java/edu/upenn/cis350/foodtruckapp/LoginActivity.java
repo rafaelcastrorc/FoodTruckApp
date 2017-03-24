@@ -48,7 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
 
-
+        // in case of NPE on opening the app with login, run with following line then delete (to sign out)
+//        firebaseAuth.signOut();
 
         // [START auth_state_listener]
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -155,10 +156,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
             });
-
-
-
-
         }
     }
 

@@ -11,6 +11,7 @@
     tools:context="edu.upenn.cis350.foodtruckapp.CustomerMainMenuActivity"
     android:background="@android:color/white">
 
+
     <Button
         android:text="Top Food Trucks"
         android:textSize="12pt"
@@ -69,9 +70,17 @@
         android:text="Sign Out"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:id="@+id/sign_out"
-        android:onClick="sign_out_onClick" />
+        android:onClick="sign_out_onClick"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+    <Button
+        android:text="Map View"
+        android:id="@+id/button_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
+
 </RelativeLayout>
