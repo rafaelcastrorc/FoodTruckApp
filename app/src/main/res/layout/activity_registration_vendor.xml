@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Truck Name"
+            android:hint="Truck Name"
             android:ems="10"
             android:id="@+id/truckNameField" />
     </LinearLayout>
@@ -92,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Food Type"
+            android:hint="Food Type"
             android:ems="10"
             android:id="@+id/foodTypeField" />
     </LinearLayout>

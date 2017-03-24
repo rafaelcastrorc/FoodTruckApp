@@ -2,11 +2,21 @@ package edu.upenn.cis350.foodtruckapp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeSet;
 
 
 public class TopFoodTrucksActivity extends AppCompatActivity {
@@ -20,6 +30,10 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
     private DatabaseReference rating;
+    private ArrayList<Vendor> vendors = new ArrayList<Vendor>();
+    private TextView[] topTrucks = null;
+    private RatingBar[] topTrucksRating = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +45,7 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         //ProcessingRatings pr = new ProcessingRatings();
         //pr.pushRatingToDatabase("K1Z7QIYsM9QtVDMI2hMUnLIGcIy2", 4);
 
-        TextView firstVendorName = (TextView) findViewById(R.id.top);
+        TextView firstVendorName = (TextView) findViewById(R.id.top_trucks_vendor_one);
         TextView secondVendorName = (TextView) findViewById(R.id.top_trucks_vendor_two);
         TextView thirdVendorName = (TextView) findViewById(R.id.top_trucks_vendor_three);
         TextView fourthVendorName = (TextView) findViewById(R.id.top_trucks_vendor_four);
@@ -40,7 +54,7 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         TextView seventhVendorName = (TextView) findViewById(R.id.top_trucks_vendor_seven);
         TextView eighthVendorName = (TextView) findViewById(R.id.top_trucks_vendor_eight);
 
-        TextView[] topTrucks = new TextView[8];
+        topTrucks = new TextView[8];
         topTrucks[0] = firstVendorName;
         topTrucks[1] = secondVendorName;
         topTrucks[2] = thirdVendorName;
@@ -59,7 +73,7 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         RatingBar seventhVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_seven_rating);
         RatingBar eighthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_eight_rating);
 
-        RatingBar[] topTrucksRating = new RatingBar[8];
+        topTrucksRating = new RatingBar[8];
         topTrucksRating[0] = firstVendorRating;
         topTrucksRating[1] = secondVendorRating;
         topTrucksRating[2] = thirdVendorRating;
@@ -72,105 +86,78 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         // Todo: Populate TextViews to have name of vendors
         // I put the names of the TextViews in an array because I think that Firebase will return
         // an ArrayList of the Vendors & it'll be an easy conversion
+        databaseRef = FirebaseDatabase.getInstance().getReference().child("Ratings");
+        vendors = new ArrayList<Vendor>();
 
-//        dinosaursRef.orderByChild("height").addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-//                Dinosaur dinosaur = dataSnapshot.getValue(Dinosaur.class);
-//                System.out.println(dataSnapshot.getKey() + " was " + dinosaur.height + " meters tall.");
-//            }
-//
-//            // ...
-//        });
-//        ArrayList<>
-//        databaseRef = FirebaseDatabase.getInstance().getReference("Ratings");
-//        databaseRef.addChildEventListener(new ChildEventListener() {
-//
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
-//                for (String type: values.keySet()) {
-//
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        })
-//        HashMap<String, Object> foodTrucks = databaseRef.get
-//
-//        databaseRef.orderByChild("AverageRating").addChildEventListener(new ChildEventListener() {
-//
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
-//                for (String type: values.keySet()) {
-//
-//                    if (type.equals("AverageRating")) {
-//                        this.instanceId = (String) values.get(type);
-//
-//                    }
-//                    else if (type.equals("Order")) {
-//                        this.order = (String) values.get(type);
-//                    }
-//                    else if (type.equals("CustomerName")){
-//                        this.customerName = (String) values.get(type);
-//                    }
-//                    else if (type.equals("PushId")){
-//                        this.pushId = (String) values.get(type);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        })
+        databaseRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
+
+                String name = null;
+                Double rating = 0.0;
+                Long count = new Long(0);
+
+                for (Map.Entry<String, Object> entry: values.entrySet()) {
+
+                    if (entry.getKey().equals("NameOfFoodTruck")) {
+                        name = (String) entry.getValue();
+                    }
+                    else if (entry.getKey().equals("AverageRating")) {
+                        rating = (Double) entry.getValue();
+                    }
+                    else if (entry.getKey().equals("Count")) {
+                        count = (Long) entry.getValue();
+                    }
+                }
+
+                Vendor vendor = new Vendor(name, rating, count);
+                vendors.add(vendor);
+                populateTextFields();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 //        mAuth = FirebaseAuth.getInstance();
 //        String currVendor = mAuth.getCurrentUser().getUid();
-//
-//        for (int i = 0; i < 8; i++) {
-//            rating = databaseRef.child(currVendor).child("Orders");
-//            topTrucks[i].setText("SET ME TO A VENDOR NAME");
-//        }
-//
-//        // Todo: Populate RatingBars to have ratings of vendors
-//
-//        for (int i = 0; i < 8; i++) {
-//           // topTrucksRating[i].setRating(4);
-//        }
+    }
 
+    void populateTextFields() {
+        TreeSet<Vendor> sortedVendors = new TreeSet<Vendor>();
+        sortedVendors.addAll(vendors);
+        ArrayList<Vendor> listOfSortedVendors = new ArrayList<Vendor>();
+        listOfSortedVendors.addAll(sortedVendors);
+
+        Log.d("size", Integer.toString(sortedVendors.size()));
+
+        for (int i = 0; i < Math.min(8, sortedVendors.size()); i++) {     // populate either top 8 or size of sortedVendors
+            Vendor vendor = listOfSortedVendors.get(i);
+            topTrucks[i].setText(vendor.getName());
+
+//
+//            Double avgRating = ((rating * count) + rating)/(count + 1);
+//            Log.d(vendor.getRating().toString(), vendor.getRating().toString());
+
+            topTrucksRating[i].setRating(vendor.getRating().floatValue());
+            Log.d("VENDOR", vendor.getName());
+        }
     }
 }

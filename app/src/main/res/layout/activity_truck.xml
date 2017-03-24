@@ -46,15 +46,6 @@
         android:layout_marginTop="39dp"
         android:id="@+id/rating4" />
 
-    <Button
-        android:text="5 Star"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rating4"
-        android:layout_alignStart="@+id/rating4"
-        android:layout_marginTop="33dp"
-        android:id="@+id/rating5" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
 
 
@@ -156,13 +157,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
-
-
-
         }
     }
-
-
 }
 
 
