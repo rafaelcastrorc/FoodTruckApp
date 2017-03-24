@@ -15,6 +15,13 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_food_trucks);
         ListView list = (ListView) findViewById(R.id.top_food_trucks_list);
+
+        //Pull food trucks from database
+        //Get their unique ids
+        //uniqueId.getChild("Name Of Food Truck")
+        //Todo: Start counter with 0 rating and 0
+        //ProcessingRatings pr = new ProcessingRatings();
+        //pr.pushRatingToDatabase("K1Z7QIYsM9QtVDMI2hMUnLIGcIy2", 4);
         String[] user_fav_trucks = {"Halal @ 38th & Walnut                             4" +
                 "", "Hemo's                                                      5",
                 "Magic Carpet                                            3",
@@ -24,7 +31,7 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
                 "The Real Le Ann                                      4",
                 "Bento Box                                                3",
                 "Casablanca                                             2",
-                "Bui's                                                          4"}; // data to be pulled from Firebase
+                "Bui's                                                          4"}; // Todo: data to be pulled from Firebase
         list.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_style,
                 user_fav_trucks) {
             @Override

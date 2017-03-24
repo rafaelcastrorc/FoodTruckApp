@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,21 +88,22 @@ public class VendorOrdersActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
+                String instanceId = "";
+                String order = "";
+                String customerName = "";
                 for (String type: values.keySet()) {
-                    String instanceId = "";
-                    String order = "";
-                    String costumerName = "";
-                    if (type.equals("CostumerInstanceId")) {
+
+                    if (type.equals("CustomerInstanceId")) {
                         instanceId = (String) values.get(type);
 
                     }
                     else if (type.equals("Order")) {
                         order = (String) values.get(type);
                     }
-                    else if (type.equals("CostumerName")){
-                        costumerName = (String) values.get(type);
-                        Order costumerOrder = new Order(instanceId, order, costumerName);
-                        orders.add(costumerOrder);
+                    else if (type.equals("CustomerName")){
+                        customerName = (String) values.get(type);
+                        Order customerOrder = new Order(instanceId, order, customerName);
+                        orders.add(customerOrder);
                     }
 
                 }
@@ -116,21 +118,22 @@ public class VendorOrdersActivity extends AppCompatActivity {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
+                String instanceId = "";
+                String order = "";
+                String customerName = "";
                 for (String type: values.keySet()) {
-                    String instanceId = "";
-                    String order = "";
-                    String costumerName = "";
-                    if (type.equals("CostumerInstanceId")) {
+
+                    if (type.equals("CustomerInstanceId")) {
                         instanceId = (String) values.get(type);
 
                     } else if (type.equals("Order")) {
                         order = (String) values.get(type);
 
                     }
-                    else if (type.equals("CostumerName")) {
-                        costumerName = (String) values.get(type);
-                        Order costumerOrder = new Order(instanceId, order, costumerName);
-                        orders.remove(costumerOrder);
+                    else if (type.equals("CustomerName")) {
+                        customerName = (String) values.get(type);
+                        Order customerOrder = new Order(instanceId, order, customerName);
+                        orders.remove(customerOrder);
                     }
 
                 }
@@ -158,10 +161,10 @@ public class VendorOrdersActivity extends AppCompatActivity {
             return;
         }
 
-        Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCostumerName() + " has been" +
+        Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCustomerName() + " has been" +
                 " notified of their order!", Toast.LENGTH_LONG).show();
-        String customerInstanceId = selectedOrder.getCostumerInstanceID();
-        customerInstanceId = FirebaseInstanceId.getInstance().getId(); // for testing purposes
+        String customerInstanceId = selectedOrder.getCustomerInstanceID();
+
         FoodTruckOrderMGM notifications = new FoodTruckOrderMGM(customerInstanceId);
         notifications.orderDone();
 
@@ -179,9 +182,9 @@ public class VendorOrdersActivity extends AppCompatActivity {
         if (selectedOrder == null) {            // button clicked but no order selected
             return;
         }
-        Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCostumerName() + "'s order" +
+        Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCustomerName() + "'s order" +
                 " has been cancelled!", Toast.LENGTH_LONG).show();
-        String customerInstanceId = selectedOrder.getCostumerInstanceID();
+        String customerInstanceId = selectedOrder.getCustomerInstanceID();
         //customerInstanceId = FirebaseInstanceId.getInstance().getId(); // for testing purposes
         FoodTruckOrderMGM notifications = new FoodTruckOrderMGM(customerInstanceId);
         notifications.orderDone();
@@ -194,23 +197,23 @@ public class VendorOrdersActivity extends AppCompatActivity {
     }
 
     public class Order {
-        protected String costumerInstanceID;
+        protected String customerInstanceID;
         protected String order;
-        protected String costumerName;
+        protected String customerName;
 
-        Order(String costumerInstanceID, String order, String name ) {
-            this.costumerInstanceID = costumerInstanceID;
+        Order(String customerInstanceID, String order, String name ) {
+            this.customerInstanceID = customerInstanceID;
             this.order = order;
-            this.costumerName = name;
+            this.customerName = name;
         }
 
-        public String getCostumerInstanceID() {
-            return costumerInstanceID;
+        public String getCustomerInstanceID() {
+            return customerInstanceID;
         }
-        public String getCostumerOrder() {
+        public String getCustomerOrder() {
             return order;
         }
-        public String getCostumerName() {return costumerName;}
+        public String getCustomerName() {return customerName;}
 
         @Override
         public boolean equals(Object o) {
@@ -219,7 +222,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
             Order order1 = (Order) o;
 
-            if (costumerInstanceID != null ? !costumerInstanceID.equals(order1.costumerInstanceID) : order1.costumerInstanceID != null)
+            if (customerInstanceID != null ? !customerInstanceID.equals(order1.customerInstanceID) : order1.customerInstanceID != null)
                 return false;
             return order != null ? order.equals(order1.order) : order1.order == null;
 
@@ -227,7 +230,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
         @Override
         public int hashCode() {
-            int result = costumerInstanceID != null ? costumerInstanceID.hashCode() : 0;
+            int result = customerInstanceID != null ? customerInstanceID.hashCode() : 0;
             result = 31 * result + (order != null ? order.hashCode() : 0);
             return result;
         }
@@ -235,7 +238,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
         @Override
         public String toString() {
             String formattedOrder = "";
-            formattedOrder = order + "\n" + costumerName;
+            formattedOrder = order + "\n" + customerName;
             return formattedOrder;
 
         }
@@ -282,8 +285,9 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
             TextView text1 = twoLineListItem.getText1();
             TextView text2 = twoLineListItem.getText2();
-            text1.setText(orders.get(position).getCostumerName());
-            text2.setText("Halal");
+            text1.setText(orders.get(position).getCustomerName());
+            Log.d("fuck", orders.get(position).getCustomerOrder());
+            text2.setText(orders.get(position).getCustomerOrder());
             return twoLineListItem;
         }
     }

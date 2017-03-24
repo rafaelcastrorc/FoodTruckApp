@@ -44,10 +44,6 @@ public class VendorMainMenuActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-
-
-
     }
 
     public void sign_out_Vendor_onClick(View v) {
