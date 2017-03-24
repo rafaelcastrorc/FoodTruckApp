@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:id="@+id/vendor_orders_layout"
+    android:descendantFocusability="blocksDescendants"
+    android:clickable="true">
+
+    <ListView
+        android:id="@+id/order_list"
+        android:layout_width="wrap_content"
+        android:layout_height="267dp"
+        android:layout_weight="0.97"
+        android:elevation="24dp"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="59dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:text="Cancel Order"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:background="@drawable/button_style"
+            android:layout_width="88dp"
+            android:layout_height="match_parent"
+            android:id="@+id/button_vendor_order_cancelled"
+            android:height = "120dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="OrderCancelledOnClick"
+            android:layout_marginLeft="6dp" />
+
+        <Button
+            android:text="Order Is Ready!"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:background="@drawable/button_style"
+            android:layout_width="88dp"
+            android:layout_height="match_parent"
+            android:id="@+id/button_vendor_order_ready"
+            android:height = "120dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="OrderDoneOnClick"
+            android:layout_marginLeft="172dp" />
+
+    </LinearLayout>
+
+    <!--<Button-->
+        <!--android:text="Order Is Ready!"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:background="@drawable/button_style"-->
+        <!--android:layout_width="88dp"-->
+        <!--android:layout_height="58dp"-->
+        <!--android:id="@+id/button_vendor_profile"-->
+        <!--android:height = "120dp"-->
+        <!--android:layout_below="@+id/button_vendor_orders"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:onClick="OrderDoneOnClick"-->
+        <!--android:layout_marginLeft="270dp" />-->
+
+</LinearLayout>

@@ -105,9 +105,11 @@ public class RegistrationVendor extends AppCompatActivity {
         //Adds this info to the user database
         databaseRef.child(userID).child("Type Of Food").setValue(tof);
         databaseRef.child(userID).child("Name Of Food Truck").setValue(noft);
+        databaseRef.child(userID).child("Rating").child("RatingHolder").child("CurrentRating").setValue(0);
+        databaseRef.child(userID).child("Rating").child("RatingHolder").child("Counter").setValue(0);
 
         //Todo: Vendor page
-        Intent i = new Intent(RegistrationVendor.this, CustomerMainMenuActivity.class);
+        Intent i = new Intent(RegistrationVendor.this, VendorMainMenuActivity.class);
         startActivity(i);
     }
 

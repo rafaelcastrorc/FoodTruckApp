@@ -3,6 +3,8 @@
     package="edu.upenn.cis350.foodtruckapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
     <application
         android:allowBackup="true"
@@ -12,18 +14,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".CustomerMainMenuActivity"
-            android:label="Main Menu"/>
-
+            android:label="Main Menu" />
         <activity
-            android:name=".LoginActivity" android:label="Login"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
+            android:name=".VendorMainMenuActivity"
+            android:exported="true"
+            android:label="Main Menu"></activity>
         <activity
             android:name=".RegistrationActivity"
             android:exported="true"
@@ -32,9 +27,6 @@
             android:name=".RegistrationVendor"
             android:label="Registration Vendor" />
         <activity
-            android:name=".RegisterChoiceActivity"
-            android:label="Type of user" />
-        <activity
             android:name=".FavoritesActivity"
             android:label="Favorites" />
         <activity
@@ -42,10 +34,45 @@
             android:label="Top Food Trucks" />
         <activity
             android:name=".NearMeActivity"
-            android:label="Food trucks near me"/>
+            android:label="Food trucks Near Me" />
         <activity
             android:name=".RegisterChoiceActivity"
-            android:label="Type of user" />
+            android:label="Type of User" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="Login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".VendorOrdersActivity"
+            android:label="My Orders" />
+        <activity
+            android:name=".VendorProfileActivity"
+            android:label="@string/title_activity_vendor_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+
+        <service
+            android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
     </application>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

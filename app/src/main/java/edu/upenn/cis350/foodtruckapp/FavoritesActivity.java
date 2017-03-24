@@ -1,6 +1,7 @@
 package edu.upenn.cis350.foodtruckapp;
 
 import android.os.Bundle;
+import android.os.Process;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,5 +28,5 @@ public class FavoritesActivity extends AppCompatActivity {
             }
         });
         list.setDividerHeight(10);
-    }
+    }//
 }

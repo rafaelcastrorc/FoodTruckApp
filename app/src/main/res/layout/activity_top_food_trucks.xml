@@ -9,146 +9,267 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.upenn.cis350.foodtruckapp.TopFoodTrucksActivity"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:weightSum="1">
 
-
-
-
-    <ListView
-        android:layout_width="113dp"
-        android:layout_height="456dp"
-        android:layout_below="@+id/favs_text"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp"
-        android:id="@+id/top_food_trucks_list"
-        android:elevation="0dp"
-        android:minHeight="@dimen/top_food_trucks_min_height"/>
-
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-    <TextView
-        android:text="Rating"
+    <RelativeLayout
         android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText2"
-        android:orientation="vertical"/>
-
-
+        android:layout_height="62dp">
 
         <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize=".50"
-            android:rating="3"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="17dp"
+            android:id="@+id/top_trucks_vendor_one_rating"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/top_trucks_vendor_one" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:hint="Item #1"
+            android:id="@+id/top_trucks_vendor_one"
+            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="10dp" />
+            android:layout_width="140dp"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
+
+    <View
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:background="#000000"
+        android:layout_alignLeft="@id/top_trucks_vendor_one"
+        android:layout_alignRight="@id/top_trucks_vendor_one_rating"
+        android:layout_height="1dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="62dp">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:hint="Item #1"
+            android:id="@+id/top_trucks_vendor_two"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="140dp" />
 
         <RatingBar
-            android:id="@+id/ratingBar6"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize=".50"
-            android:rating="1"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="17dp"
+            android:id="@+id/top_trucks_vendor_two_rating"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/top_trucks_vendor_two" />
+
+    </RelativeLayout>
+
+    <View
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:background="#000000"
+        android:layout_alignLeft="@id/top_trucks_vendor_two"
+        android:layout_alignRight="@id/top_trucks_vendor_two_rating"
+        android:layout_height="1dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="62dp">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:hint="Item #1"
+            android:id="@+id/top_trucks_vendor_three"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="140dp" />
 
         <RatingBar
-            android:id="@+id/ratingBar7"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize=".25"
-            android:rating="2.5"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="17dp"
+            android:id="@+id/top_trucks_vendor_three_rating"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="10dp" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/top_trucks_vendor_three" />
+
+    </RelativeLayout>
+
+    <View
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:background="#000000"
+        android:layout_alignLeft="@id/top_trucks_vendor_three"
+        android:layout_alignRight="@id/top_trucks_vendor_three_rating"
+        android:layout_height="1dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="62dp">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:hint="Item #1"
+            android:id="@+id/top_trucks_vendor_four"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="140dp" />
 
         <RatingBar
-            android:id="@+id/ratingBar8"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize="1.0"
-            android:rating="1.5"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="17dp"
+            android:id="@+id/top_trucks_vendor_four_rating"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_weight="0.02"
-            android:layout_marginTop="10dp" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/top_trucks_vendor_four" />
+
+    </RelativeLayout>
+
+    <View
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:background="#000000"
+        android:layout_alignLeft="@id/top_trucks_vendor_four"
+        android:layout_alignRight="@id/top_trucks_vendor_four_rating"
+        android:layout_height="1dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="62dp">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:hint="Item #1"
+            android:id="@+id/top_trucks_vendor_five"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="140dp" />
 
         <RatingBar
-            android:id="@+id/ratingBar9"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize=".25"
-            android:rating="3.5"
-            android:layout_marginLeft="50dp"
-            android:layout_marginStart="17dp"
+            android:id="@+id/top_trucks_vendor_five_rating"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_weight="0.02"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="0dp" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/top_trucks_vendor_five" />
+
+    </RelativeLayout>
+
+    <View
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:background="#000000"
+        android:layout_alignLeft="@id/top_trucks_vendor_five"
+        android:layout_alignRight="@id/top_trucks_vendor_five_rating"
+        android:layout_height="1dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="62dp">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:hint="Item #1"
+            android:id="@+id/top_trucks_vendor_six"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="140dp" />
 
         <RatingBar
-            android:id="@+id/ratingBar11"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize=".25"
-            android:rating="1.5"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="17dp"
+            android:id="@+id/top_trucks_vendor_six_rating"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_weight="0.02"
-            android:layout_marginTop="10dp" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/top_trucks_vendor_six" />
+
+    </RelativeLayout>
+
+    <View
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:background="#000000"
+        android:layout_alignLeft="@id/top_trucks_vendor_six"
+        android:layout_alignRight="@id/top_trucks_vendor_six_rating"
+        android:layout_height="1dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="62dp">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:hint="Item #1"
+            android:id="@+id/top_trucks_vendor_seven"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="140dp" />
 
         <RatingBar
-            android:id="@+id/ratingBar10"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize=".25"
-            android:rating="5"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="17dp"
+            android:id="@+id/top_trucks_vendor_seven_rating"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_weight="0.02"
-            android:layout_marginTop="10dp" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/top_trucks_vendor_seven" />
+
+    </RelativeLayout>
+
+    <View
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:background="#000000"
+        android:layout_alignLeft="@id/top_trucks_vendor_seven"
+        android:layout_alignRight="@id/top_trucks_vendor_seven_rating"
+        android:layout_height="1dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="62dp">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:hint="Item #1"
+            android:id="@+id/top_trucks_vendor_eight"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="140dp" />
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/top_trucks_vendor_eight_rating"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/top_trucks_vendor_eight" />
+
+    </RelativeLayout>
+
+    <View
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:background="#000000"
+        android:layout_alignLeft="@id/top_trucks_vendor_eight"
+        android:layout_alignRight="@id/top_trucks_vendor_eight_rating"
+        android:layout_height="1dp" />
 
 
-
-    </LinearLayout>
 </LinearLayout>
 
 
