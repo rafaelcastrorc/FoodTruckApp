@@ -3,6 +3,7 @@ package edu.upenn.cis350.foodtruckapp;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,11 +31,16 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
         this.username  = username;
     }
 
-    protected void orderDone() {
+    protected void orderDone(int i) {
         FirebaseMessaging.getInstance().subscribeToTopic("user_"+username); //For testing purposes
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         mAuth = FirebaseAuth.getInstance();
-        sendOrder();
+        if (i == 2) {
+            sendOrder2();
+        }
+        else {
+            sendOrder();
+        }
 
         //for testing purposes we are going to send the notification to the same device we are testing
         //Do this part inside the client send order part
@@ -51,6 +57,24 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String foodTruckName= dataSnapshot.getValue().toString();
                 sendNotificationToUser(username, "Your order at " + foodTruckName + " is ready!");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
+    private void sendOrder2() {
+        String uniqueUID = mAuth.getCurrentUser().getUid();
+        DatabaseReference nameofft = databaseRef.child(uniqueUID).child("Name Of Food Truck");
+
+        nameofft.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String foodTruckName= dataSnapshot.getValue().toString();
+                sendNotificationToUser(username, "Your order at " + foodTruckName + " was cancelled");
             }
 
             @Override
