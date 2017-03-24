@@ -14,36 +14,64 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_food_trucks);
-        ListView list = (ListView) findViewById(R.id.top_food_trucks_list);
-
         //Pull food trucks from database
         //Get their unique ids
         //uniqueId.getChild("Name Of Food Truck")
         //Todo: Start counter with 0 rating and 0
         //ProcessingRatings pr = new ProcessingRatings();
         //pr.pushRatingToDatabase("K1Z7QIYsM9QtVDMI2hMUnLIGcIy2", 4);
-        String[] user_fav_trucks = {"Halal @ 38th & Walnut                             4" +
-                "", "Hemo's                                                      5",
-                "Magic Carpet                                            3",
-                "Yuh Kee's                                                  5",
-                "Mexicali                                                     2",
-                "Bubble Tea                                               5",
-                "The Real Le Ann                                      4",
-                "Bento Box                                                3",
-                "Casablanca                                             2",
-                "Bui's                                                          4"}; // Todo: data to be pulled from Firebase
-        list.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_style,
-                user_fav_trucks) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView textView = ((TextView) view.findViewById(android.R.id.text1));
-                textView.setHeight(200);
-                return view;
-            }
-        });
-        list.setDividerHeight(10);
 
+        TextView firstVendorName = (TextView) findViewById(R.id.top_trucks_vendor_one);
+        TextView secondVendorName = (TextView) findViewById(R.id.top_trucks_vendor_two);
+        TextView thirdVendorName = (TextView) findViewById(R.id.top_trucks_vendor_three);
+        TextView fourthVendorName = (TextView) findViewById(R.id.top_trucks_vendor_four);
+        TextView fifthVendorName = (TextView) findViewById(R.id.top_trucks_vendor_five);
+        TextView sixthVendorName = (TextView) findViewById(R.id.top_trucks_vendor_six);
+        TextView seventhVendorName = (TextView) findViewById(R.id.top_trucks_vendor_seven);
+        TextView eighthVendorName = (TextView) findViewById(R.id.top_trucks_vendor_eight);
+
+        TextView[] topTrucks = new TextView[8];
+        topTrucks[0] = firstVendorName;
+        topTrucks[1] = secondVendorName;
+        topTrucks[2] = thirdVendorName;
+        topTrucks[3] = fourthVendorName;
+        topTrucks[4] = fifthVendorName;
+        topTrucks[5] = sixthVendorName;
+        topTrucks[6] = seventhVendorName;
+        topTrucks[7] = eighthVendorName;
+
+        RatingBar firstVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_one_rating);
+        RatingBar secondVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_two_rating);
+        RatingBar thirdVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_three_rating);
+        RatingBar fourthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_four_rating);
+        RatingBar fifthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_five_rating);
+        RatingBar sixthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_six_rating);
+        RatingBar seventhVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_seven_rating);
+        RatingBar eighthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_eight_rating);
+
+        RatingBar[] topTrucksRating = new RatingBar[8];
+        topTrucksRating[0] = firstVendorRating;
+        topTrucksRating[1] = secondVendorRating;
+        topTrucksRating[2] = thirdVendorRating;
+        topTrucksRating[3] = fourthVendorRating;
+        topTrucksRating[4] = fifthVendorRating;
+        topTrucksRating[5] = sixthVendorRating;
+        topTrucksRating[6] = seventhVendorRating;
+        topTrucksRating[7] = eighthVendorRating;
+
+        // Todo: Populate TextViews to have name of vendors
+        // I put the names of the TextViews in an array because I think that Firebase will return
+        // an ArrayList of the Vendors & it'll be an easy conversion
+
+        for (int i = 0; i < 8; i++) {
+           topTrucks[i].setText("SET ME TO A VENDOR NAME");
+        }
+
+        // Todo: Populate RatingBars to have ratings of vendors
+
+        for (int i = 0; i < 8; i++) {
+            topTrucksRating[i].setRating(4);
+        }
 
     }
 }

@@ -1,8 +1,10 @@
 package edu.upenn.cis350.foodtruckapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -149,30 +151,55 @@ public class VendorOrdersActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
     }
 
 
     // Send notification to customer that their order is ready
     public void OrderDoneOnClick(View v) {
-
         if (selectedOrder == null) {            // button clicked but no order selected
-            Toast.makeText(VendorOrdersActivity.this, "No order selected", Toast.LENGTH_LONG).show();
+            Toast.makeText(VendorOrdersActivity.this, "You must select an order first", Toast.LENGTH_LONG).show();
             return;
         }
 
-        Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCustomerName() + " has been" +
-                " notified of their order!", Toast.LENGTH_LONG).show();
-        String customerInstanceId = selectedOrder.getCustomerInstanceID();
+        // setup Complete Order popup
+        AlertDialog.Builder confirmPopupBuilder = new AlertDialog.Builder(this);
+        confirmPopupBuilder.setTitle("Complete Order");
+        confirmPopupBuilder.setMessage("Are you sure you want to complete " + selectedOrder.getCostumerName().toString()
+                + "'s order?");
 
-        FoodTruckOrderMGM notifications = new FoodTruckOrderMGM(customerInstanceId);
-        notifications.orderDone();
+        confirmPopupBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
-        // make text normal
-        previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
-        previousChildSelected.getText2().setTypeface(null, Typeface.NORMAL);
-        previousChildSelected = null;
-        isOrderSelected = false;
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCostumerName() + " has been" +
+                        " notified of their order!", Toast.LENGTH_LONG).show();
+
+                String customerInstanceId = selectedOrder.getCostumerInstanceID();
+                customerInstanceId = FirebaseInstanceId.getInstance().getId();          // for testing purposes
+                FoodTruckOrderMGM notifications = new FoodTruckOrderMGM(customerInstanceId);
+                notifications.orderDone();
+
+                // make text normal
+                previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
+                previousChildSelected.getText2().setTypeface(null, Typeface.NORMAL);
+                previousChildSelected = null;
+                isOrderSelected = false;
+
+                dialog.dismiss();
+            }
+        });
+
+        confirmPopupBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+            }
+        });
+
+        // show Complete Order popup
+        AlertDialog alert = confirmPopupBuilder.create();
+        alert.show();
     }
 
     // Todo: Setup functionality for when a vendor cancels order
@@ -180,20 +207,48 @@ public class VendorOrdersActivity extends AppCompatActivity {
     public void OrderCancelledOnClick(View v) {
 
         if (selectedOrder == null) {            // button clicked but no order selected
+            Toast.makeText(VendorOrdersActivity.this, "You must select an order first", Toast.LENGTH_LONG).show();
             return;
         }
-        Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCustomerName() + "'s order" +
-                " has been cancelled!", Toast.LENGTH_LONG).show();
-        String customerInstanceId = selectedOrder.getCustomerInstanceID();
-        //customerInstanceId = FirebaseInstanceId.getInstance().getId(); // for testing purposes
-        FoodTruckOrderMGM notifications = new FoodTruckOrderMGM(customerInstanceId);
-        notifications.orderDone();
+        // setup Cancelled popup
+        AlertDialog.Builder cancelledPopupBuilder = new AlertDialog.Builder(this);
+        cancelledPopupBuilder.setTitle("Cancel Order");
+        cancelledPopupBuilder.setMessage("Are you sure you want to cancel " + selectedOrder.getCostumerName().toString()
+                + "'s order?");
 
-        // make text normal
-        previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
-        previousChildSelected.getText2().setTypeface(null, Typeface.NORMAL);
-        previousChildSelected = null;
-        isOrderSelected = false;
+        cancelledPopupBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCostumerName() + "'s " +
+                        " order has been cancelled", Toast.LENGTH_LONG).show();
+                String customerInstanceId = selectedOrder.getCostumerInstanceID();
+                customerInstanceId = FirebaseInstanceId.getInstance().getId();          // for testing purposes
+                FoodTruckOrderMGM notifications = new FoodTruckOrderMGM(customerInstanceId);
+                notifications.orderDone();
+
+                // make text normal
+                previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
+                previousChildSelected.getText2().setTypeface(null, Typeface.NORMAL);
+                previousChildSelected = null;
+                isOrderSelected = false;
+
+                dialog.dismiss();
+            }
+        });
+
+        cancelledPopupBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+            }
+        });
+
+        // show Complete Order popup
+
+        AlertDialog alert = cancelledPopupBuilder.create();
+        alert.show();
     }
 
     public class Order {
@@ -278,7 +333,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 twoLineListItem = (TwoLineListItem) inflater.inflate(
-                        android.R.layout.simple_list_item_2, null);
+                        android.R.layout.simple_list_item_1, null);
             } else {
                 twoLineListItem = (TwoLineListItem) convertView;
             }
