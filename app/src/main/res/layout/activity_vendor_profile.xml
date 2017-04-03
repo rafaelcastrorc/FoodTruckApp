@@ -5,27 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="edu.upenn.cis350.foodtruckapp.VendorProfileActivity">
+    tools:context="edu.upenn.cis350.foodtruckapp.VendorProfileActivity"
+    app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="60dp"
         android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/button_style">
+            android:background="@color/colorPrimary"
+            app:expandedTitleMarginStart="20dp"
+            app:expandedTitleMarginTop="20dp"
+            app:expandedTitleGravity="top"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            app:expandedTitleTextAppearance="@style/Toolbar.TitleText"
+            app:title="My Profile">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                app:popupTheme="@style/AppTheme.PopupOverlay">
-
+                android:layout_weight="1"
+                android:layout_height="?android:attr/actionBarSize"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="pin"
+                app:titleTextAppearance="@style/Toolbar.TitleText">
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>

@@ -100,7 +100,7 @@ public class VendorProfileForCustomer extends AppCompatActivity {
             View view = convertView;
             if (view == null) {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.menu_item_style, null);
+                view = inflater.inflate(R.layout.customer_menu_item_style, null);
             }
 
             //Handle TextViews and display string from your list
