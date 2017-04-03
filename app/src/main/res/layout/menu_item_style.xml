@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/menu_item"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="8dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:maxLines="100"
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:width="0dp"
+        android:ellipsize="none"
+        android:scrollHorizontally="false"
+        />
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="34dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="0dp"
+        android:layout_toLeftOf="@+id/add_button"
+        android:background="@android:drawable/ic_delete"
+        />
+
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="0dp"
+        android:layout_toLeftOf="@+id/menu_item_quantity"
+        android:background="@android:drawable/ic_input_add"
+        />
+
+
+    <TextView
+        android:id="@+id/menu_item_quantity"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:textStyle="bold"
+        android:textSize="12pt"
+        android:text="0"
+        />
+
+
+</RelativeLayout>

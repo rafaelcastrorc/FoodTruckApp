@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,8 +18,23 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -48,6 +65,15 @@ public class VendorProfileActivity extends AppCompatActivity {
     private EditText itemNinePrice;
     private Button profilePic;
     public static int PICK_PROFILE_PIC = 1;
+    private FirebaseDatabase database;
+    private FirebaseAuth mAuth;
+    private DatabaseReference databaseRef;
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
+    private StorageReference imagesRef;
+    private String vendorName;
+    private StorageReference vendorRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +91,6 @@ public class VendorProfileActivity extends AppCompatActivity {
                 startActivityForResult(intent, PICK_PROFILE_PIC);
             }
         });
-
 
         itemIds = new ArrayList<Integer>();
         itemIds.add(R.id.vendor_item_one);
@@ -111,8 +136,26 @@ public class VendorProfileActivity extends AppCompatActivity {
             appendDollarSigns();
         }
 
+
+
+        databaseRef = FirebaseDatabase.getInstance().getReference("Users");
+        mAuth = FirebaseAuth.getInstance();
+        String uniqueUID = mAuth.getCurrentUser().getUid();
+        DatabaseReference foodtruck = databaseRef.child(uniqueUID).child("Name Of Food Truck");
+        foodtruck.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                vendorName = dataSnapshot.getValue().toString();
+                getSupportActionBar().setTitle(vendorName);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle(vendorName);
     }
 
     // used to create menu
@@ -157,7 +200,7 @@ public class VendorProfileActivity extends AppCompatActivity {
 
     // used for receiving image from user & changing background of button to that image
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent      data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {
             Log.d("bye", "bye");
             return;
@@ -172,16 +215,62 @@ public class VendorProfileActivity extends AppCompatActivity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
+            Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);         // get pic selected
             BitmapDrawable drawableBitmap = new BitmapDrawable(
-                    getApplicationContext().getResources(), yourSelectedImage);
+                    getApplicationContext().getResources(), selectedImage);
             profilePic.setBackground(drawableBitmap);
             profilePic.setText("");
 
-
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();               // upload pic to database
+            selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] byteData = baos.toByteArray();
+            storage = FirebaseStorage.getInstance();
+            storageRef = storage.getReference();
+            imagesRef = storageRef.child("images");
+            vendorRef = imagesRef.child(vendorName);
+            UploadTask uploadTask = vendorRef.putBytes(byteData);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(VendorProfileActivity.this, "The picture you selected could" +
+                            "not be uploaded.", Toast.LENGTH_LONG).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                }
+            });
         }
     }
 
+    void populateVendorFields() {
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        imagesRef = storageRef.child("images");
+        vendorRef = imagesRef.child(vendorName);
 
+        final long ONE_MEGABYTE = 1024 * 1024;
+        vendorRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), uri);
+                    BitmapDrawable drawableBitmap = new BitmapDrawable(
+                            getApplicationContext().getResources(), bitmap);
+                    profilePic.setBackground(drawableBitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+
+
+    }
 
 }
