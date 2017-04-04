@@ -13,6 +13,7 @@ public class Order {
     protected boolean submitted;
     protected String vendorName;
     private double price;
+    private String customerUniqueID;
 
     Order(String customerInstanceID, String order, String name, String pushId, String vendorUniqueID) {
         this.customerInstanceID = customerInstanceID;
@@ -103,4 +104,11 @@ public class Order {
         return result;
     }
 
+    protected void setCustomerUniqueID(String customerUniqueID) {
+        this.customerUniqueID = customerUniqueID;
+    }
+
+    public String getCustomerUniqueID() {
+        return customerUniqueID;
+    }
 }

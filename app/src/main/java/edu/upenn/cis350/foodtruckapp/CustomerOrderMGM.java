@@ -30,6 +30,7 @@ public class CustomerOrderMGM {
     private String foodTruckName;
     private double price;
 
+
     protected CustomerOrderMGM() {
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         mAuth = FirebaseAuth.getInstance();
@@ -132,7 +133,7 @@ public class CustomerOrderMGM {
 
 
     private void pushOrderToFirebase(final DatabaseReference vendorOrdersRef, final boolean submitted) {
-        String uID = mAuth.getCurrentUser().getUid();
+        final String uID = mAuth.getCurrentUser().getUid();
         DatabaseReference currUser = databaseRef.child(uID).child("Name");
 
         currUser.addValueEventListener(new ValueEventListener() {
@@ -148,6 +149,7 @@ public class CustomerOrderMGM {
                 orderInfo.put("Order", customerOrder);
                 orderInfo.put("CustomerName", nameOfCustomer);
                 orderInfo.put("PushId", pushId);
+                orderInfo.put("customerUniqueID", uID);
                 orderInfo.put("vendorUniqueID", vendorUniqueID);
                 orderInfo.put("FoodTruckName", foodTruckName);
                 orderInfo.put("Price", price);
@@ -207,152 +209,12 @@ public class CustomerOrderMGM {
 
 
 
-  /*  protected double getTotal() {
-        final ArrayList<Order> orders = new ArrayList<>();
-        DatabaseReference myOrdersRef = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders");
-
-        myOrdersRef.addChildEventListener(new ChildEventListener() {
-            public String vendorUniqueID = "";
-            String instanceId = "";
-            String order = "";
-            String customerName = "";
-            String pushId = "";
-            String foodTruckName = "";
-            double price = 0.0;
+    protected void listenToTotal() {
 
 
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                boolean status = false;
-                HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
-                for (String type : values.keySet()) {
-
-                    if (type.equals("CustomerInstanceId")) {
-                        this.instanceId = (String) values.get(type);
-                    } else if (type.equals("Order")) {
-                        this.order = (String) values.get(type);
-                    } else if (type.equals("CustomerName")) {
-                        this.customerName = (String) values.get(type);
-                    } else if (type.equals("PushId")) {
-                        this.pushId = (String) values.get(type);
-                    } else if (type.equals("vendorUniqueID")) {
-                        this.vendorUniqueID = (String) values.get(type);
-                    } else if (type.equals("FoodTruckName")) {
-                        this.foodTruckName = (String) values.get(type);
-                    } else if (type.equals("Price")) {
-                        this.price = (Double) values.get(type);
-                    } else if (type.equals("Submitted")) {
-                        String choice = (String) values.get(type);
-                        if (choice.equals("true")) {
-                            status = true;
-                        }
-                    }
-
-                }
-                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
-                customerOrder.setStatus(status);
-                customerOrder.setFoodTruckName(foodTruckName);
-                customerOrder.setPrice(price);
-                orders.add(customerOrder);
-                updateTotal(orders);
-
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-                boolean status = false;
-                HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
-                for (String type : values.keySet()) {
-
-                    if (type.equals("CustomerInstanceId")) {
-                        this.instanceId = (String) values.get(type);
-
-                    } else if (type.equals("Order")) {
-                        this.order = (String) values.get(type);
-                    } else if (type.equals("CustomerName")) {
-                        this.customerName = (String) values.get(type);
-                    } else if (type.equals("PushId")) {
-                        this.pushId = (String) values.get(type);
-                    } else if (type.equals("vendorUniqueID")) {
-                        this.vendorUniqueID = (String) values.get(type);
-                    } else if (type.equals("FoodTruckName")) {
-                        this.foodTruckName = (String) values.get(type);
-                    } else if (type.equals("Price")) {
-                        this.price = (Double) values.get(type);
-                    } else if (type.equals("Submitted")) {
-                        String choice = (String) values.get(type);
-                        if (choice.equals("true")) {
-                            status = true;
-                        }
-                    }
-
-                }
-                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
-
-                //deletes old order
-                orders.remove(customerOrder);
-                //adds new order at end of queue
-
-                customerOrder.setStatus(status);
-                customerOrder.setFoodTruckName(foodTruckName);
-                customerOrder.setPrice(price);
-
-                orders.add(customerOrder);
-                updateTotal(orders);
-
-            }
-
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
-                for (String type : values.keySet()) {
-
-                    if (type.equals("CustomerInstanceId")) {
-                        this.instanceId = (String) values.get(type);
-
-                    } else if (type.equals("Order")) {
-                        this.order = (String) values.get(type);
-                    } else if (type.equals("CustomerName")) {
-                        this.customerName = (String) values.get(type);
-                    } else if (type.equals("PushId")) {
-                        this.pushId = (String) values.get(type);
-                    } else if (type.equals("vendorUniqueID")) {
-                        this.vendorUniqueID = (String) values.get(type);
-                    }
-
-                }
-                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
-                orders.remove(customerOrder);
-                updateTotal(orders);
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
-        return updateTotal(orders);
-    }
-
-    private double updateTotal(ArrayList<Order> orders) {
-        double result = 0.0;
-        for(Order order :orders)
-        {
-            result = result + order.getPrice();
-        }
-        return result;
     }
 
 
 
-*/
 
 }

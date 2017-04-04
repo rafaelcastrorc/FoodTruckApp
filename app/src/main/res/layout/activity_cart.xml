@@ -91,7 +91,7 @@
             android:height="120dp"
             android:background="@drawable/button_style"
             android:onClick="submitOrder_onClick"
-            android:text="Order"
+            android:text="Submit order"
             android:textAllCaps="false"
             android:textStyle="bold" />
 

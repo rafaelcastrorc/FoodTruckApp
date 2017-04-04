@@ -29,6 +29,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -80,8 +82,14 @@ public class Cart extends AppCompatActivity {
                 final TwoLineListItem selectedChild = (TwoLineListItem) parent.getChildAt(position);
                 previousChildSelected = selectedChild;
 
-                selectedChild.getText1().setTypeface(null, Typeface.BOLD_ITALIC);
-                selectedChild.getText2().setTypeface(null, Typeface.BOLD_ITALIC);
+                try {
+                    selectedChild.getText1().setTypeface(null, Typeface.BOLD_ITALIC);
+                    selectedChild.getText2().setTypeface(null, Typeface.BOLD_ITALIC);
+                }
+                catch (NullPointerException e) {
+
+                }
+
 
                 selectedOrder = (Order) parent.getItemAtPosition(position);
 
@@ -256,6 +264,9 @@ public class Cart extends AppCompatActivity {
             }
         });;
     }
+
+
+
 
 
 
@@ -505,7 +516,8 @@ public class Cart extends AppCompatActivity {
             TextView text1 = twoLineListItem.getText1();
             text1.setTextSize(20);
             TextView text2 = twoLineListItem.getText2();
-            text1.setText(orders.get(position).getFoodTruckName() + " - $" + orders.get(position).getPrice());
+            NumberFormat formatter = new DecimalFormat("#0.00");
+            text1.setText(orders.get(position).getFoodTruckName() + " - $" + formatter.format(orders.get(position).getPrice()));
             text2.setText(orders.get(position).getCustomerOrder());
             return twoLineListItem;
         }
@@ -517,8 +529,9 @@ public class Cart extends AppCompatActivity {
         for (Order order: orders) {
             result = result + order.getPrice();
         }
+        NumberFormat formatter = new DecimalFormat("#0.00");
 
-        total.setText("$"+ result);
+        total.setText("$"+ formatter.format(result));
     }
 
 }

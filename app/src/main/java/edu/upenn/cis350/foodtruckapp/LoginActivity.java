@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
  * Created by rafaelcastro on 2/20/17.
@@ -48,8 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-
 
         // [START auth_state_listener]
         mAuthListener = new FirebaseAuth.AuthStateListener() {

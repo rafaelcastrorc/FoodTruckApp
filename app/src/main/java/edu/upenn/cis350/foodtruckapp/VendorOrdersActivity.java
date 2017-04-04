@@ -88,6 +88,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
             String order = "";
             String customerName = "";
             String pushId = "";
+            String customerUniqueID = "";
             int counter = 0;
 
 
@@ -110,12 +111,16 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     else if (type.equals("PushId")){
                         this.pushId = (String) values.get(type);
                     }
+                    else if (type.equals("customerUniqueID")){
+                        this.customerUniqueID = (String) values.get(type);
+                    }
                     else if (type.equals("vendorUniqueID")){
                         this.vendorUniqueID = (String) values.get(type);
                     }
 
                 }
                 Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+                customerOrder.setCustomerUniqueID(customerUniqueID);
                 orders.add(customerOrder);
 
                 arrayAdapter.notifyDataSetChanged();
@@ -141,6 +146,9 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     else if (type.equals("PushId")){
                         this.pushId = (String) values.get(type);
                     }
+                    else if (type.equals("customerUniqueID")){
+                        this.customerUniqueID = (String) values.get(type);
+                    }
                     else if (type.equals("vendorUniqueID")){
                         this.vendorUniqueID = (String) values.get(type);
                     }
@@ -149,6 +157,9 @@ public class VendorOrdersActivity extends AppCompatActivity {
                 Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
                 //deletes old order
                 orders.remove(customerOrder);
+
+                customerOrder.setCustomerUniqueID(customerUniqueID);
+
                 //adds new order at end of queue
                 orders.add(customerOrder);
 
@@ -175,6 +186,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     else if (type.equals("PushId")){
                         this.pushId = (String) values.get(type);
                     }
+
                     else if (type.equals("vendorUniqueID")){
                         this.vendorUniqueID = (String) values.get(type);
                     }
@@ -217,6 +229,8 @@ public class VendorOrdersActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
                 currentOrders.child(selectedOrder.getPushId()).removeValue();
+                databaseRef.child(selectedOrder.getCustomerUniqueID()).child("MyOrders").child(selectedOrder.getVendorUniqueID()).removeValue();
+
 
                 // make text normal
                 previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
@@ -262,7 +276,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCustomerName() + " has been" +
-                        " notified of their order!", Toast.LENGTH_LONG).show();
+                        " notified of his or her order!", Toast.LENGTH_LONG).show();
 
                 String customerInstanceId = selectedOrder.getCustomerInstanceID();
                 FoodTruckOrderMGM notifications = new FoodTruckOrderMGM(customerInstanceId);
@@ -315,6 +329,8 @@ public class VendorOrdersActivity extends AppCompatActivity {
                 FoodTruckOrderMGM notifications = new FoodTruckOrderMGM(customerInstanceId);
                 notifications.orderDone(2);
                 currentOrders.child(selectedOrder.getPushId()).removeValue();
+                databaseRef.child(selectedOrder.getCustomerUniqueID()).child("MyOrders").child(selectedOrder.getVendorUniqueID()).removeValue();
+
 
 
                 // make text normal
@@ -384,6 +400,8 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
             TextView text1 = twoLineListItem.getText1();
             TextView text2 = twoLineListItem.getText2();
+            text1.setTextSize(24);
+
             text1.setText(orders.get(position).getCustomerName());
             text2.setText(orders.get(position).getCustomerOrder());
             return twoLineListItem;

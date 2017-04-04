@@ -1,8 +1,12 @@
 package edu.upenn.cis350.foodtruckapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -20,6 +24,8 @@ import java.util.TreeSet;
 
 
 public class TopFoodTrucksActivity extends AppCompatActivity {
+
+
     //Pull food trucks from database
     //Get their unique ids
     //uniqueId.getChild("Name Of Food Truck")
@@ -35,6 +41,27 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
     private RatingBar[] topTrucksRating = null;
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.shopping_cart, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.shopping_cart_button:
+                Intent i = new Intent(TopFoodTrucksActivity.this, Cart.class);
+                startActivity(i);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
