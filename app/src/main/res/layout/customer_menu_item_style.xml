@@ -19,6 +19,22 @@
         android:scrollHorizontally="false"
         />
 
+    <TextView
+        android:id="@+id/menu_item_price"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="8dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:maxLines="100"
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:width="0dp"
+        android:ellipsize="none"
+        android:scrollHorizontally="false"
+        />
+
     <Button
         android:id="@+id/delete_button"
         android:layout_width="34dp"

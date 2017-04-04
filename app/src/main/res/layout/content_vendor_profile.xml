@@ -197,7 +197,7 @@
             android:clickable="true"
             android:divider="@drawable/vendor_horizontal_menu_divider"
             android:elevation="24dp"
-            android:focusable="true"></ListView>
+            ></ListView>
 
         <TextView
             android:id="@+id/textView5"

@@ -25,9 +25,7 @@
         android:textStyle="bold"
         android:layout_weight="1"
         android:hint="Price"
-        android:maxLines="5"
         android:inputType="numberDecimal"
-
         android:textColor="@color/BLACK"
         android:layout_alignBaseline="@+id/vendor_menu_item"
         android:layout_alignBottom="@+id/vendor_menu_item"

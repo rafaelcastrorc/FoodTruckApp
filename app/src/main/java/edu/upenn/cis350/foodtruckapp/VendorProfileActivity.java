@@ -16,6 +16,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -48,7 +49,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class VendorProfileActivity extends AppCompatActivity {
 
@@ -86,10 +86,17 @@ public class VendorProfileActivity extends AppCompatActivity {
     private String vendorName;
     private String uniqueID;
     private StorageReference vendorRef;
-    private ArrayList<MenuItem> menu;
+    private ArrayList<MyMenuItem> menu;
     private ListView menuListView;
     private HashMap<String, String> textValues = new HashMap<String, String>();
-
+    private int openWeekdayTime = 0;
+    private String openWeekdayPeriod = "";
+    private int closeWeekdayTime = 0;
+    private String closeWeekdayPeriod = "";
+    private int openWeekendTime = 0;
+    private String openWeekendPeriod = "";
+    private int closeWeekendTime = 0;
+    private String closeWeekendPeriod = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,8 +132,7 @@ public class VendorProfileActivity extends AppCompatActivity {
         npOpenWeekdayTime.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //Display the newly selected number from picker
-                //Toast.makeText(VendorProfileActivity.this, np.getValue(), Toast.LENGTH_LONG).show();
+                openWeekdayTime = npOpenWeekdayTime.getValue();
             }
         });
 
@@ -139,8 +145,13 @@ public class VendorProfileActivity extends AppCompatActivity {
         npOpenWeekdayPeriod.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //Display the newly selected number from picker
-                //Toast.makeText(VendorProfileActivity.this, np.getValue(), Toast.LENGTH_LONG).show();
+                if (npOpenWeekdayPeriod.getValue() == 0) {
+                    openWeekdayPeriod = "AM";
+                }
+                else {
+                    openWeekdayPeriod = "PM";
+
+                }
             }
         });
 
@@ -151,8 +162,7 @@ public class VendorProfileActivity extends AppCompatActivity {
         npCloseWeekdayTime.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //Display the newly selected number from picker
-                //Toast.makeText(VendorProfileActivity.this, np.getValue(), Toast.LENGTH_LONG).show();
+                closeWeekdayTime = npCloseWeekdayTime.getValue();
             }
         });
 
@@ -164,8 +174,13 @@ public class VendorProfileActivity extends AppCompatActivity {
         npCloseWeekdayPeriod.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //Display the newly selected number from picker
-                //Toast.makeText(VendorProfileActivity.this, np.getValue(), Toast.LENGTH_LONG).show();
+                if (npCloseWeekdayPeriod.getValue() == 0) {
+                    closeWeekdayPeriod = "AM";
+                }
+                else {
+                    closeWeekdayPeriod = "PM";
+
+                }
             }
         });
 
@@ -178,8 +193,8 @@ public class VendorProfileActivity extends AppCompatActivity {
         npOpenWeekendTime.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //Display the newly selected number from picker
-                //Toast.makeText(VendorProfileActivity.this, np.getValue(), Toast.LENGTH_LONG).show();
+                openWeekendTime = npOpenWeekendTime.getValue();
+
             }
         });
 
@@ -191,8 +206,13 @@ public class VendorProfileActivity extends AppCompatActivity {
         npOpenWeekendPeriod.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //Display the newly selected number from picker
-                //Toast.makeText(VendorProfileActivity.this, np.getValue(), Toast.LENGTH_LONG).show();
+                if (npOpenWeekendPeriod.getValue() == 0) {
+                    openWeekendPeriod = "AM";
+                }
+                else {
+                    openWeekendPeriod = "PM";
+
+                }
             }
         });
 
@@ -203,8 +223,7 @@ public class VendorProfileActivity extends AppCompatActivity {
         npCloseWeekendTime.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //Display the newly selected number from picker
-                //Toast.makeText(VendorProfileActivity.this, np.getValue(), Toast.LENGTH_LONG).show();
+                closeWeekendTime = npCloseWeekendTime.getValue();
             }
         });
 
@@ -216,8 +235,13 @@ public class VendorProfileActivity extends AppCompatActivity {
         npCloseWeekendPeriod.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                //Display the newly selected number from picker
-                //Toast.makeText(VendorProfileActivity.this, np.getValue(), Toast.LENGTH_LONG).show();
+                if (npOpenWeekendPeriod.getValue() == 0) {
+                    openWeekendPeriod = "AM";
+                }
+                else {
+                    openWeekendPeriod = "PM";
+
+                }
             }
         });
 
@@ -229,8 +253,10 @@ public class VendorProfileActivity extends AppCompatActivity {
         foodtruck.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                vendorName = dataSnapshot.getValue().toString();
-                getSupportActionBar().setTitle(vendorName);
+                if (dataSnapshot.getValue() != null) {
+                    vendorName = dataSnapshot.getValue().toString();
+                    getSupportActionBar().setTitle(vendorName);
+                }
             }
 
             @Override
@@ -242,8 +268,8 @@ public class VendorProfileActivity extends AppCompatActivity {
 
         // menu array adapter
         menuListView = (ListView) findViewById(R.id.menu);
-        menu = new ArrayList<MenuItem>();
-        final VendorProfileActivity.MyAdapter arrayAdapter = new VendorProfileActivity.MyAdapter(this, menu);
+        menu = new ArrayList<MyMenuItem>();
+        final MyAdapter arrayAdapter = new VendorProfileActivity.MyAdapter(this);
         menuListView.setAdapter(arrayAdapter);
 
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
@@ -255,35 +281,34 @@ public class VendorProfileActivity extends AppCompatActivity {
               String price = "";
               @Override
               public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                  HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
-                  for (String type : values.keySet()) {
-                      this.item = (String) type;
-                      this.price = (String) values.get(type);
+                  MyMenuItem menuItem = new MyMenuItem(
+                          dataSnapshot.getKey(), (String) dataSnapshot.getValue());
+                  if (!menu.contains(menuItem)) {
+                      menu.add(menuItem);
                   }
-                  VendorProfileActivity.MenuItem menuItem = new VendorProfileActivity.MenuItem(item, price);
-                  menu.add(menuItem);
-
                   arrayAdapter.notifyDataSetChanged();
+                  setListViewHeightBasedOnChildren(menuListView);
               }
 
               @Override
               public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+                  setListViewHeightBasedOnChildren(menuListView);
               }
 
               @Override
               public void onChildRemoved(DataSnapshot dataSnapshot) {
-                  HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
-                  for (String type : values.keySet()) {
-                      this.item = (String) type;
-                      this.price = (String) values.get(type);
-                  }
-                  VendorProfileActivity.MenuItem menuItem = new VendorProfileActivity.MenuItem(item, price);
+                  MyMenuItem menuItem = new MyMenuItem(
+                          (String) dataSnapshot.getKey(), (String) dataSnapshot.getValue());
                   menu.remove(menuItem);
                   arrayAdapter.notifyDataSetChanged();
+                  setListViewHeightBasedOnChildren(menuListView);
+
               }
 
               @Override
               public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
+                  setListViewHeightBasedOnChildren(menuListView);
+
               }
 
               @Override
@@ -297,15 +322,17 @@ public class VendorProfileActivity extends AppCompatActivity {
         addMenuItemBtn.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuItem newItem = new MenuItem("", "");
-                menu.add(newItem);
+                MyMenuItem newItem = new MyMenuItem("", "");
+                if (!menu.contains(newItem)) {
+                    menu.add(newItem);
+                }
                 arrayAdapter.notifyDataSetChanged();
+                Log.d("MENU", arrayAdapter.getMenu().toString());
                 setListViewHeightBasedOnChildren(menuListView);
-
             }
         });
-        // fill in vendor's rating
-       // databaseRef = FirebaseDatabase.getInstance().getReference().child(uniqueID).child("Rating");
+
+        makeFieldsStatic();
     }
 
     void makeChildrenStatic(View view) {
@@ -322,13 +349,31 @@ public class VendorProfileActivity extends AppCompatActivity {
         }
     }
 
+    void makeChildrenEditable(View view) {
+        if (!(view instanceof ViewGroup)) {
+            return;
+        }
+        else {
+            ViewGroup vg = (ViewGroup) view;
+            for (int i = 0; i < vg.getChildCount(); i++) {
+                View child = vg.getChildAt(i);
+                makeChildrenEditable(child);
+                child.setEnabled(true);
+            }
+        }
+    }
+
     void makeFieldsStatic() {
         LinearLayout overallLayout = (LinearLayout) findViewById(R.id.vendor_profile_overall_layout);
         makeChildrenStatic(overallLayout);
         menuListView.setEnabled(false);
     }
 
-    
+    void makeFieldsEditable() {
+        LinearLayout overallLayout = (LinearLayout) findViewById(R.id.vendor_profile_overall_layout);
+        makeChildrenEditable(overallLayout);
+        menuListView.setEnabled(false);
+    }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter arrayAdapter = listView.getAdapter();
@@ -344,8 +389,6 @@ public class VendorProfileActivity extends AppCompatActivity {
             if (i == 0) {
                 view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, LayoutParams.WRAP_CONTENT));
             }
-
-
             view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
             totalHeight += view.getMeasuredHeight();
         }
@@ -364,36 +407,27 @@ public class VendorProfileActivity extends AppCompatActivity {
 
     // used for handling mouseclick in menu
     @Override
-    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getTitle().equals("Edit")) {
-            for (int i = 0; i < allIds.size(); i++) {
-                View view = findViewById(allIds.get(i));
-                view.setEnabled(true);
-            }
+            makeFieldsEditable();
         } else if (item.getTitle().equals("Save")) {
             uploadVendorPicToServer();
             makeFieldsStatic();
+            notifyDatabaseOfChange();
         }
         return true;
-    }
-
-    // used for appending dollar signs to text in price fields once 'Save' is clicked
-    void appendDollarSigns() {
-        for (int i = 0; i < priceIds.size(); i++) {
-            EditText priceField = (EditText) findViewById(priceIds.get(i));
-            String price = priceField.getText().toString();
-            if (!price.trim().startsWith("$") && !price.trim().isEmpty()) {
-                priceField.setText("$" + price);
-            }
-            priceField.setEnabled(false);
-        }
-
     }
 
     void uploadVendorPicToServer() {
         Button imageBtn = (Button) findViewById(R.id.vendor_profile_image);
         Drawable drawable = imageBtn.getBackground();
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        Bitmap bitmap;
+        try {
+            bitmap = ((BitmapDrawable) drawable).getBitmap();
+        }
+        catch (ClassCastException e) {
+            return;
+        }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();               // upload pic to database
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] byteData = baos.toByteArray();
@@ -415,106 +449,14 @@ public class VendorProfileActivity extends AppCompatActivity {
         });
     }
 
-    void updateVendorMenu() {
-        databaseRef = FirebaseDatabase.getInstance().getReference("Users");
-        mAuth = FirebaseAuth.getInstance();
-        String currVendor = mAuth.getCurrentUser().getUid();
-        DatabaseReference menuRef = databaseRef.child(currVendor).child("Menu");
-        Map menuInfo = new HashMap<String, Map<String, String>>();
-        for (MenuItem item : menu) {
-            // itemInfo.put("Price", item.getPrice());
-            menuInfo.put(item.getItem(), item.getItem());
-        }
-        menuRef.push().setValue(menuInfo);
-
-        // create map of items & prices
-//        menuRef.addChildEventListener(new ChildEventListener() {
-//            String instanceId = "";
-//            String item = "";
-//            String price = "";
-//
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-//                HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
-//                for (String type: values.keySet()) {
-//
-//                    if (type.equals("InstanceID")) {
-//                        this.instanceId = (String) values.get(type);
-//                    }
-//                    else if (type.equals("Item")) {
-//                        this.item = (String) values.get(type);
-//                    }
-//                    else if (type.equals("Price")){
-//                        this.price = (String) values.get(type);
-//                    }
-//                }
-//                VendorOrdersActivity.Order customerOrder = new VendorOrdersActivity.Order(instanceId, order, customerName, pushId);
-//                orders.add(customerOrder);
-//
-//                arrayAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
-//                for (String type: values.keySet()) {
-//
-//                    if (type.equals("CustomerInstanceId")) {
-//                        this.instanceId = (String) values.get(type);
-//
-//                    }
-//                    else if (type.equals("Order")) {
-//                        this.order = (String) values.get(type);
-//                    }
-//                    else if (type.equals("CustomerName")){
-//                        this.customerName = (String) values.get(type);
-//                    }
-//                    else if (type.equals("PushId")){
-//                        this.pushId = (String) values.get(type);
-//                    }
-//
-//                }
-//                VendorOrdersActivity.Order customerOrder = new VendorOrdersActivity.Order(instanceId, order, customerName, pushId);
-//                orders.remove(customerOrder);
-//
-//                arrayAdapter.notifyDataSetChanged();
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//            }
-//        });
-    }
-
-    void populateVendorMenu() {
-        databaseRef = FirebaseDatabase.getInstance().getReference("Users");
-        mAuth = FirebaseAuth.getInstance();
-        String currVendor = mAuth.getCurrentUser().getUid();
-        DatabaseReference menuRef = databaseRef.child(currVendor).child("Menu");
-    }
-
-
     // used for receiving image from user & changing background of button to that image
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {
-            Log.d("bye", "bye");
             return;
         }
         if (requestCode == 1) {
-            Log.d("whoa", "whoa");
             final Uri extras = data.getData();
-
             InputStream imageStream = null;
             try {
                 imageStream = getContentResolver().openInputStream(extras);
@@ -535,7 +477,6 @@ public class VendorProfileActivity extends AppCompatActivity {
         storageRef = storage.getReference();
         imagesRef = storageRef.child("images");
         vendorRef = imagesRef.child(uniqueID);
-
         final long ONE_MEGABYTE = 1024 * 1024;
         vendorRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
@@ -549,39 +490,98 @@ public class VendorProfileActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
             }
         });
     }
 
-    public class MenuItem {
-
-        private String item;
-        private String price;
-
-        public MenuItem(String item, String price) {
-            this.item = item;
-            this.price = price;
+    void notifyDatabaseOfChange() {
+        databaseRef = FirebaseDatabase.getInstance().getReference("Users");
+        mAuth = FirebaseAuth.getInstance();
+        uniqueID = mAuth.getCurrentUser().getUid();
+        DatabaseReference hoursRef = databaseRef.child(uniqueID).child("Hours");
+        if (openWeekdayTime != 0) {
+            hoursRef.child("OpenWeekdayTime").setValue(openWeekdayTime);
+        }
+        if (!openWeekdayPeriod.isEmpty()) {
+            hoursRef.child("OpenWeekdayPeriod").setValue(openWeekdayPeriod);
+        }
+        if (closeWeekdayTime != 0) {
+            hoursRef.child("CloseWeekdayTime").setValue(closeWeekdayTime);
+        }
+        if (!closeWeekdayPeriod.isEmpty()) {
+            hoursRef.child("CloseWeekdayPeriod").setValue(closeWeekdayPeriod);
+        }
+        if (openWeekendTime != 0) {
+            hoursRef.child("OpenWeekendTime").setValue(openWeekendTime);
+        }
+        if (!openWeekendPeriod.isEmpty()) {
+            hoursRef.child("OpenWeekendPeriod").setValue(openWeekendPeriod);
+        }
+        if (closeWeekendTime != 0) {
+            hoursRef.child("CloseWeekendTime").setValue(closeWeekendTime);
+        }
+        if (!closeWeekdayPeriod.isEmpty()) {
+            hoursRef.child("CloseWeekendPeriod").setValue(closeWeekendPeriod);
         }
 
-        String getItem() {
-            return item;
+        ((MyAdapter) menuListView.getAdapter()).notifyDataSetChanged();
+        setListViewHeightBasedOnChildren(menuListView);
+        for (MyMenuItem item : menu) {
+            if (item.getPrice().isEmpty() || item.getItem().isEmpty()) {
+                continue;
+            }
+            databaseRef.child(uniqueID).child("Menu").child(item.getItem()).setValue(item.getPrice());
         }
-
-        String getPrice() {
-            return price;
-        }
-
     }
+
+//    public class MyMenuItem {
+//
+//        private String item;
+//        private String price;
+//
+//        public MyMenuItem(String item, String price) {
+//            this.item = item;
+//            this.price = price;
+//        }
+//
+//        String getItem() {
+//            return item;
+//        }
+//
+//        String getPrice() {
+//            return price;
+//        }
+//
+//        void setPrice(String price) {
+//            this.price = price;
+//        }
+//
+//        void setItem(String item) {
+//            this.item = item;
+//        }
+//
+//        @Override
+//        public boolean equals(Object o) {
+//            MyMenuItem otherItem = (MyMenuItem) o;
+//            if (otherItem.getItem().equals(item) && otherItem.getPrice().equals(price)) {
+//                return true;
+//            }
+//            return false;
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return "item: " + item + " price: " + price;
+//        }
+//
+//    }
 
     class MyAdapter extends BaseAdapter {
 
         private Context context;
-        private ArrayList<MenuItem> menu;
 
-        public MyAdapter(Context context, ArrayList<MenuItem> menu) {
+        public MyAdapter(Context context) {
             this.context = context;
-            this.menu = menu;
         }
 
         @Override
@@ -599,72 +599,106 @@ public class VendorProfileActivity extends AppCompatActivity {
             return 0;
         }
 
+        ArrayList<MyMenuItem> getMenu() {
+            return menu;
+        }
+
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // ViewHolder vh;
-//            boolean wasNull = false;
-//            EditText item = (EditText) findViewById(R.id.vendor_menu_item);
-//            EditText itemPrice = (EditText) findViewById(R.id.vendor_menu_item_price;
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.vendor_menu_item_style, parent, false);
-//                wasNull = true;
-//                item.addTextChangedListener(new GenericTextWatcher(myEditText1));
-//                itemPrice.addTextChangedListener(new GenericTextWatcher(myEditText2));
+
+                final EditText item = (EditText) convertView.findViewById(R.id.vendor_menu_item);
+                item.setText(((MyMenuItem) getItem(position)).getItem());
+                final EditText price = (EditText) convertView.findViewById(R.id.vendor_menu_item_price);
+                price.setText(((MyMenuItem) getItem(position)).getPrice());
+
+                item.addTextChangedListener(new TextWatcher() {
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        item.removeTextChangedListener(this);
+                        String itemString = ((MyMenuItem) getItem(position)).getItem();
+                        if (itemString.isEmpty()) {
+                            item.setText(s);
+                        } else {
+                            String input = s.toString();
+//                            if (input.isEmpty()) {
+//                                item.setText(itemString);
+//                            } else {
+                                item.setText(input);
+                            //}
+                    }
+                        item.addTextChangedListener(this);
+                        item.setSelection(item.getText().length());
+                    }
+
+                });
+                price.addTextChangedListener(new TextWatcher() {
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        price.removeTextChangedListener(this);
+                        String itemPrice = ((MyMenuItem) getItem(position)).getPrice();
+                        if (itemPrice.isEmpty()) {
+                            price.setText(s);
+                        } else {
+                            String input = s.toString();
+//                            if (input.isEmpty()) {
+//                                price.setText(itemPrice);
+//                            } else {
+                                price.setText(input);
+                            //}
+                        }
+                        price.addTextChangedListener(this);
+                        price.setSelection(price.getText().length());
+                    }
+                });
+
+                item.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (position >= menu.size()) {
+                            return;
+                        }
+                        if (!hasFocus) {
+                            ((MyMenuItem) getItem(position)).setItem(item.getText().toString());
+                        }
+                    }
+                });
+
+                price.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (position >= menu.size()) {
+                            return;
+                        }
+                        if (!hasFocus) {
+                            ((MyMenuItem) getItem(position)).setPrice((price.getText().toString()));
+                        }
+                    }
+                });
             }
-
-            final EditText item = (EditText) convertView.findViewById(R.id.vendor_menu_item);
-            final EditText price = (EditText) convertView.findViewById(R.id.vendor_menu_item_price);
-            item.addTextChangedListener(new TextWatcher() {
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                    if (getCurrentFocus() == item) {
-//                        // is only executed if the EditText was directly changed by the user
-//                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    item.removeTextChangedListener(this);
-                    item.setText(s);
-                    item.addTextChangedListener(this);
-                    item.setSelection(item.getText().length());
-                }
-
-                //...
-            });
-            price.addTextChangedListener(new TextWatcher() {
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                    if (getCurrentFocus() == item) {
-//                        // is only executed if the EditText was directly changed by the user
-//                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    price.removeTextChangedListener(this);
-                    price.setText(s);
-                    price.addTextChangedListener(this);
-                    price.setSelection(price.getText().length());
-                }
-            });
             return convertView;
         }
     }
-
 }

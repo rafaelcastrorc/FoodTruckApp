@@ -157,7 +157,6 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
 //            Log.d(vendor.getRating().toString(), vendor.getRating().toString());
 
             topTrucksRating[i].setRating(vendor.getRating().floatValue());
-            Log.d("VENDOR", vendor.getName());
         }
     }
 }

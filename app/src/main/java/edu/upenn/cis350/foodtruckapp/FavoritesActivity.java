@@ -64,7 +64,7 @@ public class FavoritesActivity extends AppCompatActivity {
                 final TextView selectedChild = (TextView) parent.getChildAt(position);
 
                 String selectedVendorID = (String) selectedChild.getText();
-                intent.putExtra("vendorInstanceID", vendors.get(selectedVendorID));
+                intent.putExtra("vendorUniqueID", vendors.get(selectedVendorID));
                 startActivity(intent);
             }
         });
