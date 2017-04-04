@@ -70,8 +70,8 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
 
     @Override
     public void onLocationChanged(Location location) {
-        String coords = location.getLatitude() + ", " + location.getLongitude();
-        addLocation(coords);
+    //    String coords = location.getLatitude() + ", " + location.getLongitude();
+       // addLocation(coords);
     }
 
     @Override
@@ -89,10 +89,10 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
 
     }
 
-    //TODO use this for vendor
-    public void addLocation(String coords){
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        String userId  = mAuth.getCurrentUser().getUid();
-        databaseRef.child(userId).child("Location").setValue(coords);
-    }
+   // //TODO use this for vendor
+    //public void addLocation(String coords){
+     //   FirebaseAuth mAuth = FirebaseAuth.getInstance();
+     //   String userId  = mAuth.getCurrentUser().getUid();
+      //  databaseRef.child(userId).child("Location").setValue(coords);
+   // }
 }

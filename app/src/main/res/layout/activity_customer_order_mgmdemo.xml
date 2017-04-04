@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <Button
+        android:id="@+id/sendOrderToVendor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="122dp"
+        android:onClick="sendOrderToVendor_onClick"
+        android:text="Send Order"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/updateOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="58dp"
+        android:onClick="updateOrder_onClick"
+        android:text="Update Order"
+        android:layout_below="@+id/sendOrderToVendor"
+        android:layout_alignEnd="@+id/sendOrderToVendor" />
+
+    <Button
+        android:id="@+id/cancelOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="cancelOrder_onClick"
+        android:text="Cancel order"
+        android:layout_marginTop="76dp"
+        android:layout_below="@+id/updateOrder"
+        android:layout_alignStart="@+id/updateOrder" />
+</RelativeLayout>

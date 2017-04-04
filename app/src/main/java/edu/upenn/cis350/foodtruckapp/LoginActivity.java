@@ -143,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(i);
                         finish();
                     }
-                    else {
+                    else if (type.equals("Costumer")) {
                         Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
                         i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                         startActivity(i);
