@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.upenn.cis350.foodtruckapp">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -68,7 +70,15 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".VendorProfileForCustomer"></activity>
+        <activity
+            android:name=".CustomerOrderMGMDemo"
+            android:exported="true"
+            android:label="@string/title_activity_customer_order_mgmdemo" />
+        <activity android:name=".Cart"
+            android:label="My Orders"
+            android:exported="true">
+
+        </activity>
     </application>
 
 </manifest>
