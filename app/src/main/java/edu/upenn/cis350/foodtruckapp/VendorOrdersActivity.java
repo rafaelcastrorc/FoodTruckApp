@@ -401,6 +401,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
             TextView text1 = twoLineListItem.getText1();
             TextView text2 = twoLineListItem.getText2();
             text1.setTextSize(24);
+            text2.setTextSize(15);
 
             text1.setText(orders.get(position).getCustomerName());
             text2.setText(orders.get(position).getCustomerOrder());
