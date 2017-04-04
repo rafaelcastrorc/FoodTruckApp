@@ -39,6 +39,8 @@
     <string name="Weekdays"><i>Mondays - Fridays:</i></string>
     <string name="Weekends"><i>Saturdays and Sundays:</i></string>
     <string name="Reviews"><u>My Reviews</u></string>
+    <string name="Rating"><u>My Rating</u></string>
+
 
 
     <string name="large_text">

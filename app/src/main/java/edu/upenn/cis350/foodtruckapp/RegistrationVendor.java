@@ -108,11 +108,16 @@ public class RegistrationVendor extends AppCompatActivity {
         //Adds this info to the user database
         databaseRef.child(userID).child("Type Of Food").setValue(tof);
         databaseRef.child(userID).child("Name Of Food Truck").setValue(noft);
+        databaseRef.child(userID).child("Menu");
+        //databaseRef.child(userID).child("Menu");                      // probably should setup ratings like this
+        //databaseRef.child(userID).child("Ratings").child("Counter");
         Double avrgRat = 0.000001;
         databaseRatings.child(userID).child("AverageRating").setValue(avrgRat);
         databaseRatings.child(userID).child("Counter").setValue(0);
         databaseRatings.child(userID).child("UniqueUserID").setValue(userID);
         databaseRatings.child(userID).child("NameOfFoodTruck").setValue(nameOfFoodTruck.getText().toString());
+        databaseRatings.child(userID).child("Menu");
+
 
 
 

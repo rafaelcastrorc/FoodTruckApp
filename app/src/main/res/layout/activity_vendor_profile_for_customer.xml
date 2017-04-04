@@ -5,42 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="edu.upenn.cis350.foodtruckapp.VendorProfileActivity"
-    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+    tools:context="edu.upenn.cis350.foodtruckapp.VendorProfileActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="20dp"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
-            app:expandedTitleMarginStart="20dp"
-            app:expandedTitleMarginTop="20dp"
-            app:expandedTitleGravity="top"
-            app:titleTextAppearance="@style/Toolbar.TitleText"
-            app:expandedTitleTextAppearance="@style/Toolbar.TitleText"
-            app:title="My Profile">
+            android:background="@drawable/button_style">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_weight="1"
                 android:layout_height="?android:attr/actionBarSize"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                android:fitsSystemWindows="true"
-                app:layout_collapseMode="pin"
-                app:titleTextAppearance="@style/Toolbar.TitleText">
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_vendor_profile" />
+    <include layout="@layout/content_vendor_profile_for_customer" />
 
 </android.support.design.widget.CoordinatorLayout>
