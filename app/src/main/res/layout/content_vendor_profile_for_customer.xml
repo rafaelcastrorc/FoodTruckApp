@@ -220,6 +220,49 @@
 
         </RelativeLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:text="1 Star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="28dp"
+                android:id="@+id/rating1" />
+
+            <Button
+                android:text="2 Star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rating1"
+                android:layout_alignEnd="@+id/rating1"
+                android:layout_marginTop="30dp"
+                android:id="@+id/rating2" />
+
+            <Button
+                android:text="3 Star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rating2"
+                android:layout_alignStart="@+id/rating2"
+                android:layout_marginTop="35dp"
+                android:id="@+id/rating3" />
+
+            <Button
+                android:text="4 Star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rating3"
+                android:layout_alignStart="@+id/rating3"
+                android:layout_marginTop="39dp"
+                android:id="@+id/rating4" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 

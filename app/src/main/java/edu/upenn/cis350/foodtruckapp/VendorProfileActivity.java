@@ -23,6 +23,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -107,30 +108,8 @@ public class VendorProfileActivity extends AppCompatActivity {
             }
         });
 
-        itemIds = new ArrayList<Integer>();
-//        itemIds.add(R.id.vendor_item_one);
-//        itemIds.add(R.id.vendor_item_two);
-//        itemIds.add(R.id.vendor_item_three);
-//        itemIds.add(R.id.vendor_item_four);
-//        itemIds.add(R.id.vendor_item_five);
-//        itemIds.add(R.id.vendor_item_six);
-//        itemIds.add(R.id.vendor_item_seven);
-//        itemIds.add(R.id.vendor_item_eight);
-//        itemIds.add(R.id.vendor_item_nine);
-
-        priceIds = new ArrayList<Integer>();
-//        priceIds.add(R.id.vendor_price_item_one);
-//        priceIds.add(R.id.vendor_price_item_two);
-//        priceIds.add(R.id.vendor_price_item_three);
-//        priceIds.add(R.id.vendor_price_item_four);
-//        priceIds.add(R.id.vendor_price_item_five);
-//        priceIds.add(R.id.vendor_price_item_six);
-//        priceIds.add(R.id.vendor_price_item_seven);
-//        priceIds.add(R.id.vendor_price_item_eight);
-//        priceIds.add(R.id.vendor_price_item_nine);
-
         pickerIds = new ArrayList<Integer>();
-        pickerIds.add(R.id.spinner_vendor_open_weekday_time);
+        pickerIds.add(R.id.picker_vendor_open_weekday_time);
         pickerIds.add(R.id.picker_vendor_open_weekday_period);
         pickerIds.add(R.id.picker_vendor_close_weekday_time);
         pickerIds.add(R.id.picker_vendor_close_weekday_period);
@@ -242,19 +221,6 @@ public class VendorProfileActivity extends AppCompatActivity {
             }
         });
 
-        ArrayList<Integer> pickerSelections = new ArrayList<Integer>();
-
-        allIds = new ArrayList<Integer>();
-        // allIds.addAll(itemIds);
-        //allIds.addAll(priceIds);
-        //allIds.addAll(spinnerIds);
-        //allIds.add(R.id.vendor_profile_image);
-
-//        for (int i = 0; i < allIds.size(); i++) {
-//            View view = findViewById(allIds.get(i));
-//            view.setEnabled(false);
-//            appendDollarSigns();
-//        }
 
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         mAuth = FirebaseAuth.getInstance();
@@ -328,10 +294,7 @@ public class VendorProfileActivity extends AppCompatActivity {
         populateVendorPicture();
 
         Button addMenuItemBtn = (Button) findViewById(R.id.vendor_add_menu_item_button);
-        addMenuItemBtn.setOnClickListener(new AdapterView.OnClickListener()
-
-        {
-
+        addMenuItemBtn.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MenuItem newItem = new MenuItem("", "");
@@ -341,9 +304,31 @@ public class VendorProfileActivity extends AppCompatActivity {
 
             }
         });
-
-
+        // fill in vendor's rating
+       // databaseRef = FirebaseDatabase.getInstance().getReference().child(uniqueID).child("Rating");
     }
+
+    void makeChildrenStatic(View view) {
+        if (!(view instanceof ViewGroup)) {
+            return;
+        }
+        else {
+            ViewGroup vg = (ViewGroup) view;
+            for (int i = 0; i < vg.getChildCount(); i++) {
+                View child = vg.getChildAt(i);
+                makeChildrenStatic(child);
+                child.setEnabled(false);
+            }
+        }
+    }
+
+    void makeFieldsStatic() {
+        LinearLayout overallLayout = (LinearLayout) findViewById(R.id.vendor_profile_overall_layout);
+        makeChildrenStatic(overallLayout);
+        menuListView.setEnabled(false);
+    }
+
+    
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter arrayAdapter = listView.getAdapter();
@@ -386,12 +371,8 @@ public class VendorProfileActivity extends AppCompatActivity {
                 view.setEnabled(true);
             }
         } else if (item.getTitle().equals("Save")) {
-            for (int i = 0; i < allIds.size(); i++) {
-                View view = findViewById(allIds.get(i));
-                view.setEnabled(false);
-                // appendDollarSigns();
-                uploadVendorPicToServer();
-            }
+            uploadVendorPicToServer();
+            makeFieldsStatic();
         }
         return true;
     }
@@ -685,23 +666,5 @@ public class VendorProfileActivity extends AppCompatActivity {
             return convertView;
         }
     }
-
-//    public class SpinnerAdapter extends ArrayAdapter<String> {
-//        LayoutInflater inflater;
-//        List<String> items;
-//
-//        public SpinnerAdapter(Context applicationContext, int resource, List<String> items) {
-//            super(applicationContext, resource, items);
-//            this.items = items;
-//            inflater = (LayoutInflater.from(applicationContext));
-//        }
-//        @Override
-//        public View getView(int i, View view, ViewGroup viewGroup) {
-//            view = inflater.inflate(R.layout.spinner_style, null);
-//            TextView type = (TextView) view.findViewById(R.id.spinner_text);
-//            type.setText(items.get(i));
-//            return view;
-//        }
-//    }
 
 }

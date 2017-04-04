@@ -9,6 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:id="@+id/vendor_profile_overall_layout"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="1">
@@ -229,6 +230,26 @@
 
 
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="384dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/Rating"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/BLACK"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:textAlignment="center" />
     </LinearLayout>
 
 
