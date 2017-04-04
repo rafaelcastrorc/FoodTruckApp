@@ -141,13 +141,11 @@ public class LoginActivity extends AppCompatActivity {
                         Intent i = new Intent(LoginActivity.this, VendorMainMenuActivity.class);
                         i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                         startActivity(i);
-                        finish();
                     }
                     else if (type.equals("Costumer")) {
                         Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
                         i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                         startActivity(i);
-                        finish();
                     }
                 }
 

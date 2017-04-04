@@ -125,7 +125,13 @@ public class Cart extends AppCompatActivity {
                         this.foodTruckName = (String) values.get(type);
                     }
                     else if (type.equals("Price")){
-                        this.price = (Double) values.get(type);
+                        try {
+                            this.price = (Double) values.get(type);
+                        }
+                        catch (ClassCastException e) {
+                            Long l = new Long((Long) values.get(type));
+                            this.price = l.doubleValue();
+                        }
                     }
 
                     else if(type.equals("Submitted")) {
@@ -174,7 +180,14 @@ public class Cart extends AppCompatActivity {
                         this.foodTruckName = (String) values.get(type);
                     }
                     else if (type.equals("Price")){
-                        this.price = (Double) values.get(type);
+                        try {
+                            this.price = (Double) values.get(type);
+                        }
+                        catch (ClassCastException e) {
+                            Long l = new Long((Long) values.get(type));
+                            this.price = l.doubleValue();
+
+                        }
                     }
 
                     else if(type.equals("Submitted")) {
@@ -268,7 +281,8 @@ public class Cart extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
                 //Send order to vendor
-                CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM(selectedOrder.vendorUniqueID);
+                CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+                customerOrderMGM.setVendorUniqueID(selectedOrder.vendorUniqueID);
                 customerOrderMGM.sendOrderToVendor(selectedOrder);
 
                 // make text normal
@@ -318,10 +332,9 @@ public class Cart extends AppCompatActivity {
                     //Go to the vendor profile page
                     selectedOrder.getVendorUniqueID();
                     //Todo: Go to specific vendor profile
-                    Intent i = new Intent(Cart.this, CustomerOrderMGM.class);
+                    Intent i = new Intent(Cart.this, CustomerOrderMGMDemo.class);
                     //PASS REFERENCE OF ORDER SUBMITTED
                     startActivity(i);
-                    finish();
 
                 }
             });
@@ -354,9 +367,8 @@ public class Cart extends AppCompatActivity {
                     //Go to the vendor profile page
                     selectedOrder.getVendorUniqueID();
                     //Todo: Go to specific vendor profile
-                    Intent i = new Intent(Cart.this, CustomerOrderMGM.class);
+                    Intent i = new Intent(Cart.this, CustomerOrderMGMDemo.class);
                     startActivity(i);
-                    finish();
 
                 }
             });
@@ -394,7 +406,8 @@ public class Cart extends AppCompatActivity {
 
                 public void onClick(DialogInterface dialog, int which) {
 
-                    CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM(selectedOrder.getVendorUniqueID());
+                    CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+                    customerOrderMGM.setVendorUniqueID(selectedOrder.vendorUniqueID);
                     customerOrderMGM.cancelOrder(selectedOrder.pushId, selectedOrder.getStatus());
 
                 }
@@ -425,7 +438,8 @@ public class Cart extends AppCompatActivity {
 
                 public void onClick(DialogInterface dialog, int which) {
 
-                    CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM(selectedOrder.getVendorUniqueID());
+                    CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+                    customerOrderMGM.setVendorUniqueID(selectedOrder.vendorUniqueID);
                     customerOrderMGM.cancelOrder(selectedOrder.pushId, selectedOrder.getStatus());
 
                 }
@@ -489,6 +503,7 @@ public class Cart extends AppCompatActivity {
             }
 
             TextView text1 = twoLineListItem.getText1();
+            text1.setTextSize(20);
             TextView text2 = twoLineListItem.getText2();
             text1.setText(orders.get(position).getFoodTruckName() + " - $" + orders.get(position).getPrice());
             text2.setText(orders.get(position).getCustomerOrder());

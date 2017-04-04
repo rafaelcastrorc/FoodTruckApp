@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -17,6 +18,11 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_main_menu);
         mAuth = FirebaseAuth.getInstance();
+
+        CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+        TextView tv = (TextView) findViewById(R.id.total_shopping_cart);
+        tv.setClickable(true);
+       // tv.setText("$" + customerOrderMGM.getTotal());
 
 
         // add click listener to Food Trucks near me button
@@ -57,6 +63,7 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
         startActivity(i);
         finish();
     }
+
 
 
 }

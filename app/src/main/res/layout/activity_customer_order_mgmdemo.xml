@@ -8,29 +8,21 @@
         android:id="@+id/sendOrderToVendor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="122dp"
         android:onClick="sendOrderToVendor_onClick"
-        android:text="Send Order"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:text="+" />
 
     <Button
-        android:id="@+id/updateOrder"
+        android:id="@+id/gotoPage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="58dp"
-        android:onClick="updateOrder_onClick"
-        android:text="Update Order"
+        android:layout_alignEnd="@+id/sendOrderToVendor"
         android:layout_below="@+id/sendOrderToVendor"
-        android:layout_alignEnd="@+id/sendOrderToVendor" />
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="80dp"
+        android:onClick="gotoPage_onClick"
+        android:text="Button" />
 
-    <Button
-        android:id="@+id/cancelOrder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="cancelOrder_onClick"
-        android:text="Cancel order"
-        android:layout_marginTop="76dp"
-        android:layout_below="@+id/updateOrder"
-        android:layout_alignStart="@+id/updateOrder" />
 </RelativeLayout>
