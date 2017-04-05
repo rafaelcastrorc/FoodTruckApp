@@ -538,4 +538,15 @@ public class VendorProfileForCustomer extends AppCompatActivity {
 //            return menuItemQuantity;
 //        }
 //    }
+
+
+    //Todo: Add the + to all orders.
+    public void sendOrderToVendor_onClick(View v) {
+        CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+        customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+        Button currButton = (Button) findViewById(R.id.sendOrderToVendor);
+        //Add here the order, the name of food truck, and the cost of the item
+        customerOrderMGM.sendOrderToCart("Chocolates", "Insert the name of the food truck here", 10.50);
+
+    }
 }
