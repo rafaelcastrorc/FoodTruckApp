@@ -3,6 +3,7 @@ package edu.upenn.cis350.foodtruckapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,7 +65,7 @@ public class FavoritesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
         ListView list = (ListView) findViewById(R.id.favs_list);
-        String[] user_fav_trucks = {"Bui's", "Hemo's", "Magic Carpet", "Yuh Kee's", "Mexicali"}; // data to be pulled from Firebase
+        String[] user_fav_trucks = {"My truck", "Bui's", "Magic Carpet", "Yuh Kee's", "Mexicali"}; // data to be pulled from Firebase
         list.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_style,
                 user_fav_trucks) {
             @Override
@@ -76,9 +77,24 @@ public class FavoritesActivity extends AppCompatActivity {
             }
         });
 
+        list.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                Intent intent = new Intent(FavoritesActivity.this, VendorProfileForCustomerActivity.class);
+                final TextView selectedChild = (TextView) parent.getChildAt(position);
+
+                String selectedVendorID = (String) selectedChild.getText();
+                Log.d(selectedVendorID, selectedVendorID);
+                intent.putExtra("vendorUniqueID", vendors.get(selectedVendorID));
+                Log.d(vendors.get(selectedVendorID), vendors.get(selectedVendorID));
+                startActivity(intent);
+            }
+        });
+        list.setDividerHeight(10);
+
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
-        databaseRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
+        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         getAllVendors((Map<String,Object>) dataSnapshot.getValue());
@@ -87,21 +103,6 @@ public class FavoritesActivity extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-
-        list.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                Intent intent = new Intent(FavoritesActivity.this, VendorProfileForCustomer.class);
-                final TextView selectedChild = (TextView) parent.getChildAt(position);
-
-                String selectedVendorID = (String) selectedChild.getText();
-                intent.putExtra("vendorUniqueID", vendors.get(selectedVendorID));
-                startActivity(intent);
-            }
-        });
-        list.setDividerHeight(10);
-
 
         //Handle total bar
         mAuth = FirebaseAuth.getInstance();
@@ -273,7 +274,15 @@ public class FavoritesActivity extends AppCompatActivity {
     void getAllVendors(Map<String,Object> users) {
         for (Map.Entry<String, Object> entry : users.entrySet()){
             Map user = (Map) entry.getValue();
-            vendors.put((String) user.get("Name Of Food Truck"), (String) user.get("UniqueID"));
+            String name = (String) user.get("Name Of Food Truck");
+
+            if (name != null) {
+                Log.d(name, name);
+                if (name.equals("My truck")) {
+                    Log.d((String) user.get("UniqueID"), (String) user.get("UniqueID"));
+                }
+                vendors.put(name, (String) user.get("UniqueID"));
+            }
         }
     }
 

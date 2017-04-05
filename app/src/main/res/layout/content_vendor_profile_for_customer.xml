@@ -56,32 +56,46 @@
                     android:id="@+id/customer_vendor_open_weekday_time"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.48" />
+                    android:layout_marginTop="12dp"
+                    android:layout_weight="0.31"
+                    android:textAlignment="center"
+                    android:textSize="8pt" />
 
                 <TextView
                     android:id="@+id/customer_vendor_open_weekday_period"
-                    android:layout_width="72dp"
-                    android:layout_height="match_parent"></TextView>
+                    android:layout_width="41dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="12dp"
+                    android:layout_weight="0.03"
+                    android:textAlignment="center"
+                    android:textSize="8pt"></TextView>
 
                 <TextView
                     android:id="@+id/textView1"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-5dp"
+                    android:gravity="center"
                     android:text="  -"
                     android:textColor="@color/BLACK"
                     android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/customer_vendor_close_weekday_time"
-                    android:layout_width="63dp"
+                    android:layout_width="52dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.14"></TextView>
+                    android:layout_marginTop="12dp"
+                    android:textAlignment="center"
+                    android:textSize="8pt"></TextView>
 
                 <TextView
                     android:id="@+id/customer_vendor_close_weekday_period"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.40"></TextView>
+                    android:layout_marginTop="12dp"
+                    android:layout_weight="0.21"
+                    android:textAlignment="center"
+                    android:textSize="8pt"></TextView>
 
             </LinearLayout>
 
@@ -101,36 +115,50 @@
 
                 <TextView
                     android:id="@+id/customer_vendor_open_weekend_time"
-                    android:layout_width="106dp"
+                    android:layout_width="77dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.42"></TextView>
+                    android:layout_marginTop="12dp"
+                    android:textAlignment="center"
+                    android:textSize="8pt"></TextView>
 
                 <TextView
                     android:id="@+id/customer_vendor_open_weekend_period"
-                    android:layout_width="68dp"
+                    android:layout_width="45dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.11"></TextView>
+                    android:layout_marginTop="12dp"
+                    android:textAlignment="center"
+                    android:textSize="8pt"></TextView>
 
                 <TextView
-                    android:layout_width="38dp"
-                    android:layout_height="wrap_content"
                     android:id="@+id/textView3"
+                    android:layout_width="37dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="0dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="-15dp"
+                    android:gravity="center"
+                    android:paddingTop="-10dp"
                     android:text="  -"
-                    android:textSize="30sp"
                     android:textColor="@color/BLACK"
-                    android:layout_margin="0dp" />
+                    android:textSize="30sp"
+                    android:layout_weight="0.05" />
 
                 <TextView
                     android:id="@+id/customer_vendor_close_weekend_time"
-                    android:layout_width="96dp"
+                    android:layout_width="54dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.11"></TextView>
+                    android:layout_marginTop="12dp"
+                    android:textAlignment="center"
+                    android:textSize="8pt"></TextView>
 
                 <TextView
                     android:id="@+id/customer_vendor_close_weekend_period"
-                    android:layout_width="78dp"
+                    android:layout_width="37dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.24"></TextView>
+                    android:layout_marginTop="12dp"
+                    android:textAlignment="center"
+                    android:textSize="8pt"
+                    android:layout_weight="0.13"></TextView>
 
             </LinearLayout>
 
@@ -174,14 +202,14 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/textView6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/textView6"
-                android:text="@string/large_text"
-                android:textSize="12sp"
-                android:textColor="@color/BLACK"
+                android:layout_marginTop="15dp"
                 android:layout_weight="0.03"
-                android:layout_marginTop="15dp" />
+                android:text="@string/large_text"
+                android:textColor="@color/BLACK"
+                android:textSize="12sp" />
 
             <View
                 android:gravity="center"

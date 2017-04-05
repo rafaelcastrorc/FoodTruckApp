@@ -57,7 +57,12 @@
         <activity
             android:name=".VendorProfileActivity"
             android:label="@string/title_activity_vendor_profile"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".VendorProfileForCustomerActivity"
+            android:label="@string/title_activity_vendor_profile"
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".VendorProfileForCustomer"/>
