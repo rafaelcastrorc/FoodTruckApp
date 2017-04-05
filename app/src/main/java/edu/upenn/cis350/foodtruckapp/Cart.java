@@ -145,14 +145,24 @@ public class Cart extends AppCompatActivity {
                     }
 
                 }
-                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
-                customerOrder.setStatus(status);
-                customerOrder.setFoodTruckName(foodTruckName);
-                customerOrder.setPrice(price);
-                orders.add(customerOrder);
+                //Add as long as is not empty
+                if (!order.equals("")) {
 
-                arrayAdapter.notifyDataSetChanged();
-                updateTotal();
+                    Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+                    customerOrder.setStatus(status);
+                    customerOrder.setFoodTruckName(foodTruckName);
+                    customerOrder.setPrice(price);
+                    orders.add(customerOrder);
+
+                    arrayAdapter.notifyDataSetChanged();
+                    updateTotal();
+                }
+                else {
+                    //Since order is empty delete it
+                    DatabaseReference currUserOrder = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
+                    currUserOrder.removeValue();
+                }
+
 
 
             }
@@ -201,20 +211,28 @@ public class Cart extends AppCompatActivity {
                     }
 
                 }
-                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+                if (!order.equals("")) {
 
-                //deletes old order
-                orders.remove(customerOrder);
-                //adds new order at end of queue
+                    Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
 
-                customerOrder.setStatus(status);
-                customerOrder.setFoodTruckName(foodTruckName);
-                customerOrder.setPrice(price);
+                    //deletes old order
+                    orders.remove(customerOrder);
+                    //adds new order at end of queue
 
-                orders.add(customerOrder);
+                    customerOrder.setStatus(status);
+                    customerOrder.setFoodTruckName(foodTruckName);
+                    customerOrder.setPrice(price);
 
-                arrayAdapter.notifyDataSetChanged();
-                updateTotal();
+                    orders.add(customerOrder);
+
+                    arrayAdapter.notifyDataSetChanged();
+                    updateTotal();
+                }
+                else {
+                    //Delete the order.
+                    DatabaseReference currUserOrder = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
+                    currUserOrder.removeValue();
+                }
 
             }
 

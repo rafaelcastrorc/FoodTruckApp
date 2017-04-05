@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 /**
  * Created by rafaelcastro on 3/17/17.
@@ -92,47 +93,15 @@ public class CustomerOrderMGM {
                     //If there already exist an order, do the following
 
                     HashMap<String, Object> currOrder = (HashMap<String, Object>) dataSnapshot.getValue();
-                    HashMap<String, Integer> orderToQuantity = new   HashMap<String, Integer>();
+                    Log.d("fuck order:", newOrder);
+                    TreeMap<String, Integer> orderToQuantity;
 
                     //Gets the current order
                     String prevOrder = (String) currOrder.get("Order");
 
-                    //Gets all items of the order and adds them to the map
+                    //Parses the order string
+                    orderToQuantity = ordersParser(prevOrder);
 
-                    //Goes through each line of the order
-                    Scanner scanner = new Scanner(prevOrder);
-                    while (scanner.hasNextLine()) {
-                        StringBuilder order = new StringBuilder();
-                        StringBuilder quantity = new StringBuilder();
-
-                        String line = scanner.nextLine();
-                        boolean isQuantity = false;
-                        for (char c: line.toCharArray()) {
-                            //If there is an space, it may be a word or it can be a quantity
-                            if (c == '(') {
-                                isQuantity = true;
-                                continue;
-                            }
-                            else if (isQuantity) {
-                                try  {
-                                    if (Character.isDigit(c)) {
-                                        quantity.append(c);
-                                    }
-                                }
-                                catch (NumberFormatException e) {
-                                    break;
-                                }
-                            }
-                            else {
-                                order.append(c);
-                            }
-
-                        }
-                        orderToQuantity.put(order.toString(), Integer.parseInt(quantity.toString()));
-                    }
-
-
-                    scanner.close();
 
                     //If we are adding an element to the cart
                     if (!remove) {
@@ -148,12 +117,20 @@ public class CustomerOrderMGM {
 
                     //If remove is true
                     else {
-                        //If cart does not contain the order, return
-                        if (orderToQuantity.get(newOrder) == null) {
+                        //If the order for the current  vendor is empty, i remove it
+                        if (orderToQuantity.keySet().size() == 0) {
+                            DatabaseReference currUserOrder = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
+                            currUserOrder.removeValue();
+                            Log.d("fuck", "here");
                             return;
                         }
-                        //If quantity for current item is 0, do not remove more.
+                        //If cart does not contain the order, return
+                        else if (orderToQuantity.get(newOrder) == null) {
+                            return;
+                        }
+                        //If quantity for current item is 0, do not remove more, but remove itemo
                         else if (orderToQuantity.get(newOrder) == 0) {
+                            orderToQuantity.remove(newOrder);
                             return;
                         }
                         //If quantity is greater than 0
@@ -165,6 +142,8 @@ public class CustomerOrderMGM {
                                 orderToQuantity.remove(newOrder);
                             }
                         }
+
+
                     }
 
                     //Get the prev price
@@ -188,11 +167,10 @@ public class CustomerOrderMGM {
 
                     //Construct new order string
                     StringBuilder sb = new StringBuilder();
-                    Log.d("fuck orderToQuantity", orderToQuantity.keySet().toString());
                     for(String orderToPut: orderToQuantity.keySet()) {
+                        sb.append("["+orderToQuantity.get(orderToPut)+"] ");
                         sb.append(orderToPut);
-                        sb.append("("+orderToQuantity.get(orderToPut)+")");
-                        sb.append("\n");
+                        sb.append(".\n");
                     }
                     String newOrder = sb.toString();
                     currOrder.put("Order", newOrder);
@@ -247,7 +225,11 @@ public class CustomerOrderMGM {
 
                 Map orderInfo = new HashMap<>();
                 orderInfo.put("CustomerInstanceId", id);
-                orderInfo.put("Order", customerOrder + "(1)" + "\n");
+                String orderToPut = customerOrder;
+                if (!submitted) {
+                    orderToPut = "[1] "+customerOrder+".\n";
+                }
+                orderInfo.put("Order",  orderToPut);
                 orderInfo.put("CustomerName", nameOfCustomer);
                 orderInfo.put("PushId", pushId);
                 orderInfo.put("customerUniqueID", uID);
@@ -304,6 +286,54 @@ public class CustomerOrderMGM {
     private void subscribe() {
         //Subscribe user to topic so that he can get the notification
         FirebaseMessaging.getInstance().subscribeToTopic("user_" + id);
+    }
+
+    protected TreeMap<String, Integer> ordersParser(String prevOrder) {
+        TreeMap<String, Integer> orderToQuantity = new TreeMap<>();
+        //Goes through each line of the order
+        Scanner scanner = new Scanner(prevOrder);
+        while (scanner.hasNextLine()) {
+            StringBuilder order = new StringBuilder();
+            StringBuilder quantity = new StringBuilder();
+
+            String line = scanner.nextLine();
+            Log.d("fuck", "ordersParser: "+line  );
+
+            boolean isQuantity = false;
+            //Format fo the order [n] Name Of food.\n
+            for (char c: line.toCharArray()) {
+                //If there is an space, it may be a word or it can be a quantity
+
+                if (c == '[') {
+
+                    isQuantity = true;
+                    continue;
+                }
+                else if (isQuantity) {
+                    if (c == ' ') {
+                        isQuantity = false;
+                        continue;
+                    }
+                    if (c== ']') {
+                        continue;
+                    }
+                    quantity.append(c);
+                }
+
+
+                else {
+                    if (c == '.') {
+                        break;
+                    }
+                    order.append(c);
+                }
+            }
+            orderToQuantity.put(order.toString(), Integer.parseInt(quantity.toString()));
+        }
+
+
+        scanner.close();
+        return orderToQuantity;
     }
 
 

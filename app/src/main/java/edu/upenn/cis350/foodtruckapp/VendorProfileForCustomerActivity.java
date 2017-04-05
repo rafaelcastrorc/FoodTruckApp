@@ -360,7 +360,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         customerOrderMGM.setVendorUniqueID(vendorUniqueID);
         Button currButton = (Button) findViewById(R.id.addOrderToCart);
         //Add here the order, the name of food truck, and the cost of the item
-        customerOrderMGM.addOrderToCart("Dinosaurs", "Insert the name of the food truck here", 10.50);
+        customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
 
     }
 
@@ -371,7 +371,8 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         customerOrderMGM.setVendorUniqueID(vendorUniqueID);
         Button currButton = (Button) findViewById(R.id.addOrderToCart);
         //Add here the order, the name of food truck, and the cost of the item
-        customerOrderMGM.removeOrderFromCart("Dinosaurs", "Insert the name of the food truck here", 10.50);
+        //customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
+        customerOrderMGM.removeOrderFromCart("Candies", "Insert the name of the food truck here", 10.50);
 
     }
 }

@@ -119,11 +119,18 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     }
 
                 }
-                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
-                customerOrder.setCustomerUniqueID(customerUniqueID);
-                orders.add(customerOrder);
+                if (!order.isEmpty()) {
+                    Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+                    customerOrder.setCustomerUniqueID(customerUniqueID);
+                    orders.add(customerOrder);
 
-                arrayAdapter.notifyDataSetChanged();
+                    arrayAdapter.notifyDataSetChanged();
+                }
+                else {
+                        CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+                        customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+                        customerOrderMGM.cancelOrder(pushId, true);
+                }
 
 
             }
@@ -154,16 +161,23 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     }
 
                 }
-                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
-                //deletes old order
-                orders.remove(customerOrder);
+                if (!order.isEmpty()) {
+                    Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+                    //deletes old order
+                    orders.remove(customerOrder);
 
-                customerOrder.setCustomerUniqueID(customerUniqueID);
+                    customerOrder.setCustomerUniqueID(customerUniqueID);
 
-                //adds new order at end of queue
-                orders.add(customerOrder);
+                    //adds new order at end of queue
+                    orders.add(customerOrder);
 
-                arrayAdapter.notifyDataSetChanged();
+                    arrayAdapter.notifyDataSetChanged();
+                }
+                else {
+                    CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+                    customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+                    customerOrderMGM.cancelOrder(pushId, true);
+                }
 
             }
 
