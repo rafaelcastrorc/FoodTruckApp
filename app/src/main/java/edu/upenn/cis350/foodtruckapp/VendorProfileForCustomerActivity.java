@@ -52,8 +52,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     protected ArrayList<Order> orders = new ArrayList<>();
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -73,7 +71,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
 
     @Override
@@ -110,6 +107,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         menuRef.addChildEventListener(new ChildEventListener() {
             String item = "";
             String price = "";
+
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 MyMenuItem menuItem = new MyMenuItem(dataSnapshot.getKey(),
@@ -306,10 +304,10 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                 final TextView itemCount = (TextView) view.findViewById(R.id.menu_item_quantity);
 
                 //Handle buttons and add onClickListeners
-                Button deleteButton = (Button)view.findViewById(R.id.delete_button);
+                Button deleteButton = (Button) view.findViewById(R.id.delete_button);
                 Button addButton = (Button) view.findViewById(R.id.add_button);
 
-                deleteButton.setOnClickListener(new View.OnClickListener(){
+                deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (quantity == 0) {
@@ -320,7 +318,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                         notifyDataSetChanged();
                     }
                 });
-                addButton.setOnClickListener(new View.OnClickListener(){
+                addButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         quantity++;
@@ -335,8 +333,8 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     }
 
 
-    private void updateTotal(){
-        TextView total = (TextView)findViewById(R.id.total_shopping_cart);
+    private void updateTotal() {
+        TextView total = (TextView) findViewById(R.id.total_shopping_cart);
         total.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -345,34 +343,28 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             }
         });
         double result = 0.0;
-        for (Order order: orders) {
+        for (Order order : orders) {
             result = result + order.getPrice();
         }
         NumberFormat formatter = new DecimalFormat("#0.00");
 
-        total.setText("$"+ formatter.format(result));
-    }
-
-    
-    //Todo: Add the + to all orders.
-    public void addOrderToCart_onClick(View v) {
-        CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-        customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-        Button currButton = (Button) findViewById(R.id.addOrderToCart);
-        //Add here the order, the name of food truck, and the cost of the item
-        customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
-
-    }
-
-
-    //Todo: Add the + to all orders.
-    public void removeOrderFromCart_onClick(View v) {
-        CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-        customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-        Button currButton = (Button) findViewById(R.id.addOrderToCart);
-        //Add here the order, the name of food truck, and the cost of the item
-        //customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
-        customerOrderMGM.removeOrderFromCart("Candies", "Insert the name of the food truck here", 10.50);
-
+        total.setText("$" + formatter.format(result));
     }
 }
+
+    
+    //Todo: For Desmond
+//To add item to cart
+       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+//        customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
+
+ //To remove item
+       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+        //customerOrderMGM.removeOrderFromCart("Candies", "Insert the name of the food truck here", 10.50);
+
+//To parse the order String
+// CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+// customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+//customerOrderMGM.ordersParser("[1] Chocolate. \n");
