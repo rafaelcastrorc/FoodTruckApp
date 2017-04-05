@@ -342,9 +342,9 @@ public class Cart extends AppCompatActivity {
 
                     //Go to the vendor profile page
                     selectedOrder.getVendorUniqueID();
-                    //Todo: Go to specific vendor profile
-                    Intent i = new Intent(Cart.this, CustomerOrderMGMDemo.class);
-                    //PASS REFERENCE OF ORDER SUBMITTED
+
+                    Intent i = new Intent(Cart.this, VendorProfileForCustomer.class);
+                    i.putExtra("vendorUniqueID", selectedOrder.getVendorUniqueID());
                     startActivity(i);
 
                 }
@@ -378,7 +378,8 @@ public class Cart extends AppCompatActivity {
                     //Go to the vendor profile page
                     selectedOrder.getVendorUniqueID();
                     //Todo: Go to specific vendor profile
-                    Intent i = new Intent(Cart.this, CustomerOrderMGMDemo.class);
+                    Intent i = new Intent(Cart.this, VendorProfileForCustomer.class);
+                    i.putExtra("vendorUniqueID", selectedOrder.getVendorUniqueID());
                     startActivity(i);
 
                 }

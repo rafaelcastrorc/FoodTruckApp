@@ -233,8 +233,14 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
 
                 // make text normal
-                previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
-                previousChildSelected.getText2().setTypeface(null, Typeface.NORMAL);
+                try {
+                    previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
+                    previousChildSelected.getText2().setTypeface(null, Typeface.NORMAL);
+                }
+                catch (NullPointerException e) {
+
+                }
+
                 previousChildSelected = null;
                 isOrderSelected = false;
 

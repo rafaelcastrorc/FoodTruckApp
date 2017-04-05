@@ -64,6 +64,9 @@
             android:label="@string/title_activity_vendor_profile"
             android:theme="@style/AppTheme" />
 
+        <activity
+            android:name=".VendorProfileForCustomer"/>
+
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -30,7 +30,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static edu.upenn.cis350.foodtruckapp.VendorProfileActivity.setListViewHeightBasedOnChildren;
 
@@ -44,6 +47,31 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     private ArrayList<MyMenuItem> menu;
     private ListView menuListView;
     private String vendorUniqueID;
+    protected ArrayList<Order> orders = new ArrayList<>();
+
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.shopping_cart, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.shopping_cart_button:
+                Intent i = new Intent(VendorProfileForCustomer.this, Cart.class);
+                startActivity(i);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
 
     @Override
@@ -302,5 +330,52 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
             return view;
         }
+    }
+
+
+    private void updateTotal(){
+        TextView total = (TextView)findViewById(R.id.total_shopping_cart);
+        total.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(VendorProfileForCustomer.this, Cart.class);
+                startActivity(i);
+            }
+        });
+        double result = 0.0;
+        for (Order order: orders) {
+            result = result + order.getPrice();
+        }
+        NumberFormat formatter = new DecimalFormat("#0.00");
+
+        total.setText("$"+ formatter.format(result));
+    }
+
+//    private class ViewHolder {
+//        private TextView menuItem;
+//        private TextView menuItemQuantity;
+//
+//        public ViewHolder() {
+//           // this.menuItem = menuItem;
+//            //this.menuItemQuantity = menuItemQuantity;
+//        }
+//
+//        public TextView getMenuItem() {
+//            return menuItem;
+//        }
+//        public TextView getMenuItemQuantity() {
+//            return menuItemQuantity;
+//        }
+//    }
+
+
+    //Todo: Add the + to all orders.
+    public void sendOrderToVendor_onClick(View v) {
+        CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+        customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+        Button currButton = (Button) findViewById(R.id.sendOrderToVendor);
+        //Add here the order, the name of food truck, and the cost of the item
+        customerOrderMGM.sendOrderToCart("Chocolates", "Insert the name of the food truck here", 10.50);
+
     }
 }
