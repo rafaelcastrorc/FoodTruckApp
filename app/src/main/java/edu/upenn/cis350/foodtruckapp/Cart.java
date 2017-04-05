@@ -52,10 +52,10 @@ public class Cart extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         mAuth = FirebaseAuth.getInstance();
         myOrdersRef = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders");
-
 
         orderList = (ListView) findViewById(R.id.orders_list_shopping_cart);
         final Cart.MyAdapter arrayAdapter = new Cart.MyAdapter(this, orders);
@@ -84,10 +84,7 @@ public class Cart extends AppCompatActivity {
                 catch (NullPointerException e) {
 
                 }
-
-
                 selectedOrder = (Order) parent.getItemAtPosition(position);
-
             }
 
         });
@@ -100,8 +97,6 @@ public class Cart extends AppCompatActivity {
             String pushId = "";
             String foodTruckName = "";
             double price = 0.0;
-
-
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
@@ -365,18 +360,15 @@ public class Cart extends AppCompatActivity {
             AlertDialog.Builder confirmPopupBuilder = new AlertDialog.Builder(this);
             confirmPopupBuilder.setTitle("You are about to modify your oder");
             confirmPopupBuilder.setMessage("Are you sure you want to modify this order: \n" + selectedOrder.getCustomerOrder().toString()+ "?") ;
-
             confirmPopupBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                 public void onClick(DialogInterface dialog, int which) {
-
                     //Go to the vendor profile page
                     selectedOrder.getVendorUniqueID();
                     //Todo: Go to specific vendor profile
                     Intent i = new Intent(Cart.this, VendorProfileForCustomerActivity.class);
                     i.putExtra("vendorUniqueID", selectedOrder.getVendorUniqueID());
                     startActivity(i);
-
                 }
             });
 
@@ -384,7 +376,6 @@ public class Cart extends AppCompatActivity {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
                     dialog.dismiss();
                 }
             });

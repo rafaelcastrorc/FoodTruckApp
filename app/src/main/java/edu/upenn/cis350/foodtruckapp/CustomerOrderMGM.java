@@ -1,10 +1,6 @@
 package edu.upenn.cis350.foodtruckapp;
 
-import android.util.Log;
-import android.util.StringBuilderPrinter;
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,7 +9,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +35,8 @@ public class CustomerOrderMGM {
     protected void setVendorUniqueID(String newId) {
         vendorUniqueID = newId;
     }
+
+    protected String getUniqueID() { return mAuth.getCurrentUser().getUid(); }
 
     //Call from vendor profile on customer side
     protected void sendOrderToCart(String customerOrder, String foodTruckName, double price) {
