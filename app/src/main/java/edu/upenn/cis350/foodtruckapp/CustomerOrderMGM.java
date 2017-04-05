@@ -16,6 +16,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Created by rafaelcastro on 3/17/17.
@@ -42,18 +43,30 @@ public class CustomerOrderMGM {
     }
 
     //Call from vendor profile on customer side
-    protected void sendOrderToCart(String customerOrder, String foodTruckName, double price) {
+    protected void addOrderToCart(String customerOrder, String foodTruckName, double price) {
         this.foodTruckName = foodTruckName;
         this.price = price;
         this.customerOrder = customerOrder;
         //Check if there is already an order for a given vendor, if not add a new one.
-        updateOrder(customerOrder, price);
+        updateOrder(customerOrder, price, false);
+    }
+
+
+    protected void removeOrderFromCart(String customerOrder, String foodTruckName, double price) {
+        //Check if there is no item.
+        //Remove order completly if order is empty
+        this.foodTruckName = foodTruckName;
+        //Make price negative
+        this.price = price;
+        this.customerOrder = customerOrder;
+        //Check if there is already an order for a given vendor, if not add a new one.
+        updateOrder(customerOrder, price, true);
     }
 
 
 
 
-    protected void updateOrder(final String newOrder, final double newPrice) {
+    protected void updateOrder(final String newOrder, final double newPrice, final boolean remove) {
         //On customer side, find the current order by using the vendor
         DatabaseReference currUser = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
 
@@ -65,23 +78,94 @@ public class CustomerOrderMGM {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null) {
                    //This will only happen if there is no order asccoiated with the vendor.
-                    //So we create new order and send order to cart
-                    pushOrderToFirebase(vendorOrdersRef, false);
+                    if(remove) {
+                        //If we are removing and there is no order, we just return
+                        return;
+                    }
+                    else {
+                        //If we are adding and there is no order, create a new order
+                        pushOrderToFirebase(vendorOrdersRef, false);
+                    }
 
                 }
                 else {
                     //If there already exist an order, do the following
 
                     HashMap<String, Object> currOrder = (HashMap<String, Object>) dataSnapshot.getValue();
+                    HashMap<String, Integer> orderToQuantity = new   HashMap<String, Integer>();
 
-                    //Get the prev order and append the new order.
+                    //Gets the current order
                     String prevOrder = (String) currOrder.get("Order");
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(prevOrder);
-                    sb.append("\n");
-                    sb.append(newOrder);
 
-                    String newOrder = sb.toString();
+                    //Gets all items of the order and adds them to the map
+
+                    //Goes through each line of the order
+                    Scanner scanner = new Scanner(prevOrder);
+                    while (scanner.hasNextLine()) {
+                        StringBuilder order = new StringBuilder();
+                        StringBuilder quantity = new StringBuilder();
+
+                        String line = scanner.nextLine();
+                        boolean isQuantity = false;
+                        for (char c: line.toCharArray()) {
+                            //If there is an space, it may be a word or it can be a quantity
+                            if (c == '(') {
+                                isQuantity = true;
+                                continue;
+                            }
+                            else if (isQuantity) {
+                                try  {
+                                    if (Character.isDigit(c)) {
+                                        quantity.append(c);
+                                    }
+                                }
+                                catch (NumberFormatException e) {
+                                    break;
+                                }
+                            }
+                            else {
+                                order.append(c);
+                            }
+
+                        }
+                        orderToQuantity.put(order.toString(), Integer.parseInt(quantity.toString()));
+                    }
+
+
+                    scanner.close();
+
+                    //If we are adding an element to the cart
+                    if (!remove) {
+                        if (orderToQuantity.get(newOrder) == null) {
+                            orderToQuantity.put(newOrder, 1);
+                        }
+                        else {
+                            Integer currQuantity = orderToQuantity.get(newOrder);
+                            orderToQuantity.put(newOrder, currQuantity + 1);
+                        }
+
+                    }
+
+                    //If remove is true
+                    else {
+                        //If cart does not contain the order, return
+                        if (orderToQuantity.get(newOrder) == null) {
+                            return;
+                        }
+                        //If quantity for current item is 0, do not remove more.
+                        else if (orderToQuantity.get(newOrder) == 0) {
+                            return;
+                        }
+                        //If quantity is greater than 0
+                        else {
+                            Integer currQuantity = orderToQuantity.get(newOrder);
+                            orderToQuantity.put(newOrder, currQuantity - 1);
+                           //If the quantity is now 0, remove it
+                            if (currQuantity-1 ==0) {
+                                orderToQuantity.remove(newOrder);
+                            }
+                        }
+                    }
 
                     //Get the prev price
                     Double prevPrice = 0.0;
@@ -93,10 +177,27 @@ public class CustomerOrderMGM {
                         prevPrice= l.doubleValue();
 
                     }
+                    if (!remove) {
+                        currOrder.put("Price", prevPrice + newPrice);
+                    }
+                    else {
+                        currOrder.put("Price", prevPrice - newPrice);
 
-                    //Mofify the order
+                    }
+
+
+                    //Construct new order string
+                    StringBuilder sb = new StringBuilder();
+                    Log.d("fuck orderToQuantity", orderToQuantity.keySet().toString());
+                    for(String orderToPut: orderToQuantity.keySet()) {
+                        sb.append(orderToPut);
+                        sb.append("("+orderToQuantity.get(orderToPut)+")");
+                        sb.append("\n");
+                    }
+                    String newOrder = sb.toString();
                     currOrder.put("Order", newOrder);
-                    currOrder.put("Price", newPrice + prevPrice);
+
+
                     String submitted = (String) currOrder.get("Submitted");
 
                     String pushId = (String) currOrder.get("PushId");
@@ -146,7 +247,7 @@ public class CustomerOrderMGM {
 
                 Map orderInfo = new HashMap<>();
                 orderInfo.put("CustomerInstanceId", id);
-                orderInfo.put("Order", customerOrder);
+                orderInfo.put("Order", customerOrder + "(1)" + "\n");
                 orderInfo.put("CustomerName", nameOfCustomer);
                 orderInfo.put("PushId", pushId);
                 orderInfo.put("customerUniqueID", uID);
@@ -205,14 +306,6 @@ public class CustomerOrderMGM {
         FirebaseMessaging.getInstance().subscribeToTopic("user_" + id);
     }
 
-
-
-
-
-    protected void listenToTotal() {
-
-
-    }
 
 
 
