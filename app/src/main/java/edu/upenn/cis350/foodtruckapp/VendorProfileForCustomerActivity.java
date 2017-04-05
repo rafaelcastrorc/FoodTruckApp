@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -33,7 +36,6 @@ import com.google.firebase.storage.StorageReference;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static edu.upenn.cis350.foodtruckapp.VendorProfileActivity.setListViewHeightBasedOnChildren;
 
@@ -63,7 +65,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.shopping_cart_button:
-                Intent i = new Intent(VendorProfileForCustomer.this, Cart.class);
+                Intent i = new Intent(VendorProfileForCustomerActivity.this, Cart.class);
                 startActivity(i);
                 return true;
 
@@ -338,7 +340,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         total.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(VendorProfileForCustomer.this, Cart.class);
+                Intent i = new Intent(VendorProfileForCustomerActivity.this, Cart.class);
                 startActivity(i);
             }
         });
@@ -351,24 +353,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         total.setText("$"+ formatter.format(result));
     }
 
-//    private class ViewHolder {
-//        private TextView menuItem;
-//        private TextView menuItemQuantity;
-//
-//        public ViewHolder() {
-//           // this.menuItem = menuItem;
-//            //this.menuItemQuantity = menuItemQuantity;
-//        }
-//
-//        public TextView getMenuItem() {
-//            return menuItem;
-//        }
-//        public TextView getMenuItemQuantity() {
-//            return menuItemQuantity;
-//        }
-//    }
-
-
+    
     //Todo: Add the + to all orders.
     public void sendOrderToVendor_onClick(View v) {
         CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
