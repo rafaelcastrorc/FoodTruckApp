@@ -5,7 +5,7 @@
 
 
     <Button
-        android:id="@+id/sendOrderToVendor"
+        android:id="@+id/addOrderToCart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -18,8 +18,8 @@
         android:id="@+id/gotoPage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/sendOrderToVendor"
-        android:layout_below="@+id/sendOrderToVendor"
+        android:layout_alignEnd="@+id/addOrderToCart"
+        android:layout_below="@+id/addOrderToCart"
         android:layout_marginEnd="32dp"
         android:layout_marginTop="80dp"
         android:onClick="gotoPage_onClick"

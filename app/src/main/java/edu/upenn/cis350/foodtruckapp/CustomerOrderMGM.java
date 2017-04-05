@@ -11,6 +11,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
 
 /**
  * Created by rafaelcastro on 3/17/17.
@@ -39,18 +41,30 @@ public class CustomerOrderMGM {
     protected String getUniqueID() { return mAuth.getCurrentUser().getUid(); }
 
     //Call from vendor profile on customer side
-    protected void sendOrderToCart(String customerOrder, String foodTruckName, double price) {
+    protected void addOrderToCart(String customerOrder, String foodTruckName, double price) {
         this.foodTruckName = foodTruckName;
         this.price = price;
         this.customerOrder = customerOrder;
         //Check if there is already an order for a given vendor, if not add a new one.
-        updateOrder(customerOrder, price);
+        updateOrder(customerOrder, price, false);
+    }
+
+
+    protected void removeOrderFromCart(String customerOrder, String foodTruckName, double price) {
+        //Check if there is no item.
+        //Remove order completly if order is empty
+        this.foodTruckName = foodTruckName;
+        //Make price negative
+        this.price = price;
+        this.customerOrder = customerOrder;
+        //Check if there is already an order for a given vendor, if not add a new one.
+        updateOrder(customerOrder, price, true);
     }
 
 
 
 
-    protected void updateOrder(final String newOrder, final double newPrice) {
+    protected void updateOrder(final String newOrder, final double newPrice, final boolean remove) {
         //On customer side, find the current order by using the vendor
         DatabaseReference currUser = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
 
@@ -62,23 +76,72 @@ public class CustomerOrderMGM {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null) {
                    //This will only happen if there is no order asccoiated with the vendor.
-                    //So we create new order and send order to cart
-                    pushOrderToFirebase(vendorOrdersRef, false);
+                    if(remove) {
+                        //If we are removing and there is no order, we just return
+                        return;
+                    }
+                    else {
+                        //If we are adding and there is no order, create a new order
+                        pushOrderToFirebase(vendorOrdersRef, false);
+                    }
 
                 }
                 else {
                     //If there already exist an order, do the following
 
                     HashMap<String, Object> currOrder = (HashMap<String, Object>) dataSnapshot.getValue();
+                    Log.d("fuck order:", newOrder);
+                    TreeMap<String, Integer> orderToQuantity;
 
-                    //Get the prev order and append the new order.
+                    //Gets the current order
                     String prevOrder = (String) currOrder.get("Order");
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(prevOrder);
-                    sb.append("\n");
-                    sb.append(newOrder);
 
-                    String newOrder = sb.toString();
+                    //Parses the order string
+                    orderToQuantity = ordersParser(prevOrder);
+
+
+                    //If we are adding an element to the cart
+                    if (!remove) {
+                        if (orderToQuantity.get(newOrder) == null) {
+                            orderToQuantity.put(newOrder, 1);
+                        }
+                        else {
+                            Integer currQuantity = orderToQuantity.get(newOrder);
+                            orderToQuantity.put(newOrder, currQuantity + 1);
+                        }
+
+                    }
+
+                    //If remove is true
+                    else {
+                        //If the order for the current  vendor is empty, i remove it
+                        if (orderToQuantity.keySet().size() == 0) {
+                            DatabaseReference currUserOrder = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
+                            currUserOrder.removeValue();
+                            Log.d("fuck", "here");
+                            return;
+                        }
+                        //If cart does not contain the order, return
+                        else if (orderToQuantity.get(newOrder) == null) {
+                            return;
+                        }
+                        //If quantity for current item is 0, do not remove more, but remove itemo
+                        else if (orderToQuantity.get(newOrder) == 0) {
+                            orderToQuantity.remove(newOrder);
+                            return;
+                        }
+                        //If quantity is greater than 0
+                        else {
+                            Integer currQuantity = orderToQuantity.get(newOrder);
+                            orderToQuantity.put(newOrder, currQuantity - 1);
+                           //If the quantity is now 0, remove it
+                            if (currQuantity-1 ==0) {
+                                orderToQuantity.remove(newOrder);
+                            }
+                        }
+
+
+                    }
 
                     //Get the prev price
                     Double prevPrice = 0.0;
@@ -90,10 +153,26 @@ public class CustomerOrderMGM {
                         prevPrice= l.doubleValue();
 
                     }
+                    if (!remove) {
+                        currOrder.put("Price", prevPrice + newPrice);
+                    }
+                    else {
+                        currOrder.put("Price", prevPrice - newPrice);
 
-                    //Mofify the order
+                    }
+
+
+                    //Construct new order string
+                    StringBuilder sb = new StringBuilder();
+                    for(String orderToPut: orderToQuantity.keySet()) {
+                        sb.append("["+orderToQuantity.get(orderToPut)+"] ");
+                        sb.append(orderToPut);
+                        sb.append(".\n");
+                    }
+                    String newOrder = sb.toString();
                     currOrder.put("Order", newOrder);
-                    currOrder.put("Price", newPrice + prevPrice);
+
+
                     String submitted = (String) currOrder.get("Submitted");
 
                     String pushId = (String) currOrder.get("PushId");
@@ -143,7 +222,11 @@ public class CustomerOrderMGM {
 
                 Map orderInfo = new HashMap<>();
                 orderInfo.put("CustomerInstanceId", id);
-                orderInfo.put("Order", customerOrder);
+                String orderToPut = customerOrder;
+                if (!submitted) {
+                    orderToPut = "[1] "+customerOrder+".\n";
+                }
+                orderInfo.put("Order",  orderToPut);
                 orderInfo.put("CustomerName", nameOfCustomer);
                 orderInfo.put("PushId", pushId);
                 orderInfo.put("customerUniqueID", uID);
@@ -202,14 +285,54 @@ public class CustomerOrderMGM {
         FirebaseMessaging.getInstance().subscribeToTopic("user_" + id);
     }
 
+    protected TreeMap<String, Integer> ordersParser(String prevOrder) {
+        TreeMap<String, Integer> orderToQuantity = new TreeMap<>();
+        //Goes through each line of the order
+        Scanner scanner = new Scanner(prevOrder);
+        while (scanner.hasNextLine()) {
+            StringBuilder order = new StringBuilder();
+            StringBuilder quantity = new StringBuilder();
+
+            String line = scanner.nextLine();
+            Log.d("fuck", "ordersParser: "+line  );
+
+            boolean isQuantity = false;
+            //Format fo the order [n] Name Of food.\n
+            for (char c: line.toCharArray()) {
+                //If there is an space, it may be a word or it can be a quantity
+
+                if (c == '[') {
+
+                    isQuantity = true;
+                    continue;
+                }
+                else if (isQuantity) {
+                    if (c == ' ') {
+                        isQuantity = false;
+                        continue;
+                    }
+                    if (c== ']') {
+                        continue;
+                    }
+                    quantity.append(c);
+                }
 
 
+                else {
+                    if (c == '.') {
+                        break;
+                    }
+                    order.append(c);
+                }
+            }
+            orderToQuantity.put(order.toString(), Integer.parseInt(quantity.toString()));
+        }
 
 
-    protected void listenToTotal() {
-
-
+        scanner.close();
+        return orderToQuantity;
     }
+
 
 
 

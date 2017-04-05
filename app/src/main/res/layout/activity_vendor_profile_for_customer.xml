@@ -71,21 +71,23 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="17dp"
-                android:layout_weight="0.41"
+                android:layout_weight="0.03"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 tools:text="$00.00" />
 
 
             <Button
-                android:id="@+id/sendOrderToVendor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/removeOrderFromCart"
+                android:layout_width="39dp"
+                android:layout_height="38dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="122dp"
-                android:onClick="sendOrderToVendor_onClick"
-                android:text="+" />
+                android:layout_weight="1"
+                android:onClick="removeOrderFromCart_onClick"
+                android:text="-"
+                android:textSize="20sp" />
 
         </LinearLayout>
     </LinearLayout>
