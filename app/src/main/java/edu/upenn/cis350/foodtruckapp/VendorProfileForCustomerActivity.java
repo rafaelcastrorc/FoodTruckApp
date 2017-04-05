@@ -34,7 +34,7 @@ import java.util.ArrayList;
 
 import static edu.upenn.cis350.foodtruckapp.VendorProfileActivity.setListViewHeightBasedOnChildren;
 
-public class VendorProfileForCustomer extends AppCompatActivity {
+public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private FirebaseAuth mAuth;
@@ -119,7 +119,7 @@ public class VendorProfileForCustomer extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 TextView textView = (TextView) findViewById(R.id.customer_vendor_open_weekday_time);
-                textView.setText((String) dataSnapshot.getValue());
+                textView.setText(dataSnapshot.getValue().toString());
             }
 
             @Override
@@ -143,7 +143,7 @@ public class VendorProfileForCustomer extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 TextView textView = (TextView) findViewById(R.id.customer_vendor_close_weekday_time);
-                textView.setText((String) dataSnapshot.getValue());
+                textView.setText(dataSnapshot.getValue().toString());
             }
 
             @Override
@@ -167,7 +167,7 @@ public class VendorProfileForCustomer extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 TextView textView = (TextView) findViewById(R.id.customer_vendor_open_weekend_time);
-                textView.setText((String) dataSnapshot.getValue());
+                textView.setText(dataSnapshot.getValue().toString());
             }
 
             @Override
@@ -191,7 +191,7 @@ public class VendorProfileForCustomer extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 TextView textView = (TextView) findViewById(R.id.customer_vendor_close_weekend_time);
-                textView.setText((String) dataSnapshot.getValue());
+                textView.setText(dataSnapshot.getValue().toString());
             }
 
             @Override
@@ -303,21 +303,4 @@ public class VendorProfileForCustomer extends AppCompatActivity {
             return view;
         }
     }
-
-//    private class ViewHolder {
-//        private TextView menuItem;
-//        private TextView menuItemQuantity;
-//
-//        public ViewHolder() {
-//           // this.menuItem = menuItem;
-//            //this.menuItemQuantity = menuItemQuantity;
-//        }
-//
-//        public TextView getMenuItem() {
-//            return menuItem;
-//        }
-//        public TextView getMenuItemQuantity() {
-//            return menuItemQuantity;
-//        }
-//    }
 }
