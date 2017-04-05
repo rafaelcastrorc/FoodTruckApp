@@ -265,7 +265,9 @@
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/button_style"
                 android:padding="5dp"
-                android:text="1 Star" />
+                android:text="1 Star"
+                android:onClick="addRatingOf1"
+                />
 
             <Button
                 android:id="@+id/rating2"
@@ -274,7 +276,9 @@
                 android:layout_alignEnd="@+id/rating1"
                 android:layout_below="@+id/rating1"
                 android:background="@drawable/button_style"
-                android:text="2 Star" />
+                android:text="2 Star"
+                android:onClick="addRatingOf2"
+                />
 
             <Button
                 android:id="@+id/rating3"
@@ -283,7 +287,9 @@
                 android:layout_alignStart="@+id/rating2"
                 android:layout_below="@+id/rating2"
                 android:background="@drawable/button_style"
-                android:text="3 Star" />
+                android:text="3 Star"
+                android:onClick="addRatingOf3"
+                />
 
             <Button
                 android:id="@+id/rating4"
@@ -292,7 +298,9 @@
                 android:layout_alignStart="@+id/rating3"
                 android:layout_below="@+id/rating3"
                 android:background="@drawable/button_style"
-                android:text="4 Star" />
+                android:text="4 Star"
+                android:onClick="addRatingOf4"
+                />
 
         </LinearLayout>
 
