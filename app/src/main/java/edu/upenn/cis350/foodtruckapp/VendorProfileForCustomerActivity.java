@@ -354,6 +354,9 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                         customerOrderMGM.removeOrderFromCart(item.getText().toString(), foodtruckName,
                                 Double.parseDouble(price.getText().toString()));
                         int quantity = menuItem.getQuantity();
+                        if (quantity == 0) {
+                            return;
+                        }
                         menuItem.setQuantity(quantity - 1);
                         itemCount.setText(Integer.toString(menuItem.getQuantity()));
                         notifyDataSetChanged();
