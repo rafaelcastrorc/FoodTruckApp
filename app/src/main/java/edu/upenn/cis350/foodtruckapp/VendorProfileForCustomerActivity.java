@@ -36,6 +36,8 @@ import com.google.firebase.storage.StorageReference;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static edu.upenn.cis350.foodtruckapp.VendorProfileActivity.setListViewHeightBasedOnChildren;
 
@@ -97,7 +99,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         });
         populateMenu();
         // populate cart w/ pre-existing data
-
 
 
         // get "Hours" data for vendor
@@ -198,108 +199,64 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             }
         });
 
-//        final DatabaseReference customerRef = databaseRef.child(customerOrderMGM.getUniqueID());
-//        DatabaseReference cartRef = customerRef.child("MyOrders").child(vendorUniqueID);
-//        cartRef.addChildEventListener(new ChildEventListener() {
-//            String item = "";
-//            String price = "";
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-//                if (dataSnapshot.getKey().equals("Order")) {
-//                    String order = (String) dataSnapshot.getValue();
-//                    StringBuilder sb = new StringBuilder();
-//
-//                    for (int i = 0; i < order.length(); i++) {
-//                        char c = order.charAt(i);
-//                        if (i == order.length() - 1) {
-//                            sb.append(c);
-//                            final String item = sb.toString();
-//                            decrMenuItemQuantityByName(item);
-//                        }
-//                        else if (c != '\n') {
-//                            sb.append(c);
-//                        }
-//                        else {
-//                            String item = sb.toString();
-//                            decrMenuItemQuantityByName(item);
-//                            sb = new StringBuilder();
-//                        }
-//
-//                    }
-//                }
-//                setListViewHeightBasedOnChildren(menuListView);
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                Log.d("key", dataSnapshot.getKey());
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
-//                setListViewHeightBasedOnChildren(menuListView);
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//            }
-//        });
-
-        // check to see if an item is in the customer's cart
         final DatabaseReference customerRef = databaseRef.child(customerOrderMGM.getUniqueID());
         DatabaseReference cartRef = customerRef.child("MyOrders").child(vendorUniqueID).child("Order");
         cartRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String order = (String) dataSnapshot.getValue();
-                StringBuilder sb = new StringBuilder();
-                if (order == null) {
-                    return;
+                TreeMap<String, Integer> currentItemsInCart = customerOrderMGM.ordersParser(order);
+                for (Map.Entry<String, Integer> entry : currentItemsInCart.entrySet()) {
+                    setQuantityByName(entry.getKey(), entry.getValue());
                 }
-                String[] items = order.split("\\r?\\n");
-                Log.d("orders", orders.toString());
-                for (int i = 0; i < order.length(); i++) {
-                    String item = items[i];
-                    MyMenuItem menuItem = getItemByName(item);
-
-                }
-//                        for (int i = 0; i < order.length(); i++) {
-//                            char c = order.charAt(i);
-//                            if (i == order.length() - 1) {
-//                                sb.append(c);
-//                                final String item = sb.toString();
-//                                if (item.equals(menuItem.getItem())) {
-//                                    menuItem.incrQuantity();
-//                                    Log.d("here", "hereerere");
-//                                    Log.d("order", order);
-//
-//                                    myAdapter.notifyDataSetChanged();
-//                                }
-//                            }
-//                            else if (c != '\n') {
-//                                sb.append(c);
-//                            }
-//                            else {
-//                                String item = sb.toString();
-//                                if (item.equals(menuItem.getItem())) {
-//                                    //menuItem.incrQuantity();
-//                                    Log.d("else", "elsessdadsa");
-//
-//                                }
-//                                sb = new StringBuilder();
-//                            }
-//                        }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+
+        // update current quantities
+        customerRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                // update quantity upon first add of item to cart
+                Log.d("KEY", dataSnapshot.getKey());
+                if (dataSnapshot.getKey().equals("MyOrders")) {
+                    Map<String, Object> orderInfo = (Map<String, Object>) dataSnapshot.getValue();
+                    for (Map.Entry<String, Object> entry : orderInfo.entrySet()) {
+                        if (entry.getKey().equals("Order")) {
+                            String order = (String) entry.getValue();
+                            TreeMap<String, Integer> currentItemsInCart = customerOrderMGM.ordersParser(order);
+                            for (Map.Entry<String, Integer> item : currentItemsInCart.entrySet()) {
+                                setQuantityByName(item.getKey(), item.getValue());
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//                MyMenuItem menuItem = new MyMenuItem(
+//                        (String) dataSnapshot.getKey(), (String) dataSnapshot.getValue());
+//                menu.remove(menuItem);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
         populateVendorPicture();
     }
 
@@ -310,6 +267,14 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             }
         }
         return null;
+    }
+
+    void setQuantityByName(String name, int quantity) {
+        for (MyMenuItem item : menu) {
+            if (item.getItem().equals(name)) {
+                item.setQuantity(quantity);
+            }
+        }
     }
 
     // get vendor picture
@@ -384,10 +349,12 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (menuItem.getQuantity() == 0) {
-                            return;
-                        }
-                        menuItem.decrQuantity();
+                        CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+                        customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+                        customerOrderMGM.removeOrderFromCart(item.getText().toString(), foodtruckName,
+                                Double.parseDouble(price.getText().toString()));
+                        int quantity = menuItem.getQuantity();
+                        menuItem.setQuantity(quantity - 1);
                         itemCount.setText(Integer.toString(menuItem.getQuantity()));
                         notifyDataSetChanged();
                     }
@@ -395,13 +362,13 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                 addButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        //menuItem.incrQuantity();
-                        //itemCount.setText(Integer.toString(menuItem.getQuantity()));
-                        final DatabaseReference customerRef = databaseRef.child(customerOrderMGM.getUniqueID());
                         CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
                         customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-                        customerOrderMGM.sendOrderToCart(item.getText().toString(), foodtruckName,
+                        customerOrderMGM.addOrderToCart(item.getText().toString(), foodtruckName,
                                 Double.parseDouble(price.getText().toString()));
+                        int quantity = menuItem.getQuantity();
+                        menuItem.setQuantity(quantity + 1);
+                        itemCount.setText(Integer.toString(menuItem.getQuantity()));
                         notifyDataSetChanged();
                     }
                 });
@@ -436,54 +403,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                 final MyMenuItem menuItem = new MyMenuItem(dataSnapshot.getKey(),
                         (String) dataSnapshot.getValue());
 
-//                // check to see if an item is in the customer's cart
-//                final DatabaseReference customerRef = databaseRef.child(customerOrderMGM.getUniqueID());
-//                DatabaseReference cartRef = customerRef.child("MyOrders").child(vendorUniqueID).child("Order");
-//                cartRef.addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        String order = (String) dataSnapshot.getValue();
-//                        StringBuilder sb = new StringBuilder();
-//                        if (order == null) {
-//                            return;
-//                        }
-//                        String[] orders = order.split("\\r?\\n");
-//                        Log.d("orders", orders.toString());
-//                        for (int i = 0; i < order.length(); i++) {
-//
-//                        }
-////                        for (int i = 0; i < order.length(); i++) {
-////                            char c = order.charAt(i);
-////                            if (i == order.length() - 1) {
-////                                sb.append(c);
-////                                final String item = sb.toString();
-////                                if (item.equals(menuItem.getItem())) {
-////                                    menuItem.incrQuantity();
-////                                    Log.d("here", "hereerere");
-////                                    Log.d("order", order);
-////
-////                                    myAdapter.notifyDataSetChanged();
-////                                }
-////                            }
-////                            else if (c != '\n') {
-////                                sb.append(c);
-////                            }
-////                            else {
-////                                String item = sb.toString();
-////                                if (item.equals(menuItem.getItem())) {
-////                                    //menuItem.incrQuantity();
-////                                    Log.d("else", "elsessdadsa");
-////
-////                                }
-////                                sb = new StringBuilder();
-////                            }
-////                        }
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//                    }
-//                });
+
                 if (!menu.contains(menuItem)) {
                     menu.add(menuItem);
                 }
@@ -513,38 +433,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
-//        final DatabaseReference customerRef = databaseRef.child(customerOrderMGM.getUniqueID());
-//        DatabaseReference cartRef = customerRef.child("MyOrders").child(vendorUniqueID).child("Order");
-//        cartRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                String order = (String) dataSnapshot.getValue();
-//                StringBuilder sb = new StringBuilder();
-//                if (order == null) {
-//                    return;
-//                }
-//                for (int i = 0; i < order.length(); i++) {
-//                    char c = order.charAt(i);
-//                    if (i == order.length() - 1) {
-//                        sb.append(c);
-//                        final String item = sb.toString();
-//                        if (item.equals(menuItem.getItem())) {
-//                            menuItem.incrQuantity();
-//                            myAdapter.notifyDataSetChanged();
-//                        }
-//                    } else if (c != '\n') {
-//                        sb.append(c);
-//                    } else {
-//                        String item = sb.toString();
-//                        if (item.equals(menuItem.getItem())) {
-//                            menuItem.incrQuantity();
-//                        }
-//                        sb = new StringBuilder();
-//                    }
-//                }
-//            }
-//        });
     }
 
     private void updateTotal() {

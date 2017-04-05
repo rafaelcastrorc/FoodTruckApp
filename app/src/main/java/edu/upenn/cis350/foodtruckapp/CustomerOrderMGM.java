@@ -1,5 +1,7 @@
 package edu.upenn.cis350.foodtruckapp;
 
+import android.util.Log;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -286,6 +288,9 @@ public class CustomerOrderMGM {
     }
 
     protected TreeMap<String, Integer> ordersParser(String prevOrder) {
+        if (prevOrder == null || prevOrder.isEmpty()) {
+            return new TreeMap<String, Integer>();
+        }
         TreeMap<String, Integer> orderToQuantity = new TreeMap<>();
         //Goes through each line of the order
         Scanner scanner = new Scanner(prevOrder);
@@ -327,8 +332,6 @@ public class CustomerOrderMGM {
             }
             orderToQuantity.put(order.toString(), Integer.parseInt(quantity.toString()));
         }
-
-
         scanner.close();
         return orderToQuantity;
     }

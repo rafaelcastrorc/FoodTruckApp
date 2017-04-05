@@ -19,7 +19,7 @@ public class CustomerOrderMGMDemo extends AppCompatActivity {
     public void sendOrderToVendor_onClick(View v) {
             CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
             customerOrderMGM.setVendorUniqueID("zXpAaZitvEUgEPgpsIDQweuPmtt2");
-            Button currButton = (Button) findViewById(R.id.addOrderToCart);
+            //Button currButton = (Button) findViewById(R.id.addOrderToCart);
         //For testing purposes, I am hardcoding the unique user id of the vendor@gmail.com - zXpAaZitvEUgEPgpsIDQweuPmtt2
             customerOrderMGM.addOrderToCart("Chocolates", "Halal Food Truck", 10.50);
 
