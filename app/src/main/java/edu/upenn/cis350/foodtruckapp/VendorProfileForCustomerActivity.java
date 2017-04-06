@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +24,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,23 +36,23 @@ import com.google.firebase.storage.StorageReference;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static edu.upenn.cis350.foodtruckapp.VendorProfileActivity.setListViewHeightBasedOnChildren;
 
 public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
-    private FirebaseDatabase database;
-    private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
     private DatabaseReference vendorRef;
     private DatabaseReference menuRef;
     private ArrayList<MyMenuItem> menu;
     private ListView menuListView;
     private String vendorUniqueID;
+    private String customerUniqueID;
     protected ArrayList<Order> orders = new ArrayList<>();
-
-
-
+    private String foodtruckName;
+    private CustomerOrderMGM customerOrderMGM;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -74,12 +74,11 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         }
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vendor_profile_for_customer);
+        customerOrderMGM = new CustomerOrderMGM();
 
         Intent i = getIntent();
         vendorUniqueID = i.getStringExtra("vendorUniqueID");
@@ -87,63 +86,22 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         vendorRef = databaseRef.child(vendorUniqueID);
 
         DatabaseReference foodtruck = vendorRef.child("Name Of Food Truck");
-
         foodtruck.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String name = dataSnapshot.getValue().toString();
-                getSupportActionBar().setTitle(name);
+                foodtruckName = dataSnapshot.getValue().toString();
+                getSupportActionBar().setTitle(foodtruckName);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+        populateMenu();
+        // populate cart w/ pre-existing data
 
-        menu = new ArrayList<MyMenuItem>();
-        final MyCustomAdapter myAdapter = new MyCustomAdapter(this);
 
-        menuListView = (ListView) findViewById(R.id.cust_menu);
-        menuListView.setAdapter(myAdapter);
-
-        menuRef = vendorRef.child("Menu");
-        menuRef.addChildEventListener(new ChildEventListener() {
-            String item = "";
-            String price = "";
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                MyMenuItem menuItem = new MyMenuItem(dataSnapshot.getKey(),
-                        (String) dataSnapshot.getValue());
-                if (!menu.contains(menuItem)) {
-                    menu.add(menuItem);
-                }
-                myAdapter.notifyDataSetChanged();
-                setListViewHeightBasedOnChildren(menuListView);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                MyMenuItem menuItem = new MyMenuItem(
-                        (String) dataSnapshot.getKey(), (String) dataSnapshot.getValue());
-                menu.remove(menuItem);
-                myAdapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
+        // get "Hours" data for vendor
         DatabaseReference hoursRef = vendorRef.child("Hours");
         hoursRef.child("OpenWeekdayTime").addValueEventListener(new ValueEventListener() {
             @Override
@@ -241,8 +199,85 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             }
         });
 
+        final DatabaseReference customerRef = databaseRef.child(customerOrderMGM.getUniqueID());
+        DatabaseReference cartRef = customerRef.child("MyOrders").child(vendorUniqueID).child("Order");
+        cartRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String order = (String) dataSnapshot.getValue();
+                TreeMap<String, Integer> currentItemsInCart = customerOrderMGM.ordersParser(order);
+                for (Map.Entry<String, Integer> entry : currentItemsInCart.entrySet()) {
+                    setQuantityByName(entry.getKey(), entry.getValue());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        // update current quantities
+        customerRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                // update quantity upon first add of item to cart
+                Log.d("KEY", dataSnapshot.getKey());
+                if (dataSnapshot.getKey().equals("MyOrders")) {
+                    Map<String, Object> orderInfo = (Map<String, Object>) dataSnapshot.getValue();
+                    for (Map.Entry<String, Object> entry : orderInfo.entrySet()) {
+                        if (entry.getKey().equals("Order")) {
+                            String order = (String) entry.getValue();
+                            TreeMap<String, Integer> currentItemsInCart = customerOrderMGM.ordersParser(order);
+                            for (Map.Entry<String, Integer> item : currentItemsInCart.entrySet()) {
+                                setQuantityByName(item.getKey(), item.getValue());
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//                MyMenuItem menuItem = new MyMenuItem(
+//                        (String) dataSnapshot.getKey(), (String) dataSnapshot.getValue());
+//                menu.remove(menuItem);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        populateVendorPicture();
     }
 
+    MyMenuItem getItemByName(String name) {
+        for (MyMenuItem item : menu) {
+            if (item.getItem().equals(name)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    void setQuantityByName(String name, int quantity) {
+        for (MyMenuItem item : menu) {
+            if (item.getItem().equals(name)) {
+                item.setQuantity(quantity);
+            }
+        }
+    }
+
+    // get vendor picture
     void populateVendorPicture() {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -265,6 +300,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         });
     }
 
+    // custom adapter for menu listview
     public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
         private Context context;
         int quantity = 0;
@@ -296,47 +332,114 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                 view = inflater.inflate(R.layout.customer_menu_item_style, null);
 
                 //Handle TextViews and display string from your list
-                TextView item = (TextView) view.findViewById(R.id.menu_item);
-                MyMenuItem menuItem = menu.get(position);
+                final TextView item = (TextView) view.findViewById(R.id.menu_item);
+                final MyMenuItem menuItem = menu.get(position);
                 item.setText(menuItem.getItem());
 
-                TextView price = (TextView) view.findViewById(R.id.menu_item_price);
+                final TextView price = (TextView) view.findViewById(R.id.menu_item_price);
                 price.setText(menuItem.getPrice());
 
                 final TextView itemCount = (TextView) view.findViewById(R.id.menu_item_quantity);
+                itemCount.setText(Integer.toString(menuItem.getQuantity()));
 
                 //Handle buttons and add onClickListeners
-                Button deleteButton = (Button)view.findViewById(R.id.delete_button);
+                Button deleteButton = (Button) view.findViewById(R.id.delete_button);
                 Button addButton = (Button) view.findViewById(R.id.add_button);
 
-                deleteButton.setOnClickListener(new View.OnClickListener(){
+                deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+                        customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+                        customerOrderMGM.removeOrderFromCart(item.getText().toString(), foodtruckName,
+                                Double.parseDouble(price.getText().toString()));
+                        int quantity = menuItem.getQuantity();
                         if (quantity == 0) {
                             return;
                         }
-                        quantity--;
-                        itemCount.setText(Integer.toString(quantity));
+                        menuItem.setQuantity(quantity - 1);
+                        itemCount.setText(Integer.toString(menuItem.getQuantity()));
                         notifyDataSetChanged();
                     }
                 });
                 addButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        quantity++;
-                        itemCount.setText(Integer.toString(quantity));
+                        CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+                        customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+                        customerOrderMGM.addOrderToCart(item.getText().toString(), foodtruckName,
+                                Double.parseDouble(price.getText().toString()));
+                        int quantity = menuItem.getQuantity();
+                        menuItem.setQuantity(quantity + 1);
+                        itemCount.setText(Integer.toString(menuItem.getQuantity()));
                         notifyDataSetChanged();
                     }
                 });
             }
+            else {
+                final TextView item = (TextView) view.findViewById(R.id.menu_item);
+                final MyMenuItem menuItem = menu.get(position);
+                item.setText(menuItem.getItem());
 
+                final TextView price = (TextView) view.findViewById(R.id.menu_item_price);
+                price.setText(menuItem.getPrice());
+
+                final TextView itemCount = (TextView) view.findViewById(R.id.menu_item_quantity);
+                itemCount.setText(Integer.toString(menuItem.getQuantity()));
+            }
             return view;
         }
     }
 
+    private void populateMenu() {
+        // set arrayadapter for menu list view
+        menu = new ArrayList<MyMenuItem>();
+        final MyCustomAdapter myAdapter = new MyCustomAdapter(this);
+        menuListView = (ListView) findViewById(R.id.cust_menu);
+        menuListView.setAdapter(myAdapter);
 
-    private void updateTotal(){
-        TextView total = (TextView)findViewById(R.id.total_shopping_cart);
+        menuRef = vendorRef.child("Menu");
+        menuRef.addChildEventListener(new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                final MyMenuItem menuItem = new MyMenuItem(dataSnapshot.getKey(),
+                        (String) dataSnapshot.getValue());
+
+
+                if (!menu.contains(menuItem)) {
+                    menu.add(menuItem);
+                }
+                myAdapter.notifyDataSetChanged();
+                setListViewHeightBasedOnChildren(menuListView);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                MyMenuItem menuItem = new MyMenuItem(
+                        (String) dataSnapshot.getKey(), (String) dataSnapshot.getValue());
+                menu.remove(menuItem);
+                myAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void updateTotal() {
+        TextView total = (TextView) findViewById(R.id.total_shopping_cart);
         total.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -345,24 +448,32 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             }
         });
         double result = 0.0;
-        for (Order order: orders) {
+        for (Order order : orders) {
             result = result + order.getPrice();
         }
         NumberFormat formatter = new DecimalFormat("#0.00");
 
-        total.setText("$"+ formatter.format(result));
+        total.setText("$" + formatter.format(result));
     }
+}
 
     
-    //Todo: Add the + to all orders.
-    public void sendOrderToVendor_onClick(View v) {
-        CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-        customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-        Button currButton = (Button) findViewById(R.id.sendOrderToVendor);
-        //Add here the order, the name of food truck, and the cost of the item
-        customerOrderMGM.sendOrderToCart("Chocolates", "Insert the name of the food truck here", 10.50);
+    //Todo: For Desmond
+//To add item to cart
+       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+//        customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
 
-    }
+ //To remove item
+       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+        //customerOrderMGM.removeOrderFromCart("Candies", "Insert the name of the food truck here", 10.50);
+
+//To parse the order String
+// CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+// customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+//customerOrderMGM.ordersParser("[1] Chocolate. \n");
+
 
     protected void addRatingOf1(){
         DatabaseReference avgRatingRef = vendorRef.child("Average Rating");

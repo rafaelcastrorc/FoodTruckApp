@@ -4,10 +4,12 @@ public class MyMenuItem {
 
         private String item;
         private String price;
+        private int quantity;
 
         public MyMenuItem(String item, String price) {
             this.item = item;
             this.price = price;
+            quantity = 0;
         }
 
         String getItem() {
@@ -18,6 +20,14 @@ public class MyMenuItem {
             return price;
         }
 
+        int getQuantity() { return quantity; }
+
+        void incrQuantity() { quantity++; }
+
+        void decrQuantity() { quantity--; }
+
+        void setQuantity(int quantity) {this.quantity = quantity; }
+
         void setPrice(String price) {
             this.price = price;
         }
@@ -25,6 +35,7 @@ public class MyMenuItem {
         void setItem(String item) {
             this.item = item;
         }
+
 
         @Override
         public boolean equals(Object o) {
@@ -37,7 +48,7 @@ public class MyMenuItem {
 
         @Override
         public String toString() {
-            return "item: " + item + " price: " + price;
+            return "item: " + item + " quantity: " + quantity;
         }
 
     }

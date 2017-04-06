@@ -52,10 +52,10 @@ public class Cart extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         mAuth = FirebaseAuth.getInstance();
         myOrdersRef = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders");
-
 
         orderList = (ListView) findViewById(R.id.orders_list_shopping_cart);
         final Cart.MyAdapter arrayAdapter = new Cart.MyAdapter(this, orders);
@@ -84,10 +84,7 @@ public class Cart extends AppCompatActivity {
                 catch (NullPointerException e) {
 
                 }
-
-
                 selectedOrder = (Order) parent.getItemAtPosition(position);
-
             }
 
         });
@@ -100,8 +97,6 @@ public class Cart extends AppCompatActivity {
             String pushId = "";
             String foodTruckName = "";
             double price = 0.0;
-
-
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
@@ -145,14 +140,24 @@ public class Cart extends AppCompatActivity {
                     }
 
                 }
-                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
-                customerOrder.setStatus(status);
-                customerOrder.setFoodTruckName(foodTruckName);
-                customerOrder.setPrice(price);
-                orders.add(customerOrder);
+                //Add as long as is not empty
+                if (!order.equals("")) {
 
-                arrayAdapter.notifyDataSetChanged();
-                updateTotal();
+                    Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+                    customerOrder.setStatus(status);
+                    customerOrder.setFoodTruckName(foodTruckName);
+                    customerOrder.setPrice(price);
+                    orders.add(customerOrder);
+
+                    arrayAdapter.notifyDataSetChanged();
+                    updateTotal();
+                }
+                else {
+                    //Since order is empty delete it
+                    DatabaseReference currUserOrder = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
+                    currUserOrder.removeValue();
+                }
+
 
 
             }
@@ -201,20 +206,28 @@ public class Cart extends AppCompatActivity {
                     }
 
                 }
-                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+                if (!order.equals("")) {
 
-                //deletes old order
-                orders.remove(customerOrder);
-                //adds new order at end of queue
+                    Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
 
-                customerOrder.setStatus(status);
-                customerOrder.setFoodTruckName(foodTruckName);
-                customerOrder.setPrice(price);
+                    //deletes old order
+                    orders.remove(customerOrder);
+                    //adds new order at end of queue
 
-                orders.add(customerOrder);
+                    customerOrder.setStatus(status);
+                    customerOrder.setFoodTruckName(foodTruckName);
+                    customerOrder.setPrice(price);
 
-                arrayAdapter.notifyDataSetChanged();
-                updateTotal();
+                    orders.add(customerOrder);
+
+                    arrayAdapter.notifyDataSetChanged();
+                    updateTotal();
+                }
+                else {
+                    //Delete the order.
+                    DatabaseReference currUserOrder = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
+                    currUserOrder.removeValue();
+                }
 
             }
 
@@ -365,18 +378,15 @@ public class Cart extends AppCompatActivity {
             AlertDialog.Builder confirmPopupBuilder = new AlertDialog.Builder(this);
             confirmPopupBuilder.setTitle("You are about to modify your oder");
             confirmPopupBuilder.setMessage("Are you sure you want to modify this order: \n" + selectedOrder.getCustomerOrder().toString()+ "?") ;
-
             confirmPopupBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                 public void onClick(DialogInterface dialog, int which) {
-
                     //Go to the vendor profile page
                     selectedOrder.getVendorUniqueID();
                     //Todo: Go to specific vendor profile
                     Intent i = new Intent(Cart.this, VendorProfileForCustomerActivity.class);
                     i.putExtra("vendorUniqueID", selectedOrder.getVendorUniqueID());
                     startActivity(i);
-
                 }
             });
 
@@ -384,7 +394,6 @@ public class Cart extends AppCompatActivity {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
                     dialog.dismiss();
                 }
             });
