@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,6 +37,7 @@ import com.google.firebase.storage.StorageReference;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -50,9 +52,10 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     private ListView menuListView;
     private String vendorUniqueID;
     private String customerUniqueID;
-    protected ArrayList<Order> orders = new ArrayList<>();
     private String foodtruckName;
     private CustomerOrderMGM customerOrderMGM;
+    ArrayList<Order> orders = new ArrayList<>();
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -67,6 +70,10 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             case R.id.shopping_cart_button:
                 Intent i = new Intent(VendorProfileForCustomerActivity.this, Cart.class);
                 startActivity(i);
+                return true;
+            case R.id.home_button:
+                Intent j = new Intent(VendorProfileForCustomerActivity.this, CustomerMainMenuActivity.class);
+                startActivity(j);
                 return true;
 
             default:
@@ -258,6 +265,154 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         });
 
         populateVendorPicture();
+
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        DatabaseReference myOrdersRef = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders");
+
+        myOrdersRef.addChildEventListener(new ChildEventListener() {
+
+            String vendorUniqueID = "";
+            String instanceId = "";
+            String order = "";
+            String customerName = "";
+            String pushId = "";
+            String foodTruckName = "";
+            double price = 0.0;
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                boolean status = false;
+
+                HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
+                for (String type : values.keySet()) {
+
+                    if (type.equals("CustomerInstanceId")) {
+                        this.instanceId = (String) values.get(type);
+                    } else if (type.equals("Order")) {
+                        this.order = (String) values.get(type);
+                    } else if (type.equals("CustomerName")) {
+                        this.customerName = (String) values.get(type);
+                    } else if (type.equals("PushId")) {
+                        this.pushId = (String) values.get(type);
+                    } else if (type.equals("vendorUniqueID")) {
+                        this.vendorUniqueID = (String) values.get(type);
+                    } else if (type.equals("FoodTruckName")) {
+                        this.foodTruckName = (String) values.get(type);
+                    } else if (type.equals("Price")) {
+                        try {
+                            this.price = (Double) values.get(type);
+                        }
+                        catch (ClassCastException e) {
+                            Long l = new Long((Long) values.get(type));
+                            this.price= l.doubleValue();
+
+                        }
+
+                    } else if (type.equals("Submitted")) {
+                        String choice = (String) values.get(type);
+                        if (choice.equals("true")) {
+                            status = true;
+                        }
+                    }
+
+                }
+                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+                customerOrder.setStatus(status);
+                customerOrder.setFoodTruckName(foodTruckName);
+                customerOrder.setPrice(price);
+                orders.add(customerOrder);
+                updateTotal();
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+                boolean status = false;
+                HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
+                for (String type : values.keySet()) {
+
+                    if (type.equals("CustomerInstanceId")) {
+                        this.instanceId = (String) values.get(type);
+
+                    } else if (type.equals("Order")) {
+                        this.order = (String) values.get(type);
+                    } else if (type.equals("CustomerName")) {
+                        this.customerName = (String) values.get(type);
+                    } else if (type.equals("PushId")) {
+                        this.pushId = (String) values.get(type);
+                    } else if (type.equals("vendorUniqueID")) {
+                        this.vendorUniqueID = (String) values.get(type);
+                    } else if (type.equals("FoodTruckName")) {
+                        this.foodTruckName = (String) values.get(type);
+                    } else if (type.equals("Price")) {
+                        try {
+                            this.price = (Double) values.get(type);
+                        }
+                        catch (ClassCastException e) {
+                            Long l = new Long((Long) values.get(type));
+                            this.price= l.doubleValue();
+
+                        }
+                    } else if (type.equals("Submitted")) {
+                        String choice = (String) values.get(type);
+                        if (choice.equals("true")) {
+                            status = true;
+                        }
+                    }
+
+                }
+                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+
+                //deletes old order
+                orders.remove(customerOrder);
+
+                //adds new order at end of queue
+
+                customerOrder.setStatus(status);
+                customerOrder.setFoodTruckName(foodTruckName);
+                customerOrder.setPrice(price);
+
+                orders.add(customerOrder);
+                updateTotal();
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
+                for (String type : values.keySet()) {
+
+                    if (type.equals("CustomerInstanceId")) {
+                        this.instanceId = (String) values.get(type);
+
+                    } else if (type.equals("Order")) {
+                        this.order = (String) values.get(type);
+                    } else if (type.equals("CustomerName")) {
+                        this.customerName = (String) values.get(type);
+                    } else if (type.equals("PushId")) {
+                        this.pushId = (String) values.get(type);
+                    } else if (type.equals("vendorUniqueID")) {
+                        this.vendorUniqueID = (String) values.get(type);
+                    }
+
+                }
+                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+                orders.remove(customerOrder);
+                updateTotal();
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
     }
 
     MyMenuItem getItemByName(String name) {
@@ -457,19 +612,3 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     }
 }
 
-    
-    //Todo: For Desmond
-//To add item to cart
-       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-//        customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
-
- //To remove item
-       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-        //customerOrderMGM.removeOrderFromCart("Candies", "Insert the name of the food truck here", 10.50);
-
-//To parse the order String
-// CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-// customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-//customerOrderMGM.ordersParser("[1] Chocolate. \n");
