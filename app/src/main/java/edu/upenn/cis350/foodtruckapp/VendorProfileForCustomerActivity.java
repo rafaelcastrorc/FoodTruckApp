@@ -610,5 +610,237 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
         total.setText("$" + formatter.format(result));
     }
-}
 
+
+    
+    //Todo: For Desmond
+//To add item to cart
+       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+//        customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
+
+ //To remove item
+       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+        //customerOrderMGM.removeOrderFromCart("Candies", "Insert the name of the food truck here", 10.50);
+
+//To parse the order String
+// CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+// customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+//customerOrderMGM.ordersParser("[1] Chocolate. \n");
+
+
+    protected void addRatingOf1(){
+        DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
+        DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
+
+        final Double[] avgRating = new Double[1];
+        final Integer[] totalRatings = new Integer[1];
+
+        avgRatingRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    avgRating[0] = (Double) dataSnapshot.getValue();
+                }
+                catch (ClassCastException e){
+
+                    Long temp = (Long) dataSnapshot.getValue();
+                    avgRating[0] = temp.doubleValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        totalRatingsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    totalRatings[0] = (Integer) dataSnapshot.getValue();
+                }
+                catch (ClassCastException e){
+
+                    Long temp = (Long) dataSnapshot.getValue();
+                    totalRatings[0] = temp.intValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Double newRating = (avgRating[0] + 1.00)/(totalRatings[0] + 1);
+        Integer newTotalRatings = totalRatings[0] + 1;
+
+        avgRatingRef.setValue(newRating);
+        totalRatingsRef.setValue(newTotalRatings);
+
+    }
+
+    protected void addRatingOf2(){
+        DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
+        DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
+
+        final Double[] avgRating = new Double[1];
+        final Integer[] totalRatings = new Integer[1];
+
+        avgRatingRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    avgRating[0] = (Double) dataSnapshot.getValue();
+                }
+                catch (ClassCastException e){
+
+                    Long temp = (Long) dataSnapshot.getValue();
+                    avgRating[0] = temp.doubleValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        totalRatingsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    totalRatings[0] = (Integer) dataSnapshot.getValue();
+                }
+                catch (ClassCastException e){
+
+                    Long temp = (Long) dataSnapshot.getValue();
+                    totalRatings[0] = temp.intValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Double newRating = (avgRating[0] + 2.00)/(totalRatings[0] +1);
+        Integer newTotalRatings = totalRatings[0] + 1;
+
+        avgRatingRef.setValue(newRating);
+        totalRatingsRef.setValue(newTotalRatings);
+
+    }
+
+    protected void addRatingOf3(){
+        DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
+        DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
+
+        final Double[] avgRating = new Double[1];
+        final Integer[] totalRatings = new Integer[1];
+
+        avgRatingRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    avgRating[0] = (Double) dataSnapshot.getValue();
+                }
+                catch (ClassCastException e){
+
+                    Long temp = (Long) dataSnapshot.getValue();
+                    avgRating[0] = temp.doubleValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        totalRatingsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    totalRatings[0] = (Integer) dataSnapshot.getValue();
+                }
+                catch (ClassCastException e){
+
+                    Long temp = (Long) dataSnapshot.getValue();
+                    totalRatings[0] = temp.intValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Double newRating = (avgRating[0] + 3.00)/(totalRatings[0] + 1);
+        Integer newTotalRatings = totalRatings[0] + 1;
+
+        avgRatingRef.setValue(newRating);
+        totalRatingsRef.setValue(newTotalRatings);
+
+    }
+
+    protected void addRatingOf4(){
+        DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
+        DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
+
+        final Double[] avgRating = new Double[1];
+        final Integer[] totalRatings = new Integer[1];
+
+        avgRatingRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    avgRating[0] = (Double) dataSnapshot.getValue();
+                }
+                catch (ClassCastException e){
+
+                    Long temp = (Long) dataSnapshot.getValue();
+                    avgRating[0] = temp.doubleValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        totalRatingsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    totalRatings[0] = (Integer) dataSnapshot.getValue();
+                }
+                catch (ClassCastException e){
+
+                    Long temp = (Long) dataSnapshot.getValue();
+                    totalRatings[0] = temp.intValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Double newRating = (avgRating[0] + 4.00)/(totalRatings[0] + 1);
+        Integer newTotalRatings = totalRatings[0] + 1;
+
+        avgRatingRef.setValue(newRating);
+        totalRatingsRef.setValue(newTotalRatings);
+
+    }
+
+
+}

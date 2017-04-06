@@ -20,7 +20,6 @@ public class RegistrationVendor extends AppCompatActivity {
 
     private Button uploadButton;
     private DatabaseReference databaseRef;
-    private DatabaseReference databaseRatings;
     private FirebaseDatabase database;
     private String userID;
     EditText typeOfFood;
@@ -36,12 +35,12 @@ public class RegistrationVendor extends AppCompatActivity {
         uploadButton = (Button) findViewById(R.id.truckPhoto);
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
-        databaseRatings = database.getReference("Ratings");
 
         Bundle b = getIntent().getExtras();
         String user = ""; // or other values
-        if(b != null)
+        if(b != null) {
             userID = b.getString("UserId");
+        }
         typeOfFood = (EditText) findViewById(R.id.foodTypeField);
         nameOfFoodTruck = (EditText) findViewById(R.id.truckNameField);
     }
@@ -92,22 +91,32 @@ public class RegistrationVendor extends AppCompatActivity {
             nameOfFoodTruck.setError("This field cannot be empty");
             return;
         }
+
         String tof = typeOfFood.getText().toString();
         String noft = nameOfFoodTruck.getText().toString();
 
-        //Adds this info to the user database
-        databaseRef.child(userID).child("Type Of Food").setValue(tof);
-        databaseRef.child(userID).child("Name Of Food Truck").setValue(noft);
-        databaseRef.child(userID).child("Menu");
-        //databaseRef.child(userID).child("Menu");                      // probably should setup ratings like this
-        //databaseRef.child(userID).child("Ratings").child("Counter");
-        Double avrgRat = 0.000001;
-        databaseRatings.child(userID).child("AverageRating").setValue(avrgRat);
-        databaseRatings.child(userID).child("Counter").setValue(0);
-        databaseRatings.child(userID).child("UniqueUserID").setValue(userID);
-        databaseRatings.child(userID).child("NameOfFoodTruck").setValue(nameOfFoodTruck.getText().toString());
-        databaseRatings.child(userID).child("Menu");
-        DatabaseReference hoursRef = databaseRatings.child(userID).child("Hours");
+        //Adds this info to the the current vendor
+        DatabaseReference currentVendorReference = databaseRef.child(userID);
+
+        //Create these fields for the current vendor
+        currentVendorReference.child("Type Of Food").setValue(tof);
+        currentVendorReference.child("Name Of Food Truck").setValue(noft);
+        currentVendorReference.child("Menu");
+        currentVendorReference.child("Average Rating");
+        currentVendorReference.child("Total Ratings");
+
+
+
+        Double avgRating = 0.00;
+        Integer totalRatings = 0;
+
+        currentVendorReference.child("AverageRating").setValue(avgRating); //Initialize the vendor's Average Rating to 0.00
+        currentVendorReference.child("Counter").setValue(totalRatings); //Initialize the vendor's Total Ratings to 0
+        currentVendorReference.child("UniqueUserID").setValue(userID); //??? What is this for ???
+        currentVendorReference.child("NameOfFoodTruck").setValue(nameOfFoodTruck.getText().toString());
+        currentVendorReference.child("Menu");
+
+        DatabaseReference hoursRef = currentVendorReference.child("Hours");
         hoursRef.child("OpenWeekdayTime");
         hoursRef.child("OpenWeekdayPeriod");
         hoursRef.child("CloseWeekdayTime");
