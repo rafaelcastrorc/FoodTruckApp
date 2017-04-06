@@ -455,7 +455,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
         total.setText("$" + formatter.format(result));
     }
-}
+
 
     
     //Todo: For Desmond
