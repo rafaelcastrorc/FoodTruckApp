@@ -40,8 +40,13 @@ public class NearMeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.shopping_cart_button:
+
                 Intent i = new Intent(NearMeActivity.this, Cart.class);
                 startActivity(i);
+                return true;
+            case R.id.home_button:
+                Intent j = new Intent(NearMeActivity.this, CustomerMainMenuActivity.class);
+                startActivity(j);
                 return true;
 
             default:
@@ -50,6 +55,7 @@ public class NearMeActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

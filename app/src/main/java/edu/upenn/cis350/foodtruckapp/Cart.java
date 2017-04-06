@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -44,6 +47,33 @@ public class Cart extends AppCompatActivity {
     private boolean isOrderSelected = false;
     private TwoLineListItem previousChildSelected = null;
     private Order selectedOrder;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.shopping_cart, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.shopping_cart_button:
+
+                Intent i = new Intent(Cart.this, Cart.class);
+                startActivity(i);
+                return true;
+            case R.id.home_button:
+                Intent j = new Intent(Cart.this, CustomerMainMenuActivity.class);
+                startActivity(j);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 
 
