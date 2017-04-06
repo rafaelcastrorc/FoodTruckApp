@@ -1,6 +1,8 @@
 package edu.upenn.cis350.foodtruckapp;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -10,6 +12,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +37,7 @@ public class CustomerOrderMGM {
     private String customerOrder;
     private String foodTruckName;
     private double price;
+    private Context context;
 
 
     protected CustomerOrderMGM() {
@@ -180,14 +190,31 @@ public class CustomerOrderMGM {
                     String pushId = (String) currOrder.get("PushId");
 
 
+                    boolean isValidTime = true;
+
                     if (submitted.equals("true")) {
-                        //Update the order on the vendor side
-                        vendorOrdersRef.child(pushId).setValue(currOrder);
+                        //Get time of order. Can only change to false if the order has already being submitted
+                        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
+                        DateTime prevDT = formatter.parseDateTime((String)currOrder.get("Time"));
+                        isValidTime = time(prevDT, 1);
+
+                        if (isValidTime) {
+                            //Update the order on the vendor side as long as time is valid
+                            vendorOrdersRef.child(pushId).setValue(currOrder);
+                            //get the time of the order
+                        }
                     }
 
                     //For customer side, update the order
                     DatabaseReference customerRef = databaseRef.child(mAuth.getCurrentUser().getUid());
-                    customerRef.child("MyOrders").child(vendorUniqueID).setValue(currOrder);
+                    if (isValidTime) {
+                        customerRef.child("MyOrders").child(vendorUniqueID).setValue(currOrder);
+                    }
+                    else {
+
+                        Toast toast = Toast.makeText(context, "Your have exceeded the time limit to modify your order", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
                 }
             }
 
@@ -235,7 +262,10 @@ public class CustomerOrderMGM {
                 orderInfo.put("vendorUniqueID", vendorUniqueID);
                 orderInfo.put("FoodTruckName", foodTruckName);
                 orderInfo.put("Price", price);
-
+                DateTime now = new DateTime();
+                DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
+                String dtStr = fmt.print(now);
+                orderInfo.put("Time", dtStr);
 
                 String boolString = "false";
                 if (submitted) {
@@ -335,6 +365,26 @@ public class CustomerOrderMGM {
         scanner.close();
         return orderToQuantity;
     }
+
+
+    protected boolean time(DateTime date, int timeLimit) {
+        //Allow to change order up to 5 minuts
+        DateTime now = new DateTime();
+        Period period = new Period(date, now);
+        if (period.getYears() == 0 && period.getMonths() == 0 && period.getWeeks() ==0 && period.getDays() ==0) {
+            if (period.getMinutes() < timeLimit) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    protected void setContext(Context context) {
+        this.context = context;
+    }
+
+
 
 
 

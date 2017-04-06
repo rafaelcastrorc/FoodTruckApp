@@ -26,12 +26,6 @@ import java.util.TreeSet;
 public class TopFoodTrucksActivity extends AppCompatActivity {
 
 
-    //Pull food trucks from database
-    //Get their unique ids
-    //uniqueId.getChild("Name Of Food Truck")
-    //Todo: Start counter with 0 rating and 0
-    //ProcessingRatings pr = new ProcessingRatings();
-    //pr.pushRatingToDatabase("K1Z7QIYsM9QtVDMI2hMUnLIGcIy2", 4);
 
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
@@ -72,11 +66,7 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_food_trucks);
-        //Pull food trucks from database
-        //Get their unique ids
-        //uniqueId.getChild("Name Of Food Truck")
-        //ProcessingRatings pr = new ProcessingRatings();
-        //pr.pushRatingToDatabase("K1Z7QIYsM9QtVDMI2hMUnLIGcIy2", 4);
+
 
         TextView firstVendorName = (TextView) findViewById(R.id.top_trucks_vendor_one);
         TextView secondVendorName = (TextView) findViewById(R.id.top_trucks_vendor_two);
