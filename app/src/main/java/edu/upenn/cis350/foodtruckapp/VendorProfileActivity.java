@@ -98,6 +98,7 @@ public class VendorProfileActivity extends AppCompatActivity {
     private int closeWeekendTime = 0;
     private String closeWeekendPeriod = "";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
