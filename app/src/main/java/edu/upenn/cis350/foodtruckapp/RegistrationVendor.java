@@ -110,8 +110,8 @@ public class RegistrationVendor extends AppCompatActivity {
         Double avgRating = 0.00;
         Integer totalRatings = 0;
 
-        currentVendorReference.child("AverageRating").setValue(avgRating); //Initialize the vendor's Average Rating to 0.00
-        currentVendorReference.child("Counter").setValue(totalRatings); //Initialize the vendor's Total Ratings to 0
+        currentVendorReference.child("Average Rating").setValue(avgRating); //Initialize the vendor's Average Rating to 0.00
+        currentVendorReference.child("Total Ratings").setValue(totalRatings); //Initialize the vendor's Total Ratings to 0
         currentVendorReference.child("UniqueUserID").setValue(userID); //??? What is this for ???
         currentVendorReference.child("NameOfFoodTruck").setValue(nameOfFoodTruck.getText().toString());
         currentVendorReference.child("Menu");

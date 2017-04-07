@@ -30,7 +30,7 @@
             android:textColor="@color/BLACK" />
 
         <ListView
-            android:id="@+id/favs_list"
+            android:id="@+id/nearMeList"
             android:layout_width="match_parent"
             android:layout_height="377dp"
             android:layout_alignParentBottom="true"
