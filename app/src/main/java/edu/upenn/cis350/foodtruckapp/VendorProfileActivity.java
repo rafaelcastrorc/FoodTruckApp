@@ -116,6 +116,10 @@ public class VendorProfileActivity extends AppCompatActivity {
             }
         });
 
+
+        Button reviews = (Button) findViewById(R.id.seeReviews);
+
+
         pickerIds = new ArrayList<Integer>();
         pickerIds.add(R.id.picker_vendor_open_weekday_time);
         pickerIds.add(R.id.picker_vendor_open_weekday_period);
@@ -660,5 +664,12 @@ public class VendorProfileActivity extends AppCompatActivity {
             }
             return convertView;
         }
+    }
+
+    public void seeReviews(View v){
+        Log.d("BITHCHH", "IN THIS BITCH");
+        Intent i = new Intent(VendorProfileActivity.this, VendorReviewsActivity.class);
+        i.putExtra("UniqueID", uniqueID);
+        startActivity(i);
     }
 }

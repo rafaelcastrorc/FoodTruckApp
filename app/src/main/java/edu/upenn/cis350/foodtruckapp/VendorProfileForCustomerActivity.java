@@ -1,5 +1,7 @@
 package edu.upenn.cis350.foodtruckapp;
 
+
+import android.util.Log;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,7 +10,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -34,17 +36,17 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.text.NumberFormat;
+import java.text.DecimalFormat;
+
 
 import static edu.upenn.cis350.foodtruckapp.VendorProfileActivity.setListViewHeightBasedOnChildren;
 
 public class VendorProfileForCustomerActivity extends AppCompatActivity {
-
     private DatabaseReference databaseRef;
     private DatabaseReference vendorRef;
     private DatabaseReference menuRef;
@@ -86,11 +88,13 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vendor_profile_for_customer);
         customerOrderMGM = new CustomerOrderMGM();
+        customerUniqueID = customerOrderMGM.getUniqueID();
 
         Intent i = getIntent();
         vendorUniqueID = i.getStringExtra("vendorUniqueID");
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         vendorRef = databaseRef.child(vendorUniqueID);
+        Log.d("ID of MyTruck", vendorUniqueID);
 
         DatabaseReference foodtruck = vendorRef.child("Name Of Food Truck");
         foodtruck.addValueEventListener(new ValueEventListener() {
@@ -105,8 +109,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             }
         });
         populateMenu();
-        // populate cart w/ pre-existing data
-
 
         // get "Hours" data for vendor
         DatabaseReference hoursRef = vendorRef.child("Hours");
@@ -206,6 +208,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             }
         });
 
+        // update current quantities
         final DatabaseReference customerRef = databaseRef.child(customerOrderMGM.getUniqueID());
         DatabaseReference cartRef = customerRef.child("MyOrders").child(vendorUniqueID).child("Order");
         cartRef.addValueEventListener(new ValueEventListener() {
@@ -223,12 +226,10 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             }
         });
 
-        // update current quantities
+        // populate initial quantities
         customerRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                // update quantity upon first add of item to cart
-                Log.d("KEY", dataSnapshot.getKey());
                 if (dataSnapshot.getKey().equals("MyOrders")) {
                     Map<String, Object> orderInfo = (Map<String, Object>) dataSnapshot.getValue();
                     for (Map.Entry<String, Object> entry : orderInfo.entrySet()) {
@@ -249,9 +250,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                MyMenuItem menuItem = new MyMenuItem(
-//                        (String) dataSnapshot.getKey(), (String) dataSnapshot.getValue());
-//                menu.remove(menuItem);
             }
 
             @Override
@@ -415,15 +413,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
     }
 
-    MyMenuItem getItemByName(String name) {
-        for (MyMenuItem item : menu) {
-            if (item.getItem().equals(name)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
     void setQuantityByName(String name, int quantity) {
         for (MyMenuItem item : menu) {
             if (item.getItem().equals(name)) {
@@ -486,9 +475,9 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = inflater.inflate(R.layout.customer_menu_item_style, null);
 
-                //Handle TextViews and display string from your list
-                final TextView item = (TextView) view.findViewById(R.id.menu_item);
+                // fill textviews w/ data
                 final MyMenuItem menuItem = menu.get(position);
+                final TextView item = (TextView) view.findViewById(R.id.menu_item);
                 item.setText(menuItem.getItem());
 
                 final TextView price = (TextView) view.findViewById(R.id.menu_item_price);
@@ -497,36 +486,41 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                 final TextView itemCount = (TextView) view.findViewById(R.id.menu_item_quantity);
                 itemCount.setText(Integer.toString(menuItem.getQuantity()));
 
-                //Handle buttons and add onClickListeners
+                // reduce quantity of item & notify cart
                 Button deleteButton = (Button) view.findViewById(R.id.delete_button);
                 Button addButton = (Button) view.findViewById(R.id.add_button);
-
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        int quantity = menuItem.getQuantity();
+                        if (quantity == 0) {
+                            return;
+                        }
                         CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
                         customerOrderMGM.setVendorUniqueID(vendorUniqueID);
                         customerOrderMGM.setContext(getApplicationContext());
                         customerOrderMGM.removeOrderFromCart(item.getText().toString(), foodtruckName,
                                 Double.parseDouble(price.getText().toString()));
-                        int quantity = menuItem.getQuantity();
-                        if (quantity == 0) {
-                            return;
-                        }
+
                         menuItem.setQuantity(quantity - 1);
                         itemCount.setText(Integer.toString(menuItem.getQuantity()));
                         notifyDataSetChanged();
                     }
                 });
+                // increase quantity of item & notify cart
                 addButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
+                        int quantity = menuItem.getQuantity();
+                        if (quantity == 9) {
+                            return;
+                        }
                         CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
                         customerOrderMGM.setVendorUniqueID(vendorUniqueID);
                         customerOrderMGM.setContext(getApplicationContext());
                         customerOrderMGM.addOrderToCart(item.getText().toString(), foodtruckName,
                                 Double.parseDouble(price.getText().toString()));
-                        int quantity = menuItem.getQuantity();
+
                         menuItem.setQuantity(quantity + 1);
                         itemCount.setText(Integer.toString(menuItem.getQuantity()));
                         notifyDataSetChanged();
@@ -549,7 +543,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     }
 
     private void populateMenu() {
-        // set arrayadapter for menu list view
         menu = new ArrayList<MyMenuItem>();
         final MyCustomAdapter myAdapter = new MyCustomAdapter(this);
         menuListView = (ListView) findViewById(R.id.cust_menu);
@@ -557,12 +550,10 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
         menuRef = vendorRef.child("Menu");
         menuRef.addChildEventListener(new ChildEventListener() {
-
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 final MyMenuItem menuItem = new MyMenuItem(dataSnapshot.getKey(),
                         (String) dataSnapshot.getValue());
-
 
                 if (!menu.contains(menuItem)) {
                     menu.add(menuItem);
@@ -581,12 +572,10 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                         (String) dataSnapshot.getKey(), (String) dataSnapshot.getValue());
                 menu.remove(menuItem);
                 myAdapter.notifyDataSetChanged();
-
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
-
             }
 
             @Override
@@ -614,182 +603,86 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     }
 
 
-    protected void addRatingOf1(){
-        DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
-        DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
+    
+    //Todo: For Desmond
+//To add item to cart
+       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+//        customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
 
-        final Double[] avgRating = new Double[1];
-        final Integer[] totalRatings = new Integer[1];
+ //To remove item
+       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+        //customerOrderMGM.removeOrderFromCart("Candies", "Insert the name of the food truck here", 10.50);
 
-        avgRatingRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    avgRating[0] = (Double) dataSnapshot.getValue();
-                }
-                catch (ClassCastException e){
+//To parse the order String
+// CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+// customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+//customerOrderMGM.ordersParser("[1] Chocolate. \n");
 
-                    Long temp = (Long) dataSnapshot.getValue();
-                    avgRating[0] = temp.doubleValue();
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+    public void submitReview(View v){
+        DatabaseReference reviewRef = vendorRef.child("Reviews");
 
-            }
-        });
+        EditText reviewText = (EditText) findViewById(R.id.writeReview);
+        String review = reviewText.getText().toString();
 
-        totalRatingsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    totalRatings[0] = (Integer) dataSnapshot.getValue();
-                }
-                catch (ClassCastException e){
+        reviewRef.child(customerUniqueID).setValue(review);
 
-                    Long temp = (Long) dataSnapshot.getValue();
-                    totalRatings[0] = temp.intValue();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        Double newRating = (avgRating[0] + 1.00)/(totalRatings[0] + 1);
-        Integer newTotalRatings = totalRatings[0] + 1;
-
-        avgRatingRef.setValue(newRating);
-        totalRatingsRef.setValue(newTotalRatings);
-
+          //customerUniqueID needs to be set somewhere
+          //How to notify vendor of new update?
     }
 
-    protected void addRatingOf2(){
-        DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
-        DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
-
-        final Double[] avgRating = new Double[1];
-        final Integer[] totalRatings = new Integer[1];
-
-        avgRatingRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    avgRating[0] = (Double) dataSnapshot.getValue();
-                }
-                catch (ClassCastException e){
-
-                    Long temp = (Long) dataSnapshot.getValue();
-                    avgRating[0] = temp.doubleValue();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        totalRatingsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    totalRatings[0] = (Integer) dataSnapshot.getValue();
-                }
-                catch (ClassCastException e){
-
-                    Long temp = (Long) dataSnapshot.getValue();
-                    totalRatings[0] = temp.intValue();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        Double newRating = (avgRating[0] + 2.00)/(totalRatings[0] +1);
-        Integer newTotalRatings = totalRatings[0] + 1;
-
-        avgRatingRef.setValue(newRating);
-        totalRatingsRef.setValue(newTotalRatings);
-
+    public void addRatingOf1(View v){
+        addRating(1);
     }
 
-    protected void addRatingOf3(){
-        DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
-        DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
-
-        final Double[] avgRating = new Double[1];
-        final Integer[] totalRatings = new Integer[1];
-
-        avgRatingRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    avgRating[0] = (Double) dataSnapshot.getValue();
-                }
-                catch (ClassCastException e){
-
-                    Long temp = (Long) dataSnapshot.getValue();
-                    avgRating[0] = temp.doubleValue();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        totalRatingsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    totalRatings[0] = (Integer) dataSnapshot.getValue();
-                }
-                catch (ClassCastException e){
-
-                    Long temp = (Long) dataSnapshot.getValue();
-                    totalRatings[0] = temp.intValue();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        Double newRating = (avgRating[0] + 3.00)/(totalRatings[0] + 1);
-        Integer newTotalRatings = totalRatings[0] + 1;
-
-        avgRatingRef.setValue(newRating);
-        totalRatingsRef.setValue(newTotalRatings);
-
+    public void addRatingOf2(View v){
+        addRating(2);
     }
 
-    protected void addRatingOf4(){
-        DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
-        DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
+    public void addRatingOf3(View v){
+        addRating(3);
+    }
+
+    public void addRatingOf4(View v){
+        addRating(4);
+    }
+
+
+
+   private void addRating(Integer rating){
+       Log.d("MyTruck", "in this bitch");
+
+
+
+       final DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
+       Log.d("MyTruck", "bitch1");
+       final DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
+       Log.d("MyTruck", "bitch2");
+
+
+       final Integer userRating = rating;
 
         final Double[] avgRating = new Double[1];
+       Log.d("MyTruck", "bitch3");
         final Integer[] totalRatings = new Integer[1];
+       Log.d("MyTruck", "bitch4");
 
-        avgRatingRef.addValueEventListener(new ValueEventListener() {
+        avgRatingRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 try {
+                    Log.d("MyTruck", "bitch5");
                     avgRating[0] = (Double) dataSnapshot.getValue();
+                    Log.d("MyTruckAvgRating", ""+avgRating[0]);
                 }
                 catch (ClassCastException e){
-
+                    Log.d("MyTruck", "bitch6");
                     Long temp = (Long) dataSnapshot.getValue();
                     avgRating[0] = temp.doubleValue();
+                    Log.d("MyTruckAvgRating", ""+avgRating[0]);
                 }
             }
 
@@ -799,17 +692,29 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             }
         });
 
-        totalRatingsRef.addValueEventListener(new ValueEventListener() {
+        totalRatingsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
+                    Log.d("MyTruck", "bitch7");
                     totalRatings[0] = (Integer) dataSnapshot.getValue();
+                    Log.d("MyTruckTotalRatings", ""+ totalRatings[0]);
                 }
                 catch (ClassCastException e){
-
+                    Log.d("MyTruck", "bitch8");
                     Long temp = (Long) dataSnapshot.getValue();
                     totalRatings[0] = temp.intValue();
+                    Log.d("MyTruckTotalRatings", ""+ totalRatings[0]);
                 }
+
+                Double newRating = (avgRating[0] * totalRatings[0] + userRating)/(totalRatings[0] + 1);
+                Integer newTotalRatings = totalRatings[0] + 1;
+
+                Log.d("MyTrucknewRating", ""+ newRating);
+                Log.d("MyTrucknewTotalRatings", ""+ newTotalRatings);
+
+                avgRatingRef.setValue(newRating);
+                totalRatingsRef.setValue(newTotalRatings);
             }
 
             @Override
@@ -817,13 +722,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
             }
         });
-
-        Double newRating = (avgRating[0] + 4.00)/(totalRatings[0] + 1);
-        Integer newTotalRatings = totalRatings[0] + 1;
-
-        avgRatingRef.setValue(newRating);
-        totalRatingsRef.setValue(newTotalRatings);
-
     }
 
 

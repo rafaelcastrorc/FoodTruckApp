@@ -27,6 +27,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FavoritesActivity extends AppCompatActivity {
@@ -72,9 +73,9 @@ public class FavoritesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
         ListView list = (ListView) findViewById(R.id.favs_list);
-        String[] user_fav_trucks = {"My truck", "Bui's", "Magic Carpet", "Yuh Kee's", "Mexicali"}; // data to be pulled from Firebase
-        list.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_style,
-                user_fav_trucks) {
+        final List<String> favoriteTrucks = new ArrayList<String>();
+       final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item_style2 ,
+                favoriteTrucks) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
@@ -82,7 +83,30 @@ public class FavoritesActivity extends AppCompatActivity {
                 textView.setHeight(200);
                 return view;
             }
+        };
+
+        mAuth = FirebaseAuth.getInstance();
+        databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(mAuth.getCurrentUser().getUid()).child("Favorites");
+        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+
+                    String favTruck = child.getValue(String.class);
+                    favoriteTrucks.add(favTruck);
+                }
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
         });
+
+        list.setAdapter(adapter);
 
         list.setOnItemClickListener(new OnItemClickListener() {
             @Override
