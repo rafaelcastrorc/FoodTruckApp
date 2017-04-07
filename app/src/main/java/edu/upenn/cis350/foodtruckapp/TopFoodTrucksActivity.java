@@ -110,6 +110,7 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         // an ArrayList of the Vendors & it'll be an easy conversion
         databaseRef = FirebaseDatabase.getInstance().getReference().child("Users");
         vendors = new ArrayList<Vendor>();
+        populateTextFields();
         databaseRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -118,23 +119,23 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
                 if (name == null) {
                     return;
                 }
-                Vendor vendor;
+                Vendor vendor = null;
                 try {
-                    Log.d("ratings", values.toString());
                     Double rating = (Double) values.get("Average Rating");
-                    if (rating == null) {
-                        throw new ClassCastException();
+                    if (rating != null) {
+                        vendor = new Vendor(name, rating);
                     }
-                    vendor = new Vendor(name, rating);
-                    Log.d("VENDOR", vendor.getName());
                 }
                 catch (ClassCastException e) {
                     Long rating = (Long) values.get("Average Rating");
-                    vendor = new Vendor(name, rating.doubleValue());
-                    Log.d("VENDOR", vendor.getName());
-                    Log.d("rating", rating.toString());
+                    if (rating != null) {
+                        vendor = new Vendor(name, rating.doubleValue());
+                    }
                 }
-                vendors.add(vendor);
+                if (vendor != null) {
+                    vendors.add(vendor);
+                }
+                populateTextFields();
             }
 
             @Override
@@ -164,10 +165,11 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
     void populateTextFields() {
         TreeSet<Vendor> sortedVendors = new TreeSet<Vendor>();
         sortedVendors.addAll(vendors);
+        Log.d("sorted vendors", sortedVendors.toString());
         ArrayList<Vendor> listOfSortedVendors = new ArrayList<Vendor>();
         listOfSortedVendors.addAll(sortedVendors);
 
-        for (int i = 0; i < Math.min(8, sortedVendors.size()); i++) {     // populate either top 8 or size of sortedVendors
+        for (int i = 0; i < Math.min(8, sortedVendors.size()); i++) {           // populate either top 8 or size of sortedVendors
             Vendor vendor = listOfSortedVendors.get(i);
             topTrucks[i].setText(vendor.getName());
             topTrucksRating[i].setRating(vendor.getRating().floatValue());

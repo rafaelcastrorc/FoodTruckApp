@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -268,6 +269,30 @@ public class VendorProfileActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+
+        DatabaseReference rating = databaseRef.child(uniqueID).child("Average Rating");
+        rating.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    try {
+                        Double rating = (Double) dataSnapshot.getValue();
+                        RatingBar bar = (RatingBar) findViewById(R.id.ratingBarForVendor);
+                        bar.setRating(rating.floatValue());
+                    }
+                    catch (ClassCastException e) {
+                        Long rating = (Long) dataSnapshot.getValue();
+                        RatingBar bar = (RatingBar) findViewById(R.id.ratingBarForVendor);
+                        bar.setRating(rating.floatValue());
+                    }
+                    getSupportActionBar().setTitle(vendorName);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -355,7 +380,7 @@ public class VendorProfileActivity extends AppCompatActivity {
     }
 
     void makeChildrenEditable(View view) {
-        if (!(view instanceof ViewGroup)) {
+        if (!(view instanceof ViewGroup) || view instanceof RatingBar) {
             return;
         }
         else {
