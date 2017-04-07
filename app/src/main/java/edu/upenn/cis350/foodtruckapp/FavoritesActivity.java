@@ -94,7 +94,6 @@ public class FavoritesActivity extends AppCompatActivity {
                 String selectedVendorID = (String) selectedChild.getText();
                 Log.d(selectedVendorID, selectedVendorID);
                 intent.putExtra("vendorUniqueID", vendors.get(selectedVendorID));
-                Log.d(vendors.get(selectedVendorID), vendors.get(selectedVendorID));
                 startActivity(intent);
             }
         });

@@ -265,7 +265,7 @@ public class VendorProfileActivity extends AppCompatActivity {
             }
         });
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         // menu array adapter
         menuListView = (ListView) findViewById(R.id.menu);
