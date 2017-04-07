@@ -8,7 +8,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,8 +32,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -42,14 +39,12 @@ import java.util.TreeMap;
 import static edu.upenn.cis350.foodtruckapp.VendorProfileActivity.setListViewHeightBasedOnChildren;
 
 public class VendorProfileForCustomerActivity extends AppCompatActivity {
-
     private DatabaseReference databaseRef;
     private DatabaseReference vendorRef;
     private DatabaseReference menuRef;
     private ArrayList<MyMenuItem> menu;
     private ListView menuListView;
     private String vendorUniqueID;
-    private String customerUniqueID;
     protected ArrayList<Order> orders = new ArrayList<>();
     private String foodtruckName;
     private CustomerOrderMGM customerOrderMGM;
@@ -97,9 +92,8 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+        // set listener for menu items
         populateMenu();
-        // populate cart w/ pre-existing data
-
 
         // get "Hours" data for vendor
         DatabaseReference hoursRef = vendorRef.child("Hours");
@@ -199,6 +193,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             }
         });
 
+        // update current quantities
         final DatabaseReference customerRef = databaseRef.child(customerOrderMGM.getUniqueID());
         DatabaseReference cartRef = customerRef.child("MyOrders").child(vendorUniqueID).child("Order");
         cartRef.addValueEventListener(new ValueEventListener() {
@@ -216,12 +211,10 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             }
         });
 
-        // update current quantities
+        // populate initial quantities
         customerRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                // update quantity upon first add of item to cart
-                Log.d("KEY", dataSnapshot.getKey());
                 if (dataSnapshot.getKey().equals("MyOrders")) {
                     Map<String, Object> orderInfo = (Map<String, Object>) dataSnapshot.getValue();
                     for (Map.Entry<String, Object> entry : orderInfo.entrySet()) {
@@ -242,9 +235,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                MyMenuItem menuItem = new MyMenuItem(
-//                        (String) dataSnapshot.getKey(), (String) dataSnapshot.getValue());
-//                menu.remove(menuItem);
             }
 
             @Override
@@ -258,15 +248,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         });
 
         populateVendorPicture();
-    }
-
-    MyMenuItem getItemByName(String name) {
-        for (MyMenuItem item : menu) {
-            if (item.getItem().equals(name)) {
-                return item;
-            }
-        }
-        return null;
     }
 
     void setQuantityByName(String name, int quantity) {
@@ -331,9 +312,9 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = inflater.inflate(R.layout.customer_menu_item_style, null);
 
-                //Handle TextViews and display string from your list
-                final TextView item = (TextView) view.findViewById(R.id.menu_item);
+                // fill textviews w/ data
                 final MyMenuItem menuItem = menu.get(position);
+                final TextView item = (TextView) view.findViewById(R.id.menu_item);
                 item.setText(menuItem.getItem());
 
                 final TextView price = (TextView) view.findViewById(R.id.menu_item_price);
@@ -342,34 +323,39 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                 final TextView itemCount = (TextView) view.findViewById(R.id.menu_item_quantity);
                 itemCount.setText(Integer.toString(menuItem.getQuantity()));
 
-                //Handle buttons and add onClickListeners
+                // reduce quantity of item & notify cart
                 Button deleteButton = (Button) view.findViewById(R.id.delete_button);
                 Button addButton = (Button) view.findViewById(R.id.add_button);
-
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-                        customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-                        customerOrderMGM.removeOrderFromCart(item.getText().toString(), foodtruckName,
-                                Double.parseDouble(price.getText().toString()));
                         int quantity = menuItem.getQuantity();
                         if (quantity == 0) {
                             return;
                         }
+                        CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+                        customerOrderMGM.setVendorUniqueID(vendorUniqueID);
+                        customerOrderMGM.removeOrderFromCart(item.getText().toString(), foodtruckName,
+                                Double.parseDouble(price.getText().toString()));
+
                         menuItem.setQuantity(quantity - 1);
                         itemCount.setText(Integer.toString(menuItem.getQuantity()));
                         notifyDataSetChanged();
                     }
                 });
+                // increase quantity of item & notify cart
                 addButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
+                        int quantity = menuItem.getQuantity();
+                        if (quantity == 9) {
+                            return;
+                        }
                         CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
                         customerOrderMGM.setVendorUniqueID(vendorUniqueID);
                         customerOrderMGM.addOrderToCart(item.getText().toString(), foodtruckName,
                                 Double.parseDouble(price.getText().toString()));
-                        int quantity = menuItem.getQuantity();
+
                         menuItem.setQuantity(quantity + 1);
                         itemCount.setText(Integer.toString(menuItem.getQuantity()));
                         notifyDataSetChanged();
@@ -392,7 +378,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     }
 
     private void populateMenu() {
-        // set arrayadapter for menu list view
         menu = new ArrayList<MyMenuItem>();
         final MyCustomAdapter myAdapter = new MyCustomAdapter(this);
         menuListView = (ListView) findViewById(R.id.cust_menu);
@@ -400,12 +385,10 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
         menuRef = vendorRef.child("Menu");
         menuRef.addChildEventListener(new ChildEventListener() {
-
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 final MyMenuItem menuItem = new MyMenuItem(dataSnapshot.getKey(),
                         (String) dataSnapshot.getValue());
-
 
                 if (!menu.contains(menuItem)) {
                     menu.add(menuItem);
@@ -424,12 +407,10 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                         (String) dataSnapshot.getKey(), (String) dataSnapshot.getValue());
                 menu.remove(menuItem);
                 myAdapter.notifyDataSetChanged();
-
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
-
             }
 
             @Override
@@ -437,39 +418,4 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void updateTotal() {
-        TextView total = (TextView) findViewById(R.id.total_shopping_cart);
-        total.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(VendorProfileForCustomerActivity.this, Cart.class);
-                startActivity(i);
-            }
-        });
-        double result = 0.0;
-        for (Order order : orders) {
-            result = result + order.getPrice();
-        }
-        NumberFormat formatter = new DecimalFormat("#0.00");
-
-        total.setText("$" + formatter.format(result));
-    }
 }
-
-    
-    //Todo: For Desmond
-//To add item to cart
-       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-//        customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
-
- //To remove item
-       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-        //customerOrderMGM.removeOrderFromCart("Candies", "Insert the name of the food truck here", 10.50);
-
-//To parse the order String
-// CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-// customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-//customerOrderMGM.ordersParser("[1] Chocolate. \n");
