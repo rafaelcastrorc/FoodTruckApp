@@ -7,12 +7,15 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +32,14 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
     private FirebaseDatabase database;
 
     protected LocationManager locationManager;
+    protected LocationListener locationListener;
+
+    ToggleButton toggleButton;
+    Button setLocationButton;
+    Button nearMeButton;
+    Button favsButton;
+
+    Location location;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,7 +71,7 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
         databaseRef = database.getReference("Users");
 
         // add click listener to 'My Orders' button
-        Button nearMeButton = (Button) findViewById(R.id.button_vendor_orders);
+        nearMeButton = (Button) findViewById(R.id.button_vendor_orders);
         nearMeButton.setOnClickListener(new AdapterView.OnClickListener() {
 
             public void onClick(View view) {
@@ -69,8 +80,9 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
             }
         });
 
+
         // add click listener to 'My Profile' button
-        Button favsButton = (Button) findViewById(R.id.button_vendor_profile);
+        favsButton = (Button) findViewById(R.id.button_vendor_profile);
         favsButton.setOnClickListener(new AdapterView.OnClickListener() {
 
             public void onClick(View view) {
@@ -79,22 +91,44 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
             }
         });
 
+
+        // add click listener to Active toggle button
+        toggleButton = (ToggleButton) findViewById(R.id.active_toggleButton);
+        toggleButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                boolean isActive = toggleButton.isChecked();
+                setActiveStatus(isActive);
+            }
+        });
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, this);
+
+        setLocationButton = (Button) findViewById(R.id.set_location);
+        setLocationButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                setLocation(location);
+            }
+        });
 
     }
 
     public void sign_out_Vendor_onClick(View v) {
+        setActiveStatus(false);
         mAuth.signOut();
         Intent i = new Intent(VendorMainMenuActivity.this, LoginActivity.class);
         startActivity(i);
         finish();
     }
 
+
     @Override
     public void onLocationChanged(Location location) {
-    //    String coords = location.getLatitude() + ", " + location.getLongitude();
-       // addLocation(coords);
+        this.location = location;
     }
 
     @Override
@@ -112,10 +146,16 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
 
     }
 
-   // //TODO use this for vendor
-    //public void addLocation(String coords){
-     //   FirebaseAuth mAuth = FirebaseAuth.getInstance();
-     //   String userId  = mAuth.getCurrentUser().getUid();
-      //  databaseRef.child(userId).child("Location").setValue(coords);
-   // }
+    public void setLocation(Location location){
+        String userId  = mAuth.getCurrentUser().getUid();
+        String lat = Double.toString(location.getLatitude());
+        String lng = Double.toString(location.getLongitude());
+        databaseRef.child(userId).child("Location").setValue(lat+", "+lng);
+        Toast.makeText(getApplicationContext(), "You have correctly set your location!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void setActiveStatus(boolean status) {
+        String userId  = mAuth.getCurrentUser().getUid();
+        databaseRef.child(userId).child("Active").setValue(status);
+    }
 }
