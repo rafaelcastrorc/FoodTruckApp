@@ -148,7 +148,6 @@ public class FavoritesActivity extends AppCompatActivity {
             double price = 0.0;
 
 
-
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 boolean status = false;
@@ -182,14 +181,12 @@ public class FavoritesActivity extends AppCompatActivity {
                             this.price = l.doubleValue();
                         }
                     }
-
                     else if(type.equals("Submitted")) {
                         String choice  = (String) values.get(type);
                         if (choice.equals("true")) {
                             status = true;
                         }
                     }
-
                 }
                 Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
                 customerOrder.setStatus(status);
@@ -197,8 +194,6 @@ public class FavoritesActivity extends AppCompatActivity {
                 customerOrder.setPrice(price);
                 orders.add(customerOrder);
                 updateTotal();
-
-
             }
 
             @Override
@@ -206,10 +201,8 @@ public class FavoritesActivity extends AppCompatActivity {
                 boolean status = false;
                 HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
                 for (String type: values.keySet()) {
-
                     if (type.equals("CustomerInstanceId")) {
                         this.instanceId = (String) values.get(type);
-
                     }
                     else if (type.equals("Order")) {
                         this.order = (String) values.get(type);

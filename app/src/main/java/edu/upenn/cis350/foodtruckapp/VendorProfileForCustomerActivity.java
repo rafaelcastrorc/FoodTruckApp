@@ -1,7 +1,6 @@
 package edu.upenn.cis350.foodtruckapp;
 
 
-import android.util.Log;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -424,19 +423,19 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         StorageReference imagesRef = storageRef.child("images");
         StorageReference vendorStorageRef = imagesRef.child(vendorUniqueID);
         final long ONE_MEGABYTE = 1024 * 1024;
+        final ImageView vendorImage = (ImageView) findViewById(R.id.cust_vendor_profile_image);
         vendorStorageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 BitmapDrawable drawableBitmap = new BitmapDrawable(
                         getApplicationContext().getResources(), bitmap);
-                ImageView vendorImage = (ImageView) findViewById(R.id.cust_vendor_profile_image);
                 vendorImage.setBackground(drawableBitmap);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Log.d("hey", "hey");
+                vendorImage.setBackgroundResource(R.drawable.image_not_found);
             }
         });
     }
