@@ -242,17 +242,6 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
         });
 
 
-        // add click listener to top food trucks button
-        Button map = (Button) findViewById(R.id.button_map);
-        map.setOnClickListener(new AdapterView.OnClickListener() {
-
-            public void onClick(View view) {
-                Intent i = new Intent(CustomerMainMenuActivity.this, MapsActivity.class);
-                startActivity(i);
-            }
-        });
-
-
     }
 
     public void sign_out_onClick(View v) {

@@ -77,5 +77,11 @@
     <string name="title_activity_customer_order_mgmdemo">CustomerOrderMGMDemo</string>
     <string name="title_activity_maps">Map</string>
 
+    <string name="ftnear_map_button">Map View</string>
+
+    <string name="active_toggle_active">Active</string>
+    <string name="active_toggle_inactive">Inactive</string>
+    <string name="set_location">Set Location</string>
+
 
 </resources>

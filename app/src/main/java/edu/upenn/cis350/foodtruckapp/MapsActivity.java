@@ -1,5 +1,6 @@
 package edu.upenn.cis350.foodtruckapp;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,28 +10,24 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback{
 
     private GoogleMap mMap;
 
     private DatabaseReference databaseRef;
     private FirebaseDatabase database;
-    private FirebaseAuth firebaseAuth;
-
 
 
     private String TAG = "Map Data";
@@ -39,7 +36,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_maps);
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -82,24 +79,53 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // whenever data at this location is updated.
                 HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
                 for (String id : values.keySet()) {
-                    Log.d(TAG, "Value of "+ id + " is:" + values.get(id));
                     HashMap<String, Object> userInfo =  (HashMap<String, Object>) values.get(id);
 
                     if (userInfo.get("Type").equals("Vendor")
                             && userInfo.containsKey("Location")
                             && userInfo.containsKey("Name Of Food Truck")
-                            && userInfo.containsKey("Type Of Food")) {
+                            && userInfo.containsKey("Type Of Food")
+                            && userInfo.containsKey("Active")) {
 
+                        // get info from vendor
                         String vendorName = (String) userInfo.get("Name Of Food Truck");
                         String foodType = (String) userInfo.get("Type Of Food");
                         String coords = (String) userInfo.get("Location");
-
+                        String uniqueID = (String) userInfo.get("UniqueID");
+                        boolean isActive = (boolean)userInfo.get("Active");
                         Location l = new Location(coords);
+
+                        // make green marker if active
+                        if (isActive) {
+                            // add marker to map
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(l.getLat(), l.getLng()))
+                                    .snippet(foodType)
+                                    .title(vendorName)
+                                    .icon(BitmapDescriptorFactory.defaultMarker(
+                                            BitmapDescriptorFactory.HUE_GREEN)))
+                                    .setTag(uniqueID);
+                        }
+                        else {
                         // add marker to map
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(l.getLat(), l.getLng()))
                                 .snippet(foodType)
-                                .title(vendorName));
+                                .title(vendorName))
+                                .setTag(uniqueID);
+                        }
+
+                        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                            @Override
+                            public void onInfoWindowClick(Marker marker) {
+                                Log.d("markerOnClick", "marker clicked");
+                                String uniqueID = (String) marker.getTag();
+                                Intent i = new Intent(MapsActivity.this, VendorProfileForCustomerActivity.class);
+                                i.putExtra("vendorUniqueID", uniqueID);
+                                startActivity(i);
+                            }
+                        });
+
                     }
                 }
 
@@ -112,8 +138,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-
-
 
 
     public class Location {
