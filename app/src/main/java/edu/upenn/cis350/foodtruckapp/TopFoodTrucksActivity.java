@@ -1,8 +1,12 @@
 package edu.upenn.cis350.foodtruckapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -20,12 +24,8 @@ import java.util.TreeSet;
 
 
 public class TopFoodTrucksActivity extends AppCompatActivity {
-    //Pull food trucks from database
-    //Get their unique ids
-    //uniqueId.getChild("Name Of Food Truck")
-    //Todo: Start counter with 0 rating and 0
-    //ProcessingRatings pr = new ProcessingRatings();
-    //pr.pushRatingToDatabase("K1Z7QIYsM9QtVDMI2hMUnLIGcIy2", 4);
+
+
 
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
@@ -36,14 +36,37 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
 
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.shopping_cart, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.shopping_cart_button:
+
+                Intent i = new Intent(TopFoodTrucksActivity.this, Cart.class);
+                startActivity(i);
+                return true;
+            case R.id.home_button:
+                Intent j = new Intent(TopFoodTrucksActivity.this, CustomerMainMenuActivity.class);
+                startActivity(j);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_food_trucks);
-        //Pull food trucks from database
-        //Get their unique ids
-        //uniqueId.getChild("Name Of Food Truck")
-        //ProcessingRatings pr = new ProcessingRatings();
-        //pr.pushRatingToDatabase("K1Z7QIYsM9QtVDMI2hMUnLIGcIy2", 4);
+
 
         TextView firstVendorName = (TextView) findViewById(R.id.top_trucks_vendor_one);
         TextView secondVendorName = (TextView) findViewById(R.id.top_trucks_vendor_two);
@@ -157,7 +180,6 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
 //            Log.d(vendor.getRating().toString(), vendor.getRating().toString());
 
             topTrucksRating[i].setRating(vendor.getRating().floatValue());
-            Log.d("VENDOR", vendor.getName());
         }
     }
 }

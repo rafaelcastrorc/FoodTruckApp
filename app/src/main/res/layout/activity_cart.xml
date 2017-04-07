@@ -9,13 +9,37 @@
     android:clickable="true">
 
     <ListView
-        android:id="@+id/order_list"
+        android:id="@+id/orders_list_shopping_cart"
         android:layout_width="wrap_content"
         android:layout_height="267dp"
-        android:layout_weight="0.97"
+        android:layout_weight="0.98"
         android:clickable="true"
         android:elevation="24dp"
         android:focusable="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="76dp"
+            android:layout_height="wrap_content"
+            android:text="Total:"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/total_shopping_cart"
+            android:layout_width="76dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:text="$0.00" />
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +48,7 @@
         android:weightSum="1">
 
         <Button
-            android:id="@+id/button_vendor_order_cancelled"
+            android:id="@+id/cartOrderCancelled"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
@@ -34,13 +58,13 @@
             android:layout_marginLeft="6dp"
             android:height="120dp"
             android:background="@drawable/button_style"
-            android:onClick="OrderCancelledOnClick"
+            android:onClick="cartOrderCancelled_onClick"
             android:text="Cancel Order"
             android:textAllCaps="false"
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/button_vendor_order_ready"
+            android:id="@+id/updateOrder"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
@@ -51,13 +75,13 @@
             android:layout_weight="0.19"
             android:height="120dp"
             android:background="@drawable/button_style"
-            android:onClick="OrderReadyOnClick"
-            android:text="Order Is Ready!"
+            android:onClick="updateOrder_OnClick"
+            android:text="Modify order"
             android:textAllCaps="false"
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/orderDone"
+            android:id="@+id/submitOrder"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
@@ -67,8 +91,8 @@
             android:layout_marginLeft="17dp"
             android:height="120dp"
             android:background="@drawable/button_style"
-            android:onClick="orderDone_onClick"
-            android:text="Done"
+            android:onClick="submitOrder_onClick"
+            android:text="Submit order"
             android:textAllCaps="false"
             android:textStyle="bold" />
 

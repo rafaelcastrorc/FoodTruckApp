@@ -39,6 +39,10 @@
     <string name="Weekdays"><i>Mondays - Fridays:</i></string>
     <string name="Weekends"><i>Saturdays and Sundays:</i></string>
     <string name="Reviews"><u>My Reviews</u></string>
+    <string name="Rating"><u>My Rating</u></string>
+
+    <string name="TheirReveiws"><u>Reviews</u></string>
+    <string name="TheierRating"><u>Rating</u></string>
 
 
     <string name="large_text">
@@ -70,6 +74,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_vendor_profile">VendorProfileActivity</string>
+    <string name="title_activity_customer_order_mgmdemo">CustomerOrderMGMDemo</string>
     <string name="title_activity_maps">Map</string>
 
 

@@ -32,7 +32,6 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
     }
 
     protected void orderDone(int i) {
-        FirebaseMessaging.getInstance().subscribeToTopic("user_"+username); //For testing purposes
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         mAuth = FirebaseAuth.getInstance();
         if (i == 2) {
@@ -41,11 +40,6 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
         else {
             sendOrder();
         }
-
-        //for testing purposes we are going to send the notification to the same device we are testing
-        //Do this part inside the client send order part
-        //
-        ///////////////////////
     }
 
     private void sendOrder() {

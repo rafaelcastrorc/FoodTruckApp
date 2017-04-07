@@ -1,26 +1,16 @@
 package edu.upenn.cis350.foodtruckapp;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -30,7 +20,6 @@ public class RegistrationVendor extends AppCompatActivity {
 
     private Button uploadButton;
     private DatabaseReference databaseRef;
-    private DatabaseReference databaseRatings;
     private FirebaseDatabase database;
     private String userID;
     EditText typeOfFood;
@@ -46,12 +35,12 @@ public class RegistrationVendor extends AppCompatActivity {
         uploadButton = (Button) findViewById(R.id.truckPhoto);
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
-        databaseRatings = database.getReference("Ratings");
 
         Bundle b = getIntent().getExtras();
         String user = ""; // or other values
-        if(b != null)
+        if(b != null) {
             userID = b.getString("UserId");
+        }
         typeOfFood = (EditText) findViewById(R.id.foodTypeField);
         nameOfFoodTruck = (EditText) findViewById(R.id.truckNameField);
     }
@@ -102,18 +91,40 @@ public class RegistrationVendor extends AppCompatActivity {
             nameOfFoodTruck.setError("This field cannot be empty");
             return;
         }
+
         String tof = typeOfFood.getText().toString();
         String noft = nameOfFoodTruck.getText().toString();
 
-        //Adds this info to the user database
-        databaseRef.child(userID).child("Type Of Food").setValue(tof);
-        databaseRef.child(userID).child("Name Of Food Truck").setValue(noft);
-        Double avrgRat = 0.000001;
-        databaseRatings.child(userID).child("AverageRating").setValue(avrgRat);
-        databaseRatings.child(userID).child("Counter").setValue(0);
-        databaseRatings.child(userID).child("UniqueUserID").setValue(userID);
-        databaseRatings.child(userID).child("NameOfFoodTruck").setValue(nameOfFoodTruck.getText().toString());
+        //Adds this info to the the current vendor
+        DatabaseReference currentVendorReference = databaseRef.child(userID);
 
+        //Create these fields for the current vendor
+        currentVendorReference.child("Type Of Food").setValue(tof);
+        currentVendorReference.child("Name Of Food Truck").setValue(noft);
+        currentVendorReference.child("Menu");
+        currentVendorReference.child("Average Rating");
+        currentVendorReference.child("Total Ratings");
+
+
+
+        Double avgRating = 0.00;
+        Integer totalRatings = 0;
+
+        currentVendorReference.child("AverageRating").setValue(avgRating); //Initialize the vendor's Average Rating to 0.00
+        currentVendorReference.child("Counter").setValue(totalRatings); //Initialize the vendor's Total Ratings to 0
+        currentVendorReference.child("UniqueUserID").setValue(userID); //??? What is this for ???
+        currentVendorReference.child("NameOfFoodTruck").setValue(nameOfFoodTruck.getText().toString());
+        currentVendorReference.child("Menu");
+
+        DatabaseReference hoursRef = currentVendorReference.child("Hours");
+        hoursRef.child("OpenWeekdayTime");
+        hoursRef.child("OpenWeekdayPeriod");
+        hoursRef.child("CloseWeekdayTime");
+        hoursRef.child("OpenWeekdayPeriod");
+        hoursRef.child("OpenWeekendTime");
+        hoursRef.child("OpenWeekendPeriod");
+        hoursRef.child("CloseWeekendTime");
+        hoursRef.child("CloseWeekendPeriod");
 
 
         //Todo: Vendor page

@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,6 +31,33 @@ public class TruckActivity extends AppCompatActivity {
     private Integer countValue=0;
     private boolean isCorrectVendor = false;
     private String vendorId = "";
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.shopping_cart, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.shopping_cart_button:
+
+                Intent i = new Intent(TruckActivity.this, Cart.class);
+                startActivity(i);
+                return true;
+            case R.id.home_button:
+                Intent j = new Intent(TruckActivity.this, CustomerMainMenuActivity.class);
+                startActivity(j);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 
     @Override

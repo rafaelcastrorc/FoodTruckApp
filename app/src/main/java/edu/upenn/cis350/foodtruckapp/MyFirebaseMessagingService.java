@@ -39,8 +39,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //To handle foreground notifications
         NotificationCompat.Builder builder = new  NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(remoteMessage.getNotification().getTitle())
-                .setContentText("Please come pick it up!");
+                .setContentTitle(remoteMessage.getNotification().getTitle());
+
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         manager.notify(0, builder.build());
 

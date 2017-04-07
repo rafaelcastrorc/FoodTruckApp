@@ -7,6 +7,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -27,6 +30,26 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
 
     protected LocationManager locationManager;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_for_vendor, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.home_button:
+                Intent j = new Intent(VendorMainMenuActivity.this, VendorMainMenuActivity.class);
+                startActivity(j);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +93,8 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
 
     @Override
     public void onLocationChanged(Location location) {
-        String coords = location.getLatitude() + ", " + location.getLongitude();
-        addLocation(coords);
+    //    String coords = location.getLatitude() + ", " + location.getLongitude();
+       // addLocation(coords);
     }
 
     @Override
@@ -89,10 +112,10 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
 
     }
 
-     //TODO use this for vendor
-    public void addLocation(String coords){
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        String userId  = mAuth.getCurrentUser().getUid();
-        databaseRef.child(userId).child("Location").setValue(coords);
-    }
+   // //TODO use this for vendor
+    //public void addLocation(String coords){
+     //   FirebaseAuth mAuth = FirebaseAuth.getInstance();
+     //   String userId  = mAuth.getCurrentUser().getUid();
+      //  databaseRef.child(userId).child("Location").setValue(coords);
+   // }
 }
