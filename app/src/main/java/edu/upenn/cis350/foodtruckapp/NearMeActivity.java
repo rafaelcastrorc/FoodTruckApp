@@ -258,6 +258,14 @@ public class NearMeActivity extends AppCompatActivity {
         });
 
     }
+
+
+    public void onMapButtonClick(View view) {
+        Intent i = new Intent(NearMeActivity.this, MapsActivity.class);
+        startActivity(i);
+    }
+
+
     private void updateTotal(){
         TextView total = (TextView)findViewById(R.id.total_shopping_cart);
         total.setOnClickListener(new View.OnClickListener() {

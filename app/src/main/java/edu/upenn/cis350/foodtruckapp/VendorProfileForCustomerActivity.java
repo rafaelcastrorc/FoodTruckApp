@@ -720,5 +720,12 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         });
     }
 
+    public void seeReviews(View v){
+        Log.d("BITHCHH", "IN THIS BITCH");
+        Intent i = new Intent(VendorProfileForCustomerActivity.this, VendorReviewsActivity.class);
+        i.putExtra("UniqueID", vendorUniqueID);
+        startActivity(i);
+    }
+
 
 }
