@@ -78,10 +78,6 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".CustomerOrderMGMDemo"
-            android:exported="true"
-            android:label="@string/title_activity_customer_order_mgmdemo" />
         <activity android:name=".Cart"
             android:label="My Orders"
             android:exported="true">

@@ -26,12 +26,6 @@ import java.util.TreeSet;
 public class TopFoodTrucksActivity extends AppCompatActivity {
 
 
-    //Pull food trucks from database
-    //Get their unique ids
-    //uniqueId.getChild("Name Of Food Truck")
-    //Todo: Start counter with 0 rating and 0
-    //ProcessingRatings pr = new ProcessingRatings();
-    //pr.pushRatingToDatabase("K1Z7QIYsM9QtVDMI2hMUnLIGcIy2", 4);
 
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
@@ -52,8 +46,13 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.shopping_cart_button:
+
                 Intent i = new Intent(TopFoodTrucksActivity.this, Cart.class);
                 startActivity(i);
+                return true;
+            case R.id.home_button:
+                Intent j = new Intent(TopFoodTrucksActivity.this, CustomerMainMenuActivity.class);
+                startActivity(j);
                 return true;
 
             default:
@@ -62,15 +61,12 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_food_trucks);
-        //Pull food trucks from database
-        //Get their unique ids
-        //uniqueId.getChild("Name Of Food Truck")
-        //ProcessingRatings pr = new ProcessingRatings();
-        //pr.pushRatingToDatabase("K1Z7QIYsM9QtVDMI2hMUnLIGcIy2", 4);
+
 
         TextView firstVendorName = (TextView) findViewById(R.id.top_trucks_vendor_one);
         TextView secondVendorName = (TextView) findViewById(R.id.top_trucks_vendor_two);

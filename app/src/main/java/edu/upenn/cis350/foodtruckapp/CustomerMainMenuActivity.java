@@ -44,6 +44,10 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
                 Intent i = new Intent(CustomerMainMenuActivity.this, Cart.class);
                 startActivity(i);
                 return true;
+            case R.id.home_button:
+                Intent j = new Intent(CustomerMainMenuActivity.this, CustomerMainMenuActivity.class);
+                startActivity(j);
+                return true;
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -201,10 +205,6 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
                 updateTotal();
 
             }
-
-
-
-
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {

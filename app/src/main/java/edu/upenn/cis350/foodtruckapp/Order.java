@@ -14,6 +14,7 @@ public class Order {
     protected String vendorName;
     private double price;
     private String customerUniqueID;
+    private String time;
 
     Order(String customerInstanceID, String order, String name, String pushId, String vendorUniqueID) {
         this.customerInstanceID = customerInstanceID;
@@ -110,5 +111,13 @@ public class Order {
 
     public String getCustomerUniqueID() {
         return customerUniqueID;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getTime() {
+        return time;
     }
 }

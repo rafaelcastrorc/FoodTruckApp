@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,6 +26,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -44,6 +51,33 @@ public class Cart extends AppCompatActivity {
     private boolean isOrderSelected = false;
     private TwoLineListItem previousChildSelected = null;
     private Order selectedOrder;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.shopping_cart, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.shopping_cart_button:
+
+                Intent i = new Intent(Cart.this, Cart.class);
+                startActivity(i);
+                return true;
+            case R.id.home_button:
+                Intent j = new Intent(Cart.this, CustomerMainMenuActivity.class);
+                startActivity(j);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 
 
@@ -90,7 +124,8 @@ public class Cart extends AppCompatActivity {
         });
 
         myOrdersRef.addChildEventListener(new ChildEventListener() {
-            public String vendorUniqueID = "";
+            String time;
+            String vendorUniqueID = "";
             String instanceId = "";
             String order = "";
             String customerName = "";
@@ -122,6 +157,9 @@ public class Cart extends AppCompatActivity {
                     else if (type.equals("FoodTruckName")){
                         this.foodTruckName = (String) values.get(type);
                     }
+                    else if (type.equals("Time")){
+                        this.time = (String) values.get(type);
+                    }
                     else if (type.equals("Price")){
                         try {
                             this.price = (Double) values.get(type);
@@ -147,6 +185,7 @@ public class Cart extends AppCompatActivity {
                     customerOrder.setStatus(status);
                     customerOrder.setFoodTruckName(foodTruckName);
                     customerOrder.setPrice(price);
+                    customerOrder.setTime(time);
                     orders.add(customerOrder);
 
                     arrayAdapter.notifyDataSetChanged();
@@ -184,6 +223,9 @@ public class Cart extends AppCompatActivity {
                     else if (type.equals("vendorUniqueID")){
                         this.vendorUniqueID = (String) values.get(type);
                     }
+                    else if (type.equals("Time")){
+                        this.time = (String) values.get(type);
+                    }
                     else if (type.equals("FoodTruckName")){
                         this.foodTruckName = (String) values.get(type);
                     }
@@ -217,6 +259,8 @@ public class Cart extends AppCompatActivity {
                     customerOrder.setStatus(status);
                     customerOrder.setFoodTruckName(foodTruckName);
                     customerOrder.setPrice(price);
+                    customerOrder.setTime(time);
+
 
                     orders.add(customerOrder);
 
@@ -275,9 +319,6 @@ public class Cart extends AppCompatActivity {
 
 
 
-
-
-
     // submit order
     public void submitOrder_onClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
@@ -292,7 +333,7 @@ public class Cart extends AppCompatActivity {
 
         // setup Complete Order popup
         AlertDialog.Builder confirmPopupBuilder = new AlertDialog.Builder(this);
-        confirmPopupBuilder.setTitle("Your order is going to be sent to the food truck");
+        confirmPopupBuilder.setTitle("Your order is going to be sent to the food truck. You will have 3 minutes to cancel it and 1 minute to modify it.");
         confirmPopupBuilder.setMessage("Are you sure you want this order: \n" + selectedOrder.getCustomerOrder().toString());
 
         confirmPopupBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -332,7 +373,7 @@ public class Cart extends AppCompatActivity {
 
 
 
-    // submit order
+    // update order
     public void updateOrder_OnClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(Cart.this, "You must select an order first", Toast.LENGTH_LONG).show();
@@ -350,10 +391,22 @@ public class Cart extends AppCompatActivity {
 
                     //Go to the vendor profile page
                     selectedOrder.getVendorUniqueID();
+                    CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
+                    customerOrderMGM.setVendorUniqueID(selectedOrder.vendorUniqueID);
+                    //Gives user 1 minutes to modify order
+                    DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
+                    DateTime prevDT = formatter.parseDateTime((String)selectedOrder.getTime());
+                    boolean isValidTime = customerOrderMGM.time(prevDT, 1);
+                    if (isValidTime) {
+                        Intent i = new Intent(Cart.this, VendorProfileForCustomerActivity.class);
+                        i.putExtra("vendorUniqueID", selectedOrder.getVendorUniqueID());
+                        startActivity(i);
 
-                    Intent i = new Intent(Cart.this, VendorProfileForCustomerActivity.class);
-                    i.putExtra("vendorUniqueID", selectedOrder.getVendorUniqueID());
-                    startActivity(i);
+                    }
+                    else {
+                        Toast.makeText(Cart.this, "You have exceeded the time limit to modify your order.", Toast.LENGTH_SHORT).show();
+                    }
+
 
                 }
             });
@@ -424,7 +477,16 @@ public class Cart extends AppCompatActivity {
 
                     CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
                     customerOrderMGM.setVendorUniqueID(selectedOrder.vendorUniqueID);
-                    customerOrderMGM.cancelOrder(selectedOrder.pushId, selectedOrder.getStatus());
+                    //Gives user 3 minuts to cancel order
+                    DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
+                    DateTime prevDT = formatter.parseDateTime((String)selectedOrder.getTime());
+                    boolean isValidTime = customerOrderMGM.time(prevDT, 3);
+                    if (isValidTime) {
+                        customerOrderMGM.cancelOrder(selectedOrder.pushId, selectedOrder.getStatus());
+                    }
+                    else {
+                        Toast.makeText(Cart.this, "You have exceeded the time limit to cancel your order.", Toast.LENGTH_SHORT).show();
+                    }
 
                 }
             });

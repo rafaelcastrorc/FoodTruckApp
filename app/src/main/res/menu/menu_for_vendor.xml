@@ -2,20 +2,12 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <!-- "Mark Favorite", should appear as action button if possible -->
     <item
         android:id="@+id/home_button"
         android:icon="@drawable/home"
         android:tint="@color/WHITE"
         android:title="My Orders"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/shopping_cart_button"
-        android:icon="@drawable/shopping_cart"
-        android:title="My Orders"
-        android:tint="@color/WHITE"
-        app:showAsAction="always" />
-
 
 </menu>
 
