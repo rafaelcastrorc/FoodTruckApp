@@ -57,15 +57,13 @@
         <activity
             android:name=".VendorProfileActivity"
             android:label="@string/title_activity_vendor_profile"
-            android:theme="@style/AppTheme" />
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".VendorProfileForCustomerActivity"
             android:label="@string/title_activity_vendor_profile"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            />
 
-        <activity
-            android:name=".VendorProfileForCustomer"/>
 
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
@@ -78,11 +76,11 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Cart"
-            android:label="My Orders"
-            android:exported="true">
-
-        </activity>
+        <activity
+            android:name=".Cart"
+            android:exported="true"
+            android:label="My Orders"></activity>
+        <activity android:name=".VendorReviewsActivity"></activity>
     </application>
 
 </manifest>

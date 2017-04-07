@@ -1,5 +1,7 @@
 package edu.upenn.cis350.foodtruckapp;
 
+
+import android.util.Log;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
