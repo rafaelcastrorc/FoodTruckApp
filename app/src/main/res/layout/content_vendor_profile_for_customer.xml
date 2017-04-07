@@ -10,8 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="match_parent"
@@ -222,22 +222,39 @@
         </RelativeLayout>
 
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dividerPadding="5dp"
+            android:orientation="vertical"
+            android:padding="5dp">
 
-            <TextView
-                android:id="@+id/textView7"
+            <EditText
+                android:id="@+id/writeReview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="15dp"
+                android:layout_height="80dp"
+
                 android:layout_weight="0.03"
+                android:inputType="textShortMessage"
                 android:text="@string/large_text_1"
                 android:textColor="@color/BLACK"
                 android:textSize="12sp" />
 
+            <Button
+                android:id="@+id/submitReview"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/button_style"
+                android:padding="5dp"
+                android:text="Submit Review"
+                android:onClick="submitReview"
+                android:layout_gravity="center"
+                />
 
-        </RelativeLayout>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textView8"
@@ -255,7 +272,9 @@
             android:layout_height="wrap_content"
             android:dividerPadding="5dp"
             android:orientation="horizontal"
-            android:padding="5dp">
+            android:padding="5dp"
+            android:layout_gravity = "center">
+
 
             <Button
                 android:id="@+id/rating1"

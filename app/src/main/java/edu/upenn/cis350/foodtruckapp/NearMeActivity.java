@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -62,35 +64,26 @@ public class NearMeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ftnear_me);
 
-        final ListView list = (ListView) findViewById(R.id.favs_list);
+        final ListView list = (ListView) findViewById(R.id.nearMeList);
 
         // data to be pulled from Firebase
-        String[] user_near_trucks = {"Mc Fries", "Yasmin", "Hemo's", "Magic Carpet", "Yuh Kee's", "Mexicali",
+        String[] user_near_trucks = { "Mc Fries", "Yasmin", "Hemo's", "Magic Carpet", "Yuh Kee's", "Mexicali",
                 "Magic Carpet", "Real Lee An's", "Lee An's"};
         Arrays.sort(user_near_trucks);
 
-        list.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_style,
-                user_near_trucks) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView textView = ((TextView) view.findViewById(android.R.id.text1));
-                textView.setHeight(200);
-                return view;
-            }
-        });
-
+        ListAdapter truckAdapter = new CustomTruckListAdapter(this, user_near_trucks);
+        list.setAdapter(truckAdapter);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                Intent truckIntent = new Intent(NearMeActivity.this, TruckActivity.class);
-                TextView textView = (TextView) list.getChildAt(position);
-                String truckName = textView.getText().toString();
-                truckIntent.putExtra("truckName", truckName);
-                startActivity(truckIntent);
+                String truck = String.valueOf(parent.getItemAtPosition(position));
+                Toast.makeText(NearMeActivity.this,truck, Toast.LENGTH_LONG).show();
+                Intent i = new Intent(NearMeActivity.this,VendorProfileForCustomerActivity.class);
+                i.putExtra("truckName", truck);
+                startActivity(i);
             }
 
         });
