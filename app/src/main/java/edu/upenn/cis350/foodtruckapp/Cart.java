@@ -601,13 +601,6 @@ public class Cart extends AppCompatActivity {
         total.setText("$"+ formatter.format(result));
     }
 
-    public void addFavTruck(View v){
-       // DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users");
-       // FirebaseAuth mAuth;
-       // mAuth = FirebaseAuth.getInstance();
-       // databaseRef.child(mAuth.getCurrentUser().getUid()).child("Favorites").child(singleTruckItem).setValue(singleTruckItem);
-
-    }
 
 }
 

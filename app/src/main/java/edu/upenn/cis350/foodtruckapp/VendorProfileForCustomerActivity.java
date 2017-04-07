@@ -1,7 +1,6 @@
 package edu.upenn.cis350.foodtruckapp;
 
 
-import android.util.Log;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,13 +36,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.text.NumberFormat;
-import java.text.DecimalFormat;
-
 
 import static edu.upenn.cis350.foodtruckapp.VendorProfileActivity.setListViewHeightBasedOnChildren;
 
@@ -281,10 +280,8 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 boolean status = false;
-
                 HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
                 for (String type : values.keySet()) {
-
                     if (type.equals("CustomerInstanceId")) {
                         this.instanceId = (String) values.get(type);
                     } else if (type.equals("Order")) {
@@ -306,14 +303,12 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                             this.price= l.doubleValue();
 
                         }
-
                     } else if (type.equals("Submitted")) {
                         String choice = (String) values.get(type);
                         if (choice.equals("true")) {
                             status = true;
                         }
                     }
-
                 }
                 Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
                 customerOrder.setStatus(status);
@@ -428,18 +423,19 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         StorageReference imagesRef = storageRef.child("images");
         StorageReference vendorStorageRef = imagesRef.child(vendorUniqueID);
         final long ONE_MEGABYTE = 1024 * 1024;
+        final ImageView vendorImage = (ImageView) findViewById(R.id.cust_vendor_profile_image);
         vendorStorageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 BitmapDrawable drawableBitmap = new BitmapDrawable(
                         getApplicationContext().getResources(), bitmap);
-                ImageView vendorImage = (ImageView) findViewById(R.id.cust_vendor_profile_image);
                 vendorImage.setBackground(drawableBitmap);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                vendorImage.setBackgroundResource(R.drawable.image_not_found);
             }
         });
     }
@@ -602,25 +598,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         total.setText("$" + formatter.format(result));
     }
 
-
-    
-    //Todo: For Desmond
-//To add item to cart
-       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-//        customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
-
- //To remove item
-       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-        //customerOrderMGM.removeOrderFromCart("Candies", "Insert the name of the food truck here", 10.50);
-
-//To parse the order String
-// CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-// customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-//customerOrderMGM.ordersParser("[1] Chocolate. \n");
-
-
     public void submitReview(View v){
         DatabaseReference reviewRef = vendorRef.child("Reviews");
 
@@ -722,6 +699,13 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void seeReviews(View v){
+        Log.d("BITHCHH", "IN THIS BITCH");
+        Intent i = new Intent(VendorProfileForCustomerActivity.this, VendorReviewsActivity.class);
+        i.putExtra("UniqueID", vendorUniqueID);
+        startActivity(i);
     }
 
 

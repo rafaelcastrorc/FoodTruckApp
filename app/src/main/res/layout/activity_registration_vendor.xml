@@ -98,17 +98,6 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Upload Photo of Truck From Gallery"
-        android:textSize="18sp"
-        android:textAllCaps="false"
-        android:background="@drawable/button_style"
-        android:id="@+id/truckPhoto"
-        android:onClick="btnUploadTruckPhoto"
-        android:layout_centerHorizontal="true" />
-
-    <Button
         android:text="REGISTER"
         android:textSize="18sp"
         android:textStyle="bold"

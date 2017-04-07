@@ -8,12 +8,10 @@ public class Vendor implements Comparable<Vendor> {
 
     private String name;
     private Double rating;
-    private Long count;
 
-    public Vendor(String name, Double rating, Long count) {
+    public Vendor(String name, Double rating) {
         this.name = name;
         this.rating = rating;
-        this.count = count;
     }
 
     String getName() {
@@ -23,8 +21,6 @@ public class Vendor implements Comparable<Vendor> {
     Double getRating() {
         return rating;
     }
-
-    Long getCount() {return count;}
 
     @Override
     public int compareTo(Vendor o) {
