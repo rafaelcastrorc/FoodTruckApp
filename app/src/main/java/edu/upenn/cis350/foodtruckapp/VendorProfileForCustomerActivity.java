@@ -37,6 +37,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.text.NumberFormat;
+import java.text.DecimalFormat;
+
 
 import static edu.upenn.cis350.foodtruckapp.VendorProfileActivity.setListViewHeightBasedOnChildren;
 
@@ -48,7 +51,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     private ListView menuListView;
     private String vendorUniqueID;
     private String customerUniqueID;
-    protected ArrayList<Order> orders = new ArrayList<>();
     private String foodtruckName;
     private CustomerOrderMGM customerOrderMGM;
     ArrayList<Order> orders = new ArrayList<>();
