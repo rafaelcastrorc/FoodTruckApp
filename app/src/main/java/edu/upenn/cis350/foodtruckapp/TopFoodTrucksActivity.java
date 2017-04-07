@@ -19,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.TreeSet;
 
 
@@ -109,34 +108,33 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         // Todo: Populate TextViews to have name of vendors
         // I put the names of the TextViews in an array because I think that Firebase will return
         // an ArrayList of the Vendors & it'll be an easy conversion
-        databaseRef = FirebaseDatabase.getInstance().getReference().child("Ratings");
+        databaseRef = FirebaseDatabase.getInstance().getReference().child("Users");
         vendors = new ArrayList<Vendor>();
-
         databaseRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
-
-                String name = null;
-                Double rating = 0.0;
-                Long count = new Long(0);
-
-                for (Map.Entry<String, Object> entry: values.entrySet()) {
-
-                    if (entry.getKey().equals("NameOfFoodTruck")) {
-                        name = (String) entry.getValue();
-                    }
-                    else if (entry.getKey().equals("AverageRating")) {
-                        rating = (Double) entry.getValue();
-                    }
-                    else if (entry.getKey().equals("Count")) {
-                        count = (Long) entry.getValue();
-                    }
+                HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
+                String name = (String) values.get("Name Of Food Truck");
+                if (name == null) {
+                    return;
                 }
-
-                Vendor vendor = new Vendor(name, rating, count);
+                Vendor vendor;
+                try {
+                    Log.d("ratings", values.toString());
+                    Double rating = (Double) values.get("Average Rating");
+                    if (rating == null) {
+                        throw new ClassCastException();
+                    }
+                    vendor = new Vendor(name, rating);
+                    Log.d("VENDOR", vendor.getName());
+                }
+                catch (ClassCastException e) {
+                    Long rating = (Long) values.get("Average Rating");
+                    vendor = new Vendor(name, rating.doubleValue());
+                    Log.d("VENDOR", vendor.getName());
+                    Log.d("rating", rating.toString());
+                }
                 vendors.add(vendor);
-                populateTextFields();
             }
 
             @Override
@@ -158,9 +156,9 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
+
         });
-//        mAuth = FirebaseAuth.getInstance();
-//        String currVendor = mAuth.getCurrentUser().getUid();
+        populateTextFields();
     }
 
     void populateTextFields() {
@@ -169,16 +167,9 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         ArrayList<Vendor> listOfSortedVendors = new ArrayList<Vendor>();
         listOfSortedVendors.addAll(sortedVendors);
 
-        Log.d("size", Integer.toString(sortedVendors.size()));
-
         for (int i = 0; i < Math.min(8, sortedVendors.size()); i++) {     // populate either top 8 or size of sortedVendors
             Vendor vendor = listOfSortedVendors.get(i);
             topTrucks[i].setText(vendor.getName());
-
-//
-//            Double avgRating = ((rating * count) + rating)/(count + 1);
-//            Log.d(vendor.getRating().toString(), vendor.getRating().toString());
-
             topTrucksRating[i].setRating(vendor.getRating().floatValue());
         }
     }

@@ -495,6 +495,7 @@ public class VendorProfileActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                profilePic.setBackgroundResource(R.drawable.image_not_found);
             }
         });
     }
