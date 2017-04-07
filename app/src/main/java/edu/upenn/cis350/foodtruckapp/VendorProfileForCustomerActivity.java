@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,13 +34,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.text.NumberFormat;
-import java.text.DecimalFormat;
-
 
 import static edu.upenn.cis350.foodtruckapp.VendorProfileActivity.setListViewHeightBasedOnChildren;
 
@@ -276,10 +276,8 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 boolean status = false;
-
                 HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
                 for (String type : values.keySet()) {
-
                     if (type.equals("CustomerInstanceId")) {
                         this.instanceId = (String) values.get(type);
                     } else if (type.equals("Order")) {
@@ -301,14 +299,12 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                             this.price= l.doubleValue();
 
                         }
-
                     } else if (type.equals("Submitted")) {
                         String choice = (String) values.get(type);
                         if (choice.equals("true")) {
                             status = true;
                         }
                     }
-
                 }
                 Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
                 customerOrder.setStatus(status);
@@ -435,6 +431,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                Log.d("hey", "hey");
             }
         });
     }
