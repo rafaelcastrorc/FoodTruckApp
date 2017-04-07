@@ -598,25 +598,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         total.setText("$" + formatter.format(result));
     }
 
-
-    
-    //Todo: For Desmond
-//To add item to cart
-       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-//        customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
-
- //To remove item
-       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-        //customerOrderMGM.removeOrderFromCart("Candies", "Insert the name of the food truck here", 10.50);
-
-//To parse the order String
-// CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-// customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-//customerOrderMGM.ordersParser("[1] Chocolate. \n");
-
-
     public void submitReview(View v){
         DatabaseReference reviewRef = vendorRef.child("Reviews");
 
