@@ -65,7 +65,7 @@ public class NearMeActivity extends AppCompatActivity {
         final ListView list = (ListView) findViewById(R.id.favs_list);
 
         // data to be pulled from Firebase
-        String[] user_near_trucks = {"Mc Fries", "Yasmin", "Hemo's", "Magic Carpet", "Yuh Kee's", "Mexicali",
+        String[] user_near_trucks = { "Mc Fries", "Yasmin", "Hemo's", "Magic Carpet", "Yuh Kee's", "Mexicali",
                 "Magic Carpet", "Real Lee An's", "Lee An's"};
         Arrays.sort(user_near_trucks);
 
@@ -86,7 +86,7 @@ public class NearMeActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                Intent truckIntent = new Intent(NearMeActivity.this, TruckActivity.class);
+                Intent truckIntent = new Intent(NearMeActivity.this, VendorProfileForCustomerActivity.class);
                 TextView textView = (TextView) list.getChildAt(position);
                 String truckName = textView.getText().toString();
                 truckIntent.putExtra("truckName", truckName);
