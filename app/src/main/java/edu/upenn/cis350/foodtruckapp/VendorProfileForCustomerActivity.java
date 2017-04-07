@@ -245,10 +245,24 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+                if (dataSnapshot.getKey().equals("MyOrders")) {
+                    Map<String, Object> orderInfo = (Map<String, Object>) dataSnapshot.getValue();
+                    for (Map.Entry<String, Object> entry : orderInfo.entrySet()) {
+                        if (entry.getKey().equals("Order")) {
+                            String order = (String) entry.getValue();
+                            TreeMap<String, Integer> currentItemsInCart = customerOrderMGM.ordersParser(order);
+                            Log.d("CURR", currentItemsInCart.toString());
+                            for (Map.Entry<String, Integer> item : currentItemsInCart.entrySet()) {
+                                setQuantityByName(item.getKey(), item.getValue());
+                            }
+                        }
+                    }
+                }
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+
             }
 
             @Override
@@ -568,6 +582,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                         (String) dataSnapshot.getKey(), (String) dataSnapshot.getValue());
                 menu.remove(menuItem);
                 myAdapter.notifyDataSetChanged();
+                setListViewHeightBasedOnChildren(menuListView);
             }
 
             @Override
