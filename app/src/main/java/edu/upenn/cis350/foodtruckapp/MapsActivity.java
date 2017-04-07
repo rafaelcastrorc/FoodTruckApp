@@ -29,7 +29,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private DatabaseReference databaseRef;
     private FirebaseDatabase database;
 
-
     private String TAG = "Map Data";
 
 
