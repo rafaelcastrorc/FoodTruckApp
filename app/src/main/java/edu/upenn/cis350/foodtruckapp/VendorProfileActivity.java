@@ -255,13 +255,20 @@ public class VendorProfileActivity extends AppCompatActivity {
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         mAuth = FirebaseAuth.getInstance();
         uniqueID = mAuth.getCurrentUser().getUid();
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         DatabaseReference foodtruck = databaseRef.child(uniqueID).child("Name Of Food Truck");
         foodtruck.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     vendorName = dataSnapshot.getValue().toString();
-                    getSupportActionBar().setTitle(vendorName);
+                    try {
+                        getSupportActionBar().setTitle(vendorName);
+                    }
+                    catch (NullPointerException e) {
+                        getSupportActionBar().setTitle("No name found");
+                    }
                 }
             }
 
@@ -520,7 +527,6 @@ public class VendorProfileActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                profilePic.setBackgroundResource(R.drawable.image_not_found);
             }
         });
     }
