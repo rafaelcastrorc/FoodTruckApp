@@ -27,6 +27,7 @@ import java.util.TreeMap;
 
 /**
  * Created by rafaelcastro on 3/17/17.
+ * Handles how the customer orders are sent from the user to the vendor.
  */
 
 public class CustomerOrderMGM {
@@ -52,7 +53,13 @@ public class CustomerOrderMGM {
 
     protected String getUniqueID() { return mAuth.getCurrentUser().getUid(); }
 
-    //Call from vendor profile on customer side
+    /**
+     * Adds an order to the cart
+     * @param customerOrder - String representing the order of the customer.
+     * @param foodTruckName - Name of the food truck the user ordered from
+     * @param price - Price of the item the user ordered
+     * @return void
+     */
     protected void addOrderToCart(String customerOrder, String foodTruckName, double price) {
         this.foodTruckName = foodTruckName;
         this.price = price;
@@ -61,7 +68,13 @@ public class CustomerOrderMGM {
         updateOrder(customerOrder, price, false);
     }
 
-
+    /**
+     * Removes an order from the cart
+     * @param customerOrder - String representing the order of the customer.
+     * @param foodTruckName - Name of the food truck the user ordered from
+     * @param price - Price of the item the user ordered
+     * @return void
+     */
     protected void removeOrderFromCart(String customerOrder, String foodTruckName, double price) {
         //Check if there is no item.
         //Remove order completly if order is empty
@@ -74,8 +87,14 @@ public class CustomerOrderMGM {
     }
 
 
-
-
+    /**
+     * Updates a current order in the cart
+     * There is a time limit to update the order
+     * @param newOrder - The new item that you are adding to the order.
+     * @param newPrice - The price of the item you are adding to the cart
+     * @param remove - True if you are removing the current item, false otherwise.
+     * @return void
+     */
     protected void updateOrder(final String newOrder, final double newPrice, final boolean remove) {
         //On customer side, find the current order by using the vendor
         DatabaseReference currUser = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
@@ -100,7 +119,6 @@ public class CustomerOrderMGM {
                 }
                 else {
                     //If there already exist an order, do the following
-
                     HashMap<String, Object> currOrder = (HashMap<String, Object>) dataSnapshot.getValue();
                     Log.d("fuck order:", newOrder);
                     TreeMap<String, Integer> orderToQuantity;
@@ -196,6 +214,7 @@ public class CustomerOrderMGM {
                         //Get time of order. Can only change to false if the order has already being submitted
                         DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
                         DateTime prevDT = formatter.parseDateTime((String)currOrder.get("Time"));
+                        //Time limit of 1 minut
                         isValidTime = time(prevDT, 1);
 
                         if (isValidTime) {
@@ -227,6 +246,13 @@ public class CustomerOrderMGM {
 
     }
 
+    /**
+     * Cancels an order, notifies the vendor
+     * There is a time limit to cancel the order
+     * @param submitted - Has the order been submitted to the vendor or not.
+     * @param pushID - pushId of the user
+     * @return void
+     */
     protected void cancelOrder(String pushID, boolean submitted) {
         DatabaseReference currUserOrder = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
         currUserOrder.removeValue();
@@ -296,8 +322,11 @@ public class CustomerOrderMGM {
     }
 
 
-
-    //Call from the cart
+    /**
+     * Sends the order to the vendor, adds it to the database
+     * @param order - String representing the order of the customer.
+     * @return void
+     */
     protected void sendOrderToVendor(Order order) {
         this.customerOrder = order.getCustomerOrder();
         this.foodTruckName = order.getFoodTruckName();
@@ -311,7 +340,9 @@ public class CustomerOrderMGM {
         pushOrderToFirebase(vendorOrdersRef, true);
     }
 
-
+    /**
+     * Subscribes a user to receieve notifications on his device
+     */
     private void subscribe() {
         //Subscribe user to topic so that he can get the notification
         FirebaseMessaging.getInstance().subscribeToTopic("user_" + id);
@@ -366,6 +397,12 @@ public class CustomerOrderMGM {
         return orderToQuantity;
     }
 
+    /**
+     * Adds a time limite to perform a certain operation
+     * @param date - date the order was sent
+     * @param timeLimit - Amount of minutes user has before he is unable to perform a function
+     * @return boolean
+     */
 
     protected boolean time(DateTime date, int timeLimit) {
         //Allow to change order up to 5 minuts
@@ -379,7 +416,6 @@ public class CustomerOrderMGM {
         return false;
 
     }
-
     protected void setContext(Context context) {
         this.context = context;
     }

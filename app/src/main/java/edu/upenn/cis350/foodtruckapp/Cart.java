@@ -38,6 +38,7 @@ import java.util.HashMap;
 
 /**
  * Created by rafaelcastro on 4/02/17.
+ * Handles all the functionality of the customer cart
  */
 
 public class Cart extends AppCompatActivity {
@@ -52,6 +53,9 @@ public class Cart extends AppCompatActivity {
     private TwoLineListItem previousChildSelected = null;
     private Order selectedOrder;
 
+    /**
+     * Inflates the menu with the shopping cart icon
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -319,8 +323,9 @@ public class Cart extends AppCompatActivity {
 
 
 
-    // submit order
-    public void submitOrder_onClick(View v) {
+    /**
+     * Handles the code for the Submit button
+     */    public void submitOrder_onClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(Cart.this, "You must select an order first", Toast.LENGTH_LONG).show();
             return;
@@ -372,8 +377,9 @@ public class Cart extends AppCompatActivity {
 
 
 
-
-    // update order
+    /**
+     * Handles the code for the Update Order button
+     */
     public void updateOrder_OnClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(Cart.this, "You must select an order first", Toast.LENGTH_LONG).show();
@@ -539,7 +545,9 @@ public class Cart extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Custom adapter class that handles how the items are displayed in the cart
+     */
 
     class MyAdapter extends BaseAdapter {
 
@@ -589,6 +597,10 @@ public class Cart extends AppCompatActivity {
             return twoLineListItem;
         }
     }
+
+    /**
+     * Handles the bar that displays the total. It is constantly updated.
+     */
 
     private void updateTotal(){
         TextView total = (TextView)findViewById(R.id.total_shopping_cart);

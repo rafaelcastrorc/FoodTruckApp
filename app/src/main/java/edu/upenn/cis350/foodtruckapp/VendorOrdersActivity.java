@@ -29,10 +29,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
+
+//Handles the vendor queue interface
 public class VendorOrdersActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -107,6 +111,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
         });
 
         currentOrders.addChildEventListener(new ChildEventListener() {
+            String time = "";
             public String vendorUniqueID = "";
             String instanceId = "";
             String order = "";
@@ -138,6 +143,9 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     else if (type.equals("customerUniqueID")){
                         this.customerUniqueID = (String) values.get(type);
                     }
+                    else if (type.equals("Time")) {
+                        this.time = (String) values.get(type);
+                    }
                     else if (type.equals("vendorUniqueID")){
                         this.vendorUniqueID = (String) values.get(type);
                     }
@@ -146,6 +154,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
                 if (!order.isEmpty()) {
                     Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
                     customerOrder.setCustomerUniqueID(customerUniqueID);
+                    customerOrder.setTime(time);
                     orders.add(customerOrder);
 
                     arrayAdapter.notifyDataSetChanged();
@@ -180,6 +189,9 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     else if (type.equals("customerUniqueID")){
                         this.customerUniqueID = (String) values.get(type);
                     }
+                    else if (type.equals("Time")) {
+                        this.time = (String) values.get(type);
+                    }
                     else if (type.equals("vendorUniqueID")){
                         this.vendorUniqueID = (String) values.get(type);
                     }
@@ -191,7 +203,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     orders.remove(customerOrder);
 
                     customerOrder.setCustomerUniqueID(customerUniqueID);
-
+                    customerOrder.setTime(time);
                     //adds new order at end of queue
                     orders.add(customerOrder);
 
@@ -249,7 +261,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
 
 
-    // Order is Done
+    /*Handles the order done button*/
     public void orderDone_onClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(VendorOrdersActivity.this, "You must select an order first", Toast.LENGTH_LONG).show();
@@ -266,6 +278,11 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
             public void onClick(DialogInterface dialog, int which) {
 
+                //Add order to the order history field in the database
+                VendorAnalytics va = new VendorAnalytics();
+                va.pushOrderToDataBase(selectedOrder);
+
+                //Remove all instances of the order
                 currentOrders.child(selectedOrder.getPushId()).removeValue();
                 databaseRef.child(selectedOrder.getCustomerUniqueID()).child("MyOrders").child(selectedOrder.getVendorUniqueID()).removeValue();
 
@@ -302,8 +319,10 @@ public class VendorOrdersActivity extends AppCompatActivity {
     }
 
 
-
-    // Send notification to customer that their order is ready
+    /**
+     * Handles the Order is Ready button.
+     * Sends notification to customer
+     */
     public void OrderReadyOnClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(VendorOrdersActivity.this, "You must select an order first", Toast.LENGTH_LONG).show();
@@ -350,7 +369,10 @@ public class VendorOrdersActivity extends AppCompatActivity {
         alert.show();
     }
 
-    // Send notification to customer that their order was cancelled
+    /**
+     * Handles the Cancel Order button.
+     * Sends notification to customer
+     */
     public void OrderCancelledOnClick(View v) {
 
         if (selectedOrder == null) {            // button clicked but no order selected
@@ -403,6 +425,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
     }
 
 
+    //Handles the way the vendor sees the orders
     class MyAdapter extends BaseAdapter {
 
         private Context context;
@@ -447,7 +470,8 @@ public class VendorOrdersActivity extends AppCompatActivity {
             text1.setTextSize(24);
             text2.setTextSize(15);
 
-            text1.setText(orders.get(position).getCustomerName());
+            NumberFormat formatter = new DecimalFormat("#0.00");
+            text1.setText(orders.get(position).getCustomerName() + " $"+ formatter.format(orders.get(position).getPrice()));
             text2.setText(orders.get(position).getCustomerOrder());
             return twoLineListItem;
         }
