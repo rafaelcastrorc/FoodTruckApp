@@ -348,6 +348,11 @@ public class CustomerOrderMGM {
         FirebaseMessaging.getInstance().subscribeToTopic("user_" + id);
     }
 
+    /**
+     * Parses an order into a map
+     * @param prevOrder - String representing the order of the customer.
+     * @return TreeMap mapping item to frequency
+     */
     protected TreeMap<String, Integer> ordersParser(String prevOrder) {
         if (prevOrder == null || prevOrder.isEmpty()) {
             return new TreeMap<String, Integer>();

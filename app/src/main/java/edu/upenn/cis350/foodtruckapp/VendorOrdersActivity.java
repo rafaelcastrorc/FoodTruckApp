@@ -111,8 +111,9 @@ public class VendorOrdersActivity extends AppCompatActivity {
         });
 
         currentOrders.addChildEventListener(new ChildEventListener() {
+            Double price = 0.0;
             String time = "";
-            public String vendorUniqueID = "";
+            String vendorUniqueID = "";
             String instanceId = "";
             String order = "";
             String customerName = "";
@@ -146,6 +147,14 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     else if (type.equals("Time")) {
                         this.time = (String) values.get(type);
                     }
+                    else if (type.equals("Price")) {
+                        try {
+                            this.price = (Double) values.get(type);
+                        } catch (ClassCastException e) {
+                            Long l = new Long((Long) values.get(type));
+                            this.price = l.doubleValue();
+                        }
+                    }
                     else if (type.equals("vendorUniqueID")){
                         this.vendorUniqueID = (String) values.get(type);
                     }
@@ -155,6 +164,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
                     customerOrder.setCustomerUniqueID(customerUniqueID);
                     customerOrder.setTime(time);
+                    customerOrder.setPrice(price);
                     orders.add(customerOrder);
 
                     arrayAdapter.notifyDataSetChanged();
@@ -192,6 +202,14 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     else if (type.equals("Time")) {
                         this.time = (String) values.get(type);
                     }
+                    else if (type.equals("Price")) {
+                        try {
+                            this.price = (Double) values.get(type);
+                        } catch (ClassCastException e) {
+                            Long l = new Long((Long) values.get(type));
+                            this.price = l.doubleValue();
+                        }
+                    }
                     else if (type.equals("vendorUniqueID")){
                         this.vendorUniqueID = (String) values.get(type);
                     }
@@ -204,6 +222,8 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
                     customerOrder.setCustomerUniqueID(customerUniqueID);
                     customerOrder.setTime(time);
+                    customerOrder.setPrice(price);
+
                     //adds new order at end of queue
                     orders.add(customerOrder);
 
