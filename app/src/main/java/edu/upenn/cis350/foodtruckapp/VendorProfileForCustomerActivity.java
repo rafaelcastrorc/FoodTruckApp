@@ -644,34 +644,27 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
 
    private void addRating(Integer rating){
-       Log.d("MyTruck", "in this bitch");
 
 
 
        final DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
-       Log.d("MyTruck", "bitch1");
        final DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
-       Log.d("MyTruck", "bitch2");
 
 
        final Integer userRating = rating;
 
         final Double[] avgRating = new Double[1];
-       Log.d("MyTruck", "bitch3");
         final Integer[] totalRatings = new Integer[1];
-       Log.d("MyTruck", "bitch4");
 
         avgRatingRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 try {
-                    Log.d("MyTruck", "bitch5");
                     avgRating[0] = (Double) dataSnapshot.getValue();
                     Log.d("MyTruckAvgRating", ""+avgRating[0]);
                 }
                 catch (ClassCastException e){
-                    Log.d("MyTruck", "bitch6");
                     Long temp = (Long) dataSnapshot.getValue();
                     avgRating[0] = temp.doubleValue();
                     Log.d("MyTruckAvgRating", ""+avgRating[0]);
@@ -688,12 +681,10 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    Log.d("MyTruck", "bitch7");
                     totalRatings[0] = (Integer) dataSnapshot.getValue();
                     Log.d("MyTruckTotalRatings", ""+ totalRatings[0]);
                 }
                 catch (ClassCastException e){
-                    Log.d("MyTruck", "bitch8");
                     Long temp = (Long) dataSnapshot.getValue();
                     totalRatings[0] = temp.intValue();
                     Log.d("MyTruckTotalRatings", ""+ totalRatings[0]);
@@ -717,7 +708,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     }
 
     public void seeReviews(View v){
-        Log.d("BITHCHH", "IN THIS BITCH");
         Intent i = new Intent(VendorProfileForCustomerActivity.this, VendorReviewsActivity.class);
         i.putExtra("UniqueID", vendorUniqueID);
         startActivity(i);

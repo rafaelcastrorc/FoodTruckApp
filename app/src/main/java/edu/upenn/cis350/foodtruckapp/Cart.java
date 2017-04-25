@@ -59,16 +59,16 @@ public class Cart extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.shopping_cart, menu);
+        inflater.inflate(R.menu.menu_for_cart, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.shopping_cart_button:
+            case R.id.user_history:
 
-                Intent i = new Intent(Cart.this, Cart.class);
+                Intent i = new Intent(Cart.this, CustomerOrderHistoryActivity.class);
                 startActivity(i);
                 return true;
             case R.id.home_button:
@@ -318,7 +318,7 @@ public class Cart extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-        });;
+        });
     }
 
 
@@ -442,7 +442,6 @@ public class Cart extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     //Go to the vendor profile page
                     selectedOrder.getVendorUniqueID();
-                    //Todo: Go to specific vendor profile
                     Intent i = new Intent(Cart.this, VendorProfileForCustomerActivity.class);
                     i.putExtra("vendorUniqueID", selectedOrder.getVendorUniqueID());
                     startActivity(i);

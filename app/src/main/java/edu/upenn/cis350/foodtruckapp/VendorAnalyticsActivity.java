@@ -1,61 +1,71 @@
 package edu.upenn.cis350.foodtruckapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.TwoLineListItem;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.joda.time.DateTime;
-import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 //Handles the GUI of the vendor analytics page
 public class VendorAnalyticsActivity extends AppCompatActivity {
 
     protected ListView statList;
     protected ArrayList<Stat> stats = new ArrayList<>();
+    protected LinkedList<Order> orderList = new LinkedList<>();
+    VendorAnalyticsActivity.MyAdapter arrayAdapter;
+    boolean first = true;
     private boolean isOrderSelected = false;
     private TwoLineListItem previousChildSelected = null;
     private Order selectedOrder;
-
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
     private String id;
     private HashMap<Integer, Order> orderHistoryMap = new HashMap<>();
-    protected LinkedList<Order> orderList = new LinkedList<>();
-    VendorAnalyticsActivity.MyAdapter arrayAdapter;
-    boolean first = true;
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,11 +91,20 @@ public class VendorAnalyticsActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vendor_analytics);
+        TabHost host = (TabHost) findViewById(R.id.tab_host);
+        host.setup();
+
+        //Tab 1
+        TabHost.TabSpec spec = host.newTabSpec("Tab One");
+        spec.setContent(R.id.tab1);
+        spec.setIndicator("General Statistics");
+        host.addTab(spec);
+
+
         statList = (ListView) findViewById(R.id.list_view_analaytics);
         arrayAdapter = new VendorAnalyticsActivity.MyAdapter(this, stats);
         statList.setAdapter(arrayAdapter);
@@ -106,9 +125,9 @@ public class VendorAnalyticsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                overridePendingTransition( 0, 0);
+                overridePendingTransition(0, 0);
                 startActivity(getIntent());
-                overridePendingTransition( 0, 0);
+                overridePendingTransition(0, 0);
 
             }
         });
@@ -126,50 +145,43 @@ public class VendorAnalyticsActivity extends AppCompatActivity {
             String customerUniqueID = "";
 
 
-
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
-                for (String type: values.keySet()) {
+                HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
+                for (String type : values.keySet()) {
 
                     if (type.equals("customerInstanceId")) {
                         this.instanceId = (String) values.get(type);
 
-                    }
-                    else if (type.equals("customerOrder")) {
+                    } else if (type.equals("customerOrder")) {
                         this.order = (String) values.get(type);
-                    }
-                    else if (type.equals("customerName")){
+                    } else if (type.equals("customerName")) {
                         this.customerName = (String) values.get(type);
-                    }
-                    else if (type.equals("pushId")){
+                    } else if (type.equals("pushId")) {
                         this.pushId = (String) values.get(type);
-                    }
-                    else if (type.equals("customerUniqueID")){
+                    } else if (type.equals("customerUniqueID")) {
                         this.customerUniqueID = (String) values.get(type);
-                    }
-                    else if (type.equals("time")) {
+                    } else if (type.equals("time")) {
                         this.time = (String) values.get(type);
-                    }
-                    else if (type.equals("price")) {
+                    } else if (type.equals("price")) {
                         try {
                             this.price = (Double) values.get(type);
                         } catch (ClassCastException e) {
                             Long l = new Long((Long) values.get(type));
                             this.price = l.doubleValue();
                         }
-                    }
-                    else if (type.equals("vendorUniqueID")){
+                    } else if (type.equals("vendorUniqueID")) {
                         this.vendorUniqueID = (String) values.get(type);
                     }
 
                 }
 
-                    Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
-                    customerOrder.setCustomerUniqueID(customerUniqueID);
-                    customerOrder.setTime(time);
-                    customerOrder.setPrice(price);
-                    addOrder(customerOrder);
+                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+                customerOrder.setCustomerUniqueID(customerUniqueID);
+                customerOrder.setTime(time);
+                customerOrder.setPrice(price);
+                addOrder(customerOrder);
+
 
             }
 
@@ -192,7 +204,263 @@ public class VendorAnalyticsActivity extends AppCompatActivity {
         });
 
 
+        //Tab 2
+        spec = host.newTabSpec("Graphs");
+        spec.setContent(R.id.tab2);
+        spec.setIndicator("Graphs");
+        host.addTab(spec);
 
+    }
+
+    /**
+     * Calls the different graph method
+     * @param orderHistoryMap
+     * @return void
+     */
+    private void setGraphs(HashMap<Integer, Order> orderHistoryMap) {
+        VendorAnalytics va = new VendorAnalytics(orderHistoryMap);
+        fillGraphSalesPerWeek(va);
+        fillGraphSalesPerMonth(va);
+        fillMostPopularHours(va);
+
+
+    }
+
+    /**
+     * Fills the information for the graph that displays the most popular hour of the current vendor
+     * @param va - VendorAnalytics
+     * @return void
+     */
+    private void fillMostPopularHours(VendorAnalytics va) {
+        PieChart pieChart = (PieChart) findViewById(R.id.graph_most_pop_hour);
+        List<PieEntry> entries = new ArrayList<>();
+        HashMap<String, Integer> hours = va.getHours();
+
+        for (String hour: hours.keySet()) {
+            entries.add(new PieEntry(hours.get(hour), hour));
+
+        }
+
+        PieDataSet set = new PieDataSet(entries, "Hours (Based on 24h format)");
+       // set.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        set.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+        set.setColors(new int[] {R.color.RED, R.color.blue, R.color.darkblue, R.color.darkgreen,
+        R.color.darkorange, R.color.darkpurple, R.color.purple, R.color.green, R.color.red}, this);
+        PieData data = new PieData(set);
+
+        Description description = new Description();
+        description.setYOffset(-7);
+        description.setText("*Based on the total number of orders for each hour");
+        pieChart.setDescription(description);
+
+
+        final DecimalFormat mFormat = new DecimalFormat("###,###,##0.0");
+        IValueFormatter valsFormatter = new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return mFormat.format(value) + " %";
+            }
+
+        };
+
+        //Format how values are show
+        data.setValueFormatter(valsFormatter);
+        data.setValueTextSize(12);
+        pieChart.setData(data);
+        pieChart.setUsePercentValues(true);
+        pieChart.setEntryLabelColor(Color.BLACK);
+        pieChart.invalidate();
+
+        TextView title = (TextView) findViewById(R.id.most_popular_hour);
+        title.setText("Most popular hours");
+
+    }
+
+
+
+    /**
+     * Fills the information for the graph that displays the sales of the current week
+     * @param va - VendorAnalytics
+     * @return void
+     */
+    private void fillGraphSalesPerWeek(VendorAnalytics va) {
+        BarChart barChart = (BarChart) findViewById(R.id.graph_sales_week);
+        final String[] days = new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+
+        //Formats x axis
+        IAxisValueFormatter daysFormat = new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return days[(int) value];
+            }
+
+        };
+
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+        xAxis.setValueFormatter(daysFormat);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+
+
+
+        //Formats right y axis
+        YAxis yAxisr = barChart.getAxisRight();
+        yAxisr.setEnabled(false);
+
+        //Formats left y axis
+        YAxis yAxis = barChart.getAxisLeft();
+
+        IAxisValueFormatter formatter2 = new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return "$" + (int) value;
+            }
+        };
+        yAxis.setValueFormatter(formatter2);
+        yAxis.setDrawZeroLine(true);
+        yAxis.setAxisMinimum(0);
+
+
+        //Data to be used as entry
+        HashMap<Integer, Double> sales = va.getSalesThisWeek();
+
+        List<BarEntry> entries = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            if (sales.get(i+1) == null) {
+                //If there are no sales for day
+                entries.add(new BarEntry(i, 0f));
+            }
+            else {
+                entries.add(new BarEntry(i, sales.get(i+1).floatValue()));
+
+            }
+        }
+        //Information shown as entries
+        BarDataSet set = new BarDataSet(entries, "Sales");
+
+        //Formats how the values are shown inside the graph
+        IValueFormatter valsFormatter = new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return "$"+ value;
+            }
+        };
+        set.setValueFormatter(valsFormatter);
+        set.setValueTextSize(8f);
+
+
+        BarData data = new BarData(set);
+        data.setBarWidth(0.9f);
+        barChart.setData(data);
+
+        Description description = new Description();
+        description.setEnabled(false);
+        TextView title = (TextView) findViewById(R.id.sales_week);
+        DateTime now = new DateTime();
+        title.setText("Sales of the current week (Week " + now.getWeekOfWeekyear() + ")");
+
+
+        barChart.setDescription(description);
+        barChart.setNoDataText("You do not have any sales!");
+
+        barChart.setFitBars(true);
+        barChart.invalidate();
+
+    }
+
+
+
+    /**
+     * Fills the information for the graph that displays monthly sales
+     * @param va - VendorAnalytics
+     * @return void
+     */
+    private void fillGraphSalesPerMonth(VendorAnalytics va) {
+        BarChart barChart = (BarChart) findViewById(R.id.graph_sales_month);
+        final String[] months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+        //Formats x axis
+        IAxisValueFormatter formatter = new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return months[(int) value];
+            }
+
+        };
+
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+        xAxis.setValueFormatter(formatter);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setLabelCount(12);
+
+        //Formats right y axis
+        YAxis yAxisr = barChart.getAxisRight();
+        yAxisr.setEnabled(false);
+
+        //Formats left y axis
+        YAxis yAxis = barChart.getAxisLeft();
+
+        IAxisValueFormatter formatter2 = new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return "$" + (int) value;
+            }
+        };
+        yAxis.setValueFormatter(formatter2);
+        yAxis.setDrawZeroLine(true);
+        yAxis.setAxisMinimum(0);
+
+
+
+
+        //Data to be used as entry
+        HashMap<Integer, Double> sales = va.getSalesPerMonth();
+
+        List<BarEntry> entries = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            if (sales.get(i+1) == null) {
+                //If there are no sales for month
+                entries.add(new BarEntry(i, 0f));
+            }
+            else {
+                entries.add(new BarEntry(i, sales.get(i+1).floatValue()));
+
+            }
+        }
+        //Information shown as entries
+        BarDataSet set = new BarDataSet(entries, "Sales");
+
+        //Formats how the values are shown inside the graph
+        IValueFormatter valsFormatter = new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return "$"+ value;
+            }
+        };
+        set.setValueFormatter(valsFormatter);
+        set.setValueTextSize(8f);
+
+
+        BarData data = new BarData(set);
+        data.setBarWidth(0.9f);
+        barChart.setData(data);
+
+        Description description = new Description();
+        description.setEnabled(false);
+        TextView title = (TextView) findViewById(R.id.sales_per_month);
+        DateTime now = new DateTime();
+        title.setText("Sales per month for the year: " + now.getYear());
+
+
+        barChart.setDescription(description);
+        barChart.setNoDataText("You do not have any sales!");
+
+        barChart.setFitBars(true);
+        barChart.invalidate();
 
     }
 
@@ -206,30 +474,30 @@ public class VendorAnalyticsActivity extends AppCompatActivity {
         NumberFormat formatter = new DecimalFormat("#0.00");
         //Past hour sales
         double result = va.getSales("Hour");
-        Stat stat1 = new Stat("Sales in the last hour", "$"+ formatter.format(result));
+        Stat stat1 = new Stat("Sales in the last hour", "$" + formatter.format(result));
         //Past hour sales
         result = va.getSales("Hour");
-        Stat stat2 = new Stat("Sales in the last day", "$"+formatter.format(result) );
+        Stat stat2 = new Stat("Sales in the last day", "$" + formatter.format(result));
         //Past week sales
         result = va.getSales("Week");
-        Stat stat3 = new Stat("Sales in the last week", "$"+formatter.format(result) );
+        Stat stat3 = new Stat("Sales in the last week", "$" + formatter.format(result));
         //Past month sales
         result = va.getSales("Month");
-        Stat stat4 = new Stat("Sales in the last month", "$"+formatter.format(result) );
+        Stat stat4 = new Stat("Sales in the last month", "$" + formatter.format(result));
         //Past year sales
         result = va.getSales("Year");
-        Stat stat5 = new Stat("Sales in the last year", "$"+formatter.format(result) );
+        Stat stat5 = new Stat("Sales in the last year", "$" + formatter.format(result));
         //All time sales
         result = va.getSales("All time");
-        Stat stat6 = new Stat("All time sales", "$"+formatter.format(result) );
+        Stat stat6 = new Stat("All time sales", "$" + formatter.format(result));
 
         //Show most popular times
         //Most popular hour
         String result2 = va.getMostPopularTime("Hour");
-        Stat stat7 = new Stat("Most popular hour", result2 );
+        Stat stat7 = new Stat("Most popular hour", result2);
         //Most popular day
         result2 = va.getMostPopularTime("Day");
-        Stat stat8 = new Stat("Most popular day", result2 );
+        Stat stat8 = new Stat("Most popular day", result2);
 
 
         //Most popular product
@@ -245,7 +513,6 @@ public class VendorAnalyticsActivity extends AppCompatActivity {
             stats.remove(stat7);
             stats.remove(stat8);
             stats.remove(stat9);
-
 
 
             first = true;
@@ -265,27 +532,25 @@ public class VendorAnalyticsActivity extends AppCompatActivity {
         }
 
         arrayAdapter.notifyDataSetChanged();
-        //Show graph
-        //Week to number of orders graph
-        //Hours to number of orders graph
-        //Month to profit or month to number of orders for 12 months
 
 
     }
 
-
-
-
+    /**
+     * Updates the current activity
+     * @return void
+     */
     public void update_Analytics_onClick(View v) {
         finish();
-        overridePendingTransition( 0, 0);
+        overridePendingTransition(0, 0);
         startActivity(getIntent());
-        overridePendingTransition( 0, 0);    }
-
+        overridePendingTransition(0, 0);
+    }
 
 
     /**
      * Adds an order to the vendor and modifies the stats displayed on the screen
+     *
      * @param order - order you want to add
      * @return void
      */
@@ -294,7 +559,10 @@ public class VendorAnalyticsActivity extends AppCompatActivity {
         //Map of num of the order to an Order object
         orderHistoryMap.put(orderList.size(), order);
         addStats(orderHistoryMap);
+        setGraphs(orderHistoryMap);
+
     }
+
     /**
      * Remove an order from the vendor history and modifies the stats displayed on the screen
      * @param order - order you want to remove
@@ -303,7 +571,7 @@ public class VendorAnalyticsActivity extends AppCompatActivity {
     protected void removeOrder(Order order) {
         orderList.remove(order);
         //Map of num of the order to an Order object
-        int j =0;
+        int j = 0;
         for (int i : orderHistoryMap.keySet()) {
             if (orderHistoryMap.get(i).equals(order)) {
                 j = i;

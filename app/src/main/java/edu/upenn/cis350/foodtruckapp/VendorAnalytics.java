@@ -142,6 +142,27 @@ class VendorAnalytics {
 
         return result;
     }
+
+    /**
+     * Gets the time of the day when the food truck receives the most order
+     * @return map of hours to number of orders
+     */
+    protected HashMap<String, Integer> getHours() {
+        HashMap<String, Integer> periodToNumOfOrders = new HashMap<>();
+        int mostOrders = 0;
+
+            HashMap<Integer, ArrayList<Order>> timeToOrder = mapTimeToOrder("Hour");
+            for (int hour : timeToOrder.keySet()) {
+                //Gets the number of orders in a given hour
+                int numOfOrder = timeToOrder.get(hour).size();
+                String currHour = String.valueOf(hour) + ":00";
+                periodToNumOfOrders.put(currHour, numOfOrder);
+
+            }
+        return periodToNumOfOrders;
+
+    }
+
     /**
      * Maps a time period to a list of orders that occur during that specific period
      * @param time - Time period to calculate the info
@@ -226,7 +247,7 @@ class VendorAnalytics {
 
 
     /**
-     * Adds a time limite to perform a certain operation
+     * Adds a time limit to perform a certain operation
      * @param date - date the order was sent
      * @param limitPeriod - Limit for the allowed valid time, for instance 1 hour, 1 day, 1 week, etc...
      * @return boolean - is the time valid?
@@ -264,5 +285,58 @@ class VendorAnalytics {
         }
         return false;
 
+    }
+
+    /**
+     * Gets the sale per month for the current year
+     * @return map with the sales of each month
+     */
+    protected HashMap<Integer, Double> getSalesPerMonth() {
+        DateTime now = new DateTime();
+        HashMap<Integer, Double> monthToSales = new HashMap<>();
+        for (int i: orderHistoryMap.keySet()) {
+
+            Order curr = orderHistoryMap.get(i);
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
+            DateTime prevDT = formatter.parseDateTime(curr.getTime());
+            Period p = new Period(prevDT, now);
+            if (p.getYears() <= 1) {
+                if (!monthToSales.containsKey(prevDT.getMonthOfYear())) {
+                    monthToSales.put(prevDT.getMonthOfYear(), curr.getPrice());
+                }
+                else {
+                    Double prev = monthToSales.get(prevDT.getMonthOfYear());
+                    monthToSales.put(prevDT.getMonthOfYear(), curr.getPrice() + prev);
+
+                }
+            }
+        }
+        return monthToSales;
+
+    }
+    /**
+     * Gets the sale for the current week
+     * @return map with the sales of the week
+     */
+    protected HashMap<Integer,Double> getSalesThisWeek() {
+        DateTime now = new DateTime();
+        HashMap<Integer, Double> weekSales = new HashMap<>();
+        for (int i: orderHistoryMap.keySet()) {
+
+            Order curr = orderHistoryMap.get(i);
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
+            DateTime prevDT = formatter.parseDateTime(curr.getTime());
+            Period p = new Period(prevDT, now);
+            if (p.getYears() == 0  && p.getMonths() == 0 && now.getWeekOfWeekyear() == prevDT.getWeekOfWeekyear()) {
+                if (!weekSales.containsKey(prevDT.getDayOfWeek())) {
+                    weekSales.put(prevDT.getDayOfWeek(), curr.getPrice());
+                }
+                else {
+                    Double prev = weekSales.get(prevDT.getDayOfWeek());
+                    weekSales.put(prevDT.getDayOfWeek(), curr.getPrice() + prev);
+                }
+            }
+        }
+        return weekSales;
     }
 }

@@ -103,15 +103,17 @@
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".Cart"
-            android:exported="true"
-            android:label="My Orders"></activity>
+            android:label="My Orders" />
         <activity android:name=".VendorReviewsActivity" />
-
-        <activity android:name=".VendorAnalyticsActivity"
-            android:exported="true"
+        <activity
+            android:name=".VendorAnalyticsActivity"
             android:label="My Stats">
         </activity>
+        <activity android:name=".CustomerOrderHistoryActivity"
+            android:label="Order History"
+            android:exported="true">
 
+        </activity>
     </application>
 
 </manifest>

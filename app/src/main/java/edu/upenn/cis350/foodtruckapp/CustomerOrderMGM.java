@@ -106,7 +106,7 @@ public class CustomerOrderMGM {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null) {
-                   //This will only happen if there is no order asccoiated with the vendor.
+                   //This will only happen if there is no order associated with the vendor.
                     if(remove) {
                         //If we are removing and there is no order, we just return
                         return;
@@ -120,7 +120,6 @@ public class CustomerOrderMGM {
                 else {
                     //If there already exist an order, do the following
                     HashMap<String, Object> currOrder = (HashMap<String, Object>) dataSnapshot.getValue();
-                    Log.d("fuck order:", newOrder);
                     TreeMap<String, Integer> orderToQuantity;
 
                     //Gets the current order
@@ -148,7 +147,6 @@ public class CustomerOrderMGM {
                         if (orderToQuantity.keySet().size() == 0) {
                             DatabaseReference currUserOrder = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
                             currUserOrder.removeValue();
-                            Log.d("fuck", "here");
                             return;
                         }
                         //If cart does not contain the order, return
@@ -169,8 +167,6 @@ public class CustomerOrderMGM {
                                 orderToQuantity.remove(newOrder);
                             }
                         }
-
-
                     }
 
                     //Get the prev price
@@ -365,7 +361,6 @@ public class CustomerOrderMGM {
             StringBuilder quantity = new StringBuilder();
 
             String line = scanner.nextLine();
-            Log.d("fuck", "ordersParser: "+line  );
 
             boolean isQuantity = false;
             //Format fo the order [n] Name Of food.\n
@@ -426,6 +421,46 @@ public class CustomerOrderMGM {
     }
 
 
+
+    /**
+     * Adds an order from the history activity
+     * @param customerOrder - the entire order you want to add
+     * @param foodTruckName - the name of the food truck
+     * @param price - total price of the order
+     * @return boolean - true if push was successgul, false if client already submitted order to vendor.
+     */
+    protected boolean addOrderFromHistory(String customerOrder, String foodTruckName, double price) {
+
+        this.foodTruckName = foodTruckName;
+        this.price = price;
+        this.customerOrder = customerOrder;
+        final boolean[] result = {true};
+
+        DatabaseReference currUserOrdersRef = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
+        currUserOrdersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot == null) {
+                    result[0] = false;
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        if (result[0]) {
+            DatabaseReference vendorRef = databaseRef.child(vendorUniqueID);
+            final DatabaseReference vendorOrdersRef = vendorRef.child("Orders");
+            pushOrderToFirebase(vendorOrdersRef, true);
+        }
+        return result[0];
+
+
+    }
 
 
 

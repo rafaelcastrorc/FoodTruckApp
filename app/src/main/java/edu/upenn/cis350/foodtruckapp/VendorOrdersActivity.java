@@ -48,6 +48,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
     private boolean isOrderSelected = false;
     private TwoLineListItem previousChildSelected = null;
     private Order selectedOrder;
+    String truckName = "";
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,6 +63,10 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
             case R.id.home_button:
                 Intent j = new Intent(VendorOrdersActivity.this, VendorMainMenuActivity.class);
+                startActivity(j);
+                return true;
+            case R.id.stats_button:
+                j = new Intent(VendorOrdersActivity.this, VendorAnalyticsActivity.class);
                 startActivity(j);
                 return true;
 
@@ -111,6 +116,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
         });
 
         currentOrders.addChildEventListener(new ChildEventListener() {
+            String foodTruckName;
             Double price = 0.0;
             String time = "";
             String vendorUniqueID = "";
@@ -144,6 +150,10 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     else if (type.equals("customerUniqueID")){
                         this.customerUniqueID = (String) values.get(type);
                     }
+                    else if (type.equals("FoodTruckName")){
+                        this.foodTruckName = (String) values.get(type);
+                        truckName = foodTruckName;
+                    }
                     else if (type.equals("Time")) {
                         this.time = (String) values.get(type);
                     }
@@ -165,6 +175,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     customerOrder.setCustomerUniqueID(customerUniqueID);
                     customerOrder.setTime(time);
                     customerOrder.setPrice(price);
+                    customerOrder.setFoodTruckName(foodTruckName);
                     orders.add(customerOrder);
 
                     arrayAdapter.notifyDataSetChanged();
@@ -196,6 +207,10 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     else if (type.equals("PushId")){
                         this.pushId = (String) values.get(type);
                     }
+                    else if (type.equals("FoodTruckName")){
+                        this.foodTruckName = (String) values.get(type);
+                        truckName = foodTruckName;
+                    }
                     else if (type.equals("customerUniqueID")){
                         this.customerUniqueID = (String) values.get(type);
                     }
@@ -223,6 +238,8 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     customerOrder.setCustomerUniqueID(customerUniqueID);
                     customerOrder.setTime(time);
                     customerOrder.setPrice(price);
+                    customerOrder.setFoodTruckName(foodTruckName);
+
 
                     //adds new order at end of queue
                     orders.add(customerOrder);
@@ -290,7 +307,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
         // setup Complete Order popup
         AlertDialog.Builder confirmPopupBuilder = new AlertDialog.Builder(this);
-        confirmPopupBuilder.setTitle("This order has been completes");
+        confirmPopupBuilder.setTitle("This order has been completed");
         confirmPopupBuilder.setMessage("Are you sure you want to mark this order as completed: " + selectedOrder.getCustomerName().toString()
                 + "'s order?");
 
@@ -305,6 +322,11 @@ public class VendorOrdersActivity extends AppCompatActivity {
                 //Remove all instances of the order
                 currentOrders.child(selectedOrder.getPushId()).removeValue();
                 databaseRef.child(selectedOrder.getCustomerUniqueID()).child("MyOrders").child(selectedOrder.getVendorUniqueID()).removeValue();
+
+                //Add order to user history
+                selectedOrder.setFoodTruckName(truckName);
+                databaseRef.child(selectedOrder.getCustomerUniqueID()).child("History").push().setValue(selectedOrder);
+
 
 
                 // make text normal
