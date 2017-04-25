@@ -21,6 +21,7 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -241,11 +242,11 @@ public class VendorAnalyticsActivity extends AppCompatActivity {
 
         }
 
-        PieDataSet set = new PieDataSet(entries, "Hours (Based on 24h format)");
+        PieDataSet set = new PieDataSet(entries, "[Hours - Based on 24h format]");
        // set.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         set.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
-        set.setColors(new int[] {R.color.RED, R.color.blue, R.color.darkblue, R.color.darkgreen,
+        set.setColors(new int[] {R.color.orange, R.color.blue, R.color.darkblue, R.color.darkgreen,
         R.color.darkorange, R.color.darkpurple, R.color.purple, R.color.green, R.color.red}, this);
         PieData data = new PieData(set);
 
@@ -263,6 +264,10 @@ public class VendorAnalyticsActivity extends AppCompatActivity {
             }
 
         };
+
+        //Format legend
+        Legend legend = pieChart.getLegend();
+        legend.setWordWrapEnabled(true);
 
         //Format how values are show
         data.setValueFormatter(valsFormatter);

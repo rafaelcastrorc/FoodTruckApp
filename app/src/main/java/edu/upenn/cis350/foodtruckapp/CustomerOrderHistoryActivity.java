@@ -28,10 +28,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 import java.util.TreeMap;
 
 public class CustomerOrderHistoryActivity extends AppCompatActivity {
@@ -159,7 +164,7 @@ public class CustomerOrderHistoryActivity extends AppCompatActivity {
                             this.price = (Double) values.get(type);
                         }
                         catch (ClassCastException e) {
-                            Long l = new Long((Long) values.get(type));
+                            Long l = (Long) values.get(type);
                             this.price = l.doubleValue();
                         }
                     }
@@ -178,7 +183,7 @@ public class CustomerOrderHistoryActivity extends AppCompatActivity {
                     customerOrder.setFoodTruckName(foodTruckName);
                     customerOrder.setPrice(price);
                     customerOrder.setTime(time);
-                    orders.add(customerOrder);
+                    orders.add(0, customerOrder);
 
                     arrayAdapter.notifyDataSetChanged();
                 }
@@ -252,8 +257,7 @@ public class CustomerOrderHistoryActivity extends AppCompatActivity {
                     customerOrder.setPrice(price);
                     customerOrder.setTime(time);
 
-
-                    orders.add(customerOrder);
+                    orders.add(0, customerOrder);
 
                     arrayAdapter.notifyDataSetChanged();
                 }
@@ -356,8 +360,25 @@ public class CustomerOrderHistoryActivity extends AppCompatActivity {
             text1.setTextSize(20);
             TextView text2 = twoLineListItem.getText2();
             NumberFormat formatter = new DecimalFormat("#0.00");
+            DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
+            DateTime time = timeFormatter.parseDateTime(orders.get(position).getTime());
+            String hour = String.valueOf(time.getHourOfDay()),
+                    minute = String.valueOf(time.getMinuteOfHour()),
+                    second = String.valueOf(time.getSecondOfMinute());
+            if (time.getHourOfDay() < 10) {
+                hour = "0" +time.getHourOfDay();
+            }
+            if (time.getMinuteOfHour() < 10) {
+                minute = "0" +time.getMinuteOfHour();
+            }
+            if (time.getSecondOfMinute() < 10) {
+                second = "0" +time.getSecondOfMinute();
+            }
+            String timeToDisplay = "Ordered: " +time.getMonthOfYear()+"/"+ time.getDayOfMonth()+"/"+
+                    time.getYear() +" " + hour + ":" + minute+ ":" + second;
+
             text1.setText(orders.get(position).getFoodTruckName() + " - $" + formatter.format(orders.get(position).getPrice()));
-            text2.setText(orders.get(position).getCustomerOrder());
+            text2.setText(timeToDisplay +"\n" +  orders.get(position).getCustomerOrder());
             return twoLineListItem;
         }
     }
@@ -381,21 +402,20 @@ public class CustomerOrderHistoryActivity extends AppCompatActivity {
                 //Send order to vendor
                 CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
                 customerOrderMGM.setVendorUniqueID(selectedOrder.vendorUniqueID);
+                customerOrderMGM.setContext(getApplicationContext());
 
-                //parse the order
-                TreeMap<String, Integer> orderItemsToAdd = customerOrderMGM.ordersParser(selectedOrder.getCustomerOrder());
-                boolean result = customerOrderMGM.addOrderFromHistory(selectedOrder.getCustomerOrder(), selectedOrder.getFoodTruckName(), selectedOrder.getPrice());
+                customerOrderMGM.addOrderFromHistory(selectedOrder.getCustomerOrder(), selectedOrder.getFoodTruckName(), selectedOrder.getPrice());
 
-                if (!result) {
-                    Toast.makeText(CustomerOrderHistoryActivity.this, "You have already submitted an order to this vendor", Toast.LENGTH_LONG).show();
+                try {
+                    // make text normal
+                    previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
+                    previousChildSelected.getText2().setTypeface(null, Typeface.NORMAL);
+                    previousChildSelected = null;
+                    isOrderSelected = false;
+                }
+                catch (NullPointerException e){
 
                 }
-
-                // make text normal
-                previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
-                previousChildSelected.getText2().setTypeface(null, Typeface.NORMAL);
-                previousChildSelected = null;
-                isOrderSelected = false;
 
 
                 dialog.dismiss();

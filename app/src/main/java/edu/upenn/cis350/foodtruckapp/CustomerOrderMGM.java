@@ -429,19 +429,27 @@ public class CustomerOrderMGM {
      * @param price - total price of the order
      * @return boolean - true if push was successgul, false if client already submitted order to vendor.
      */
-    protected boolean addOrderFromHistory(String customerOrder, String foodTruckName, double price) {
+    protected void addOrderFromHistory(String customerOrder, String foodTruckName, double price) {
 
         this.foodTruckName = foodTruckName;
         this.price = price;
         this.customerOrder = customerOrder;
-        final boolean[] result = {true};
 
         DatabaseReference currUserOrdersRef = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
-        currUserOrdersRef.addValueEventListener(new ValueEventListener() {
+        currUserOrdersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot == null) {
-                    result[0] = false;
+                if (dataSnapshot.getValue() != null) {
+
+                    Toast toast = Toast.makeText(context, "You have already submitted an order to this vendor", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+
+                } else {
+                    DatabaseReference vendorRef = databaseRef.child(vendorUniqueID);
+                    final DatabaseReference vendorOrdersRef = vendorRef.child("Orders");
+                    pushOrderToFirebase(vendorOrdersRef, true);
+                    return;
                 }
 
             }
@@ -451,16 +459,8 @@ public class CustomerOrderMGM {
 
             }
         });
-
-        if (result[0]) {
-            DatabaseReference vendorRef = databaseRef.child(vendorUniqueID);
-            final DatabaseReference vendorOrdersRef = vendorRef.child("Orders");
-            pushOrderToFirebase(vendorOrdersRef, true);
-        }
-        return result[0];
-
-
     }
+
 
 
 
