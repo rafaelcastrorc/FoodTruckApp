@@ -647,17 +647,13 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
 
 
-
        final DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
-
        final DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
-
 
 
        final Integer userRating = rating;
 
         final Double[] avgRating = new Double[1];
-
         final Integer[] totalRatings = new Integer[1];
 
         avgRatingRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -665,7 +661,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 try {
-
                     avgRating[0] = (Double) dataSnapshot.getValue();
 
                 }

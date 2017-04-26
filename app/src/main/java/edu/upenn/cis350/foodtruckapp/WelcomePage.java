@@ -23,11 +23,9 @@ public class WelcomePage extends AppCompatActivity{
 
     //Handles database  login and register
 
-    //TODO: WE NEED A MAIN PAGE!!!
     //If the button Register is pressed.
 
 
-    //TODO: Add a button
     private void buttonRegisterPressed(View v) {
         Intent i = new Intent(WelcomePage.this, RegistrationActivity.class);
         startActivity(i);
@@ -38,7 +36,6 @@ public class WelcomePage extends AppCompatActivity{
 
 
     //If the button Login is pressed.
-    //TODO: Add a button
     private void buttonLoginPressed(View v) {
         Intent i = new Intent(WelcomePage.this, LoginActivity.class);
         startActivity(i);

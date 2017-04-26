@@ -27,23 +27,28 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
+
+//Handles the vendor queue interface
 public class VendorOrdersActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
-    DatabaseReference currentOrders;
+    private DatabaseReference currentOrders;
 
     protected ListView orderList;
     protected ArrayList<Order> orders = new ArrayList<>();
     private boolean isOrderSelected = false;
     private TwoLineListItem previousChildSelected = null;
     private Order selectedOrder;
+    String truckName = "";
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,6 +63,10 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
             case R.id.home_button:
                 Intent j = new Intent(VendorOrdersActivity.this, VendorMainMenuActivity.class);
+                startActivity(j);
+                return true;
+            case R.id.stats_button:
+                j = new Intent(VendorOrdersActivity.this, VendorAnalyticsActivity.class);
                 startActivity(j);
                 return true;
 
@@ -107,7 +116,10 @@ public class VendorOrdersActivity extends AppCompatActivity {
         });
 
         currentOrders.addChildEventListener(new ChildEventListener() {
-            public String vendorUniqueID = "";
+            String foodTruckName;
+            Double price = 0.0;
+            String time = "";
+            String vendorUniqueID = "";
             String instanceId = "";
             String order = "";
             String customerName = "";
@@ -138,6 +150,21 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     else if (type.equals("customerUniqueID")){
                         this.customerUniqueID = (String) values.get(type);
                     }
+                    else if (type.equals("FoodTruckName")){
+                        this.foodTruckName = (String) values.get(type);
+                        truckName = foodTruckName;
+                    }
+                    else if (type.equals("Time")) {
+                        this.time = (String) values.get(type);
+                    }
+                    else if (type.equals("Price")) {
+                        try {
+                            this.price = (Double) values.get(type);
+                        } catch (ClassCastException e) {
+                            Long l = new Long((Long) values.get(type));
+                            this.price = l.doubleValue();
+                        }
+                    }
                     else if (type.equals("vendorUniqueID")){
                         this.vendorUniqueID = (String) values.get(type);
                     }
@@ -146,6 +173,9 @@ public class VendorOrdersActivity extends AppCompatActivity {
                 if (!order.isEmpty()) {
                     Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
                     customerOrder.setCustomerUniqueID(customerUniqueID);
+                    customerOrder.setTime(time);
+                    customerOrder.setPrice(price);
+                    customerOrder.setFoodTruckName(foodTruckName);
                     orders.add(customerOrder);
 
                     arrayAdapter.notifyDataSetChanged();
@@ -177,8 +207,23 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     else if (type.equals("PushId")){
                         this.pushId = (String) values.get(type);
                     }
+                    else if (type.equals("FoodTruckName")){
+                        this.foodTruckName = (String) values.get(type);
+                        truckName = foodTruckName;
+                    }
                     else if (type.equals("customerUniqueID")){
                         this.customerUniqueID = (String) values.get(type);
+                    }
+                    else if (type.equals("Time")) {
+                        this.time = (String) values.get(type);
+                    }
+                    else if (type.equals("Price")) {
+                        try {
+                            this.price = (Double) values.get(type);
+                        } catch (ClassCastException e) {
+                            Long l = new Long((Long) values.get(type));
+                            this.price = l.doubleValue();
+                        }
                     }
                     else if (type.equals("vendorUniqueID")){
                         this.vendorUniqueID = (String) values.get(type);
@@ -191,6 +236,10 @@ public class VendorOrdersActivity extends AppCompatActivity {
                     orders.remove(customerOrder);
 
                     customerOrder.setCustomerUniqueID(customerUniqueID);
+                    customerOrder.setTime(time);
+                    customerOrder.setPrice(price);
+                    customerOrder.setFoodTruckName(foodTruckName);
+
 
                     //adds new order at end of queue
                     orders.add(customerOrder);
@@ -249,7 +298,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
 
 
-    // Order is Done
+    /*Handles the order done button*/
     public void orderDone_onClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(VendorOrdersActivity.this, "You must select an order first", Toast.LENGTH_LONG).show();
@@ -258,7 +307,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
         // setup Complete Order popup
         AlertDialog.Builder confirmPopupBuilder = new AlertDialog.Builder(this);
-        confirmPopupBuilder.setTitle("This order has been completes");
+        confirmPopupBuilder.setTitle("This order has been completed");
         confirmPopupBuilder.setMessage("Are you sure you want to mark this order as completed: " + selectedOrder.getCustomerName().toString()
                 + "'s order?");
 
@@ -266,8 +315,18 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
             public void onClick(DialogInterface dialog, int which) {
 
+                //Add order to the order history field in the database
+                VendorAnalytics va = new VendorAnalytics();
+                va.pushOrderToDataBase(selectedOrder);
+
+                //Remove all instances of the order
                 currentOrders.child(selectedOrder.getPushId()).removeValue();
                 databaseRef.child(selectedOrder.getCustomerUniqueID()).child("MyOrders").child(selectedOrder.getVendorUniqueID()).removeValue();
+
+                //Add order to user history
+                selectedOrder.setFoodTruckName(truckName);
+                databaseRef.child(selectedOrder.getCustomerUniqueID()).child("History").push().setValue(selectedOrder);
+
 
 
                 // make text normal
@@ -302,8 +361,10 @@ public class VendorOrdersActivity extends AppCompatActivity {
     }
 
 
-
-    // Send notification to customer that their order is ready
+    /**
+     * Handles the Order is Ready button.
+     * Sends notification to customer
+     */
     public void OrderReadyOnClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(VendorOrdersActivity.this, "You must select an order first", Toast.LENGTH_LONG).show();
@@ -327,10 +388,16 @@ public class VendorOrdersActivity extends AppCompatActivity {
                 notifications.orderDone(1);
 
                 // make text normal
-                previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
-                previousChildSelected.getText2().setTypeface(null, Typeface.NORMAL);
-                previousChildSelected = null;
-                isOrderSelected = false;
+                try {
+                    previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
+                    previousChildSelected.getText2().setTypeface(null, Typeface.NORMAL);
+                    previousChildSelected = null;
+                    isOrderSelected = false;
+                }
+                catch (NullPointerException e) {
+
+                }
+
 
                 dialog.dismiss();
             }
@@ -350,7 +417,10 @@ public class VendorOrdersActivity extends AppCompatActivity {
         alert.show();
     }
 
-    // Send notification to customer that their order was cancelled
+    /**
+     * Handles the Cancel Order button.
+     * Sends notification to customer
+     */
     public void OrderCancelledOnClick(View v) {
 
         if (selectedOrder == null) {            // button clicked but no order selected
@@ -374,8 +444,6 @@ public class VendorOrdersActivity extends AppCompatActivity {
                 notifications.orderDone(2);
                 currentOrders.child(selectedOrder.getPushId()).removeValue();
                 databaseRef.child(selectedOrder.getCustomerUniqueID()).child("MyOrders").child(selectedOrder.getVendorUniqueID()).removeValue();
-
-
 
                 // make text normal
                 previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
@@ -402,6 +470,89 @@ public class VendorOrdersActivity extends AppCompatActivity {
         alert.show();
     }
 
+
+    public void OrderNoShowOnClick(View v) {
+        // button clicked but no order selected
+        if (selectedOrder == null) {
+            Toast.makeText(VendorOrdersActivity.this, "You must select an order first", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // setup noshow popup
+        AlertDialog.Builder cancelledPopupBuilder = new AlertDialog.Builder(this);
+        cancelledPopupBuilder.setTitle("No Show");
+        cancelledPopupBuilder.setMessage("Are you sure " + selectedOrder.getCustomerName().toString()
+                + " did not show up?");
+
+        cancelledPopupBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCustomerName() +
+                        " has been flagged.", Toast.LENGTH_LONG).show();
+
+                String customerInstanceId = selectedOrder.getCustomerInstanceID();
+                //  customerInstanceId = FirebaseInstanceId.getInstance().getId();          // for testing purposes
+
+                currentOrders.child(selectedOrder.getPushId()).removeValue();
+                databaseRef.child(selectedOrder.getCustomerUniqueID()).child("MyOrders").child(selectedOrder.getVendorUniqueID()).removeValue();
+
+                // update noshow count
+                updateCustomerNoShow(selectedOrder.getCustomerUniqueID());
+
+                // make text normal
+                previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
+                previousChildSelected.getText2().setTypeface(null, Typeface.NORMAL);
+                previousChildSelected = null;
+                isOrderSelected = false;
+
+                dialog.dismiss();
+            }
+        });
+
+        cancelledPopupBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+            }
+        });
+
+        // show Complete Order popup
+
+        AlertDialog alert = cancelledPopupBuilder.create();
+        alert.show();
+    }
+
+    // add 1 to the customer's no-show count
+    public void updateCustomerNoShow(String customerID) {
+        final String id = customerID;
+
+        databaseRef.child(customerID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild("No Show")) {
+                    databaseRef.child(id).child("No Show").setValue("1");
+                }
+                else {
+                    int noShowCounter = Integer.parseInt(dataSnapshot.child("No Show")
+                            .getValue().toString());
+                    databaseRef.child(id).child("No Show").setValue(++noShowCounter);
+
+                    if (noShowCounter == 3) {
+                        Log.d("noshow test", "counter is 3");
+                        databaseRef.child(id).child("Ban Time").setValue(
+                                Math.round(System.currentTimeMillis() / 1000.0));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     class MyAdapter extends BaseAdapter {
 
@@ -447,7 +598,8 @@ public class VendorOrdersActivity extends AppCompatActivity {
             text1.setTextSize(24);
             text2.setTextSize(15);
 
-            text1.setText(orders.get(position).getCustomerName());
+            NumberFormat formatter = new DecimalFormat("#0.00");
+            text1.setText(orders.get(position).getCustomerName() + " $"+ formatter.format(orders.get(position).getPrice()));
             text2.setText(orders.get(position).getCustomerOrder());
             return twoLineListItem;
         }

@@ -11,22 +11,41 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.upenn.cis350.foodtruckapp.CustomerMainMenuActivity">
 
-    <Button
-        android:id="@+id/button_top_trucks"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/button_favs"
-        android:layout_marginTop="26dp"
-        android:height="85dp"
-        android:background="@drawable/button_style"
-        android:onClick="topFoodTrucksOnClick (CustomerMainMenuActivity)"
-        android:text="Top Food Trucks"
-        android:textAllCaps="false"
-        android:textSize="12pt"
-        android:textStyle="bold" />
+    <LinearLayout
+        android:id="@+id/main_buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@+id/linearLayout2"
+        android:weightSum="4"
+        android:layout_alignParentEnd="true">
 
+        <Button
+            android:id="@+id/button_near_me"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:background="@drawable/button_style"
+            android:onClick="nearMeOnClick (CustomerMainMenuActivity)"
+            android:text="@string/near_me"
+            android:textAllCaps="false"
+            android:textSize="12pt"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/button_top_trucks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:background="@drawable/button_style"
+            android:onClick="topFoodTrucksOnClick (CustomerMainMenuActivity)"
+            android:text="@string/top_food_trucks"
+            android:textAllCaps="false"
+            android:textSize="12pt"
+            android:textStyle="bold" />
     <Button
         android:id="@+id/button_search_food"
         android:layout_width="wrap_content"
@@ -57,22 +76,32 @@
         android:textSize="12pt"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/button_favs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/button_search_food"
-        android:layout_marginTop="24dp"
-        android:height="85dp"
-        android:background="@drawable/button_style"
-        android:elevation="0dp"
-        android:onClick="favesOnClick (CustomerMainMenuActivity)"
-        android:text="My Favorite Trucks"
-        android:textAllCaps="false"
-        android:textSize="12pt"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/button_favs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:background="@drawable/button_style"
+            android:onClick="favesOnClick (CustomerMainMenuActivity)"
+            android:text="@string/my_favorite_trucks"
+            android:textAllCaps="false"
+            android:textSize="12pt"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/share"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_style"
+            android:onClick="shareOnClick"
+            android:text="@string/share"
+            android:textAllCaps="false"
+            android:textSize="12pt"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="251dp"
@@ -81,16 +110,15 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:paddingTop="0dp"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:id="@+id/linearLayout2">
 
         <TextView
             android:id="@+id/textView11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
             android:layout_marginStart="16dp"
-            android:text="Total:"
+            android:text="@string/total"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -98,10 +126,9 @@
             android:id="@+id/total_shopping_cart"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_marginStart="17dp"
             android:layout_weight="0.41"
-            android:text="$00.00"
+            android:text="@string/zero"
             android:textSize="24sp"
             android:textStyle="bold"
             tools:text="$00.00" />
@@ -110,13 +137,10 @@
             android:id="@+id/sign_out"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_weight="0.35"
             android:width="0dp"
-            android:onClick="sign_out_onClick"
-            android:text="Sign Out"
+            android:onClick="signOutOnClick"
+            android:text="@string/sign_out"
             android:textSize="17sp" />
 
     </LinearLayout>
