@@ -4,6 +4,13 @@
 
     <!-- "Mark Favorite", should appear as action button if possible -->
 
+
+    <item
+        android:id="@+id/search_button_menu"
+        android:icon="@drawable/search"
+        android:tint="@color/WHITE"
+        android:title="Search by food"
+        app:showAsAction="always" />
     <item
         android:id="@+id/shopping_cart_button"
         android:icon="@drawable/shopping_cart"
@@ -16,6 +23,9 @@
         android:tint="@color/WHITE"
         android:title="Home"
         app:showAsAction="always" />
+
+
+
 
 
 </menu>

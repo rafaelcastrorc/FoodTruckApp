@@ -59,6 +59,9 @@ public class FavoritesActivity extends AppCompatActivity {
                 Intent j = new Intent(FavoritesActivity.this, CustomerMainMenuActivity.class);
                 startActivity(j);
                 return true;
+            case R.id.search_button_menu:
+                Intent x = new Intent(FavoritesActivity.this, SearchFoodActivity.class);
+                startActivity(x);
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -66,7 +69,6 @@ public class FavoritesActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

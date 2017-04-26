@@ -60,6 +60,9 @@ public class CustomerMainMenuActivity extends AppCompatActivity implements Googl
                 Intent j = new Intent(CustomerMainMenuActivity.this, CustomerMainMenuActivity.class);
                 startActivity(j);
                 return true;
+            case R.id.search_button_menu:
+                Intent x = new Intent(CustomerMainMenuActivity.this, SearchFoodActivity.class);
+                startActivity(x);
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -76,239 +79,237 @@ public class CustomerMainMenuActivity extends AppCompatActivity implements Googl
         setContentView(R.layout.activity_customer_main_menu);
         mAuth = FirebaseAuth.getInstance();
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
-        currentUserID = mAuth.getCurrentUser().getUid();
 
+        try {
+            currentUserID = mAuth.getCurrentUser().getUid();
 
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this).addApi(Plus.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this).addApi(Plus.API)
+                    .addScope(Plus.SCOPE_PLUS_LOGIN).build();
 
+            // add click listener to near me button
+            Button nearMeButton = (Button) findViewById(R.id.button_near_me);
+            nearMeButton.setOnClickListener(new AdapterView.OnClickListener() {
+                public void onClick(View view) {
+                    Intent i = new Intent(CustomerMainMenuActivity.this, NearMeActivity.class);
+                    startActivity(i);
+                }
+            });
 
-        // add click listener to Food Trucks near me button
-        Button nearMeButton = (Button) findViewById(R.id.button_near_me);
-        nearMeButton.setOnClickListener(new AdapterView.OnClickListener() {
+            // add click listener to favorites button
+            Button favsButton = (Button) findViewById(R.id.button_favs);
+            favsButton.setOnClickListener(new AdapterView.OnClickListener() {
 
-            public void onClick(View view) {
-                Intent i = new Intent(CustomerMainMenuActivity.this, NearMeActivity.class);
-                startActivity(i);
-            }
-        });
+                public void onClick(View view) {
+                    Intent i = new Intent(CustomerMainMenuActivity.this, FavoritesActivity.class);
+                    startActivity(i);
+                }
+            });
 
-        // add click listener to search food button
-        Button searchFoodButton = (Button) findViewById(R.id.button_search_food);
-        searchFoodButton.setOnClickListener(new AdapterView.OnClickListener() {
+            // add click listener to top food trucks button
+            Button topTrucksButton = (Button) findViewById(R.id.button_top_trucks);
+            topTrucksButton.setOnClickListener(new AdapterView.OnClickListener() {
 
-            public void onClick(View view) {
-                Intent i = new Intent(CustomerMainMenuActivity.this, SearchFoodActivity.class);
-                startActivity(i);
-            }
-        });
+                public void onClick(View view) {
+                    Intent i = new Intent(CustomerMainMenuActivity.this, TopFoodTrucksActivity.class);
+                    startActivity(i);
+                }
+            });
 
-        // add click listener to favorites button
-        Button favsButton = (Button) findViewById(R.id.button_favs);
-        favsButton.setOnClickListener(new AdapterView.OnClickListener() {
+            // add click listener to social feed button
+            Button socialFeedButton = (Button) findViewById(R.id.button_social_feed);
+            socialFeedButton.setOnClickListener(new AdapterView.OnClickListener() {
 
-            public void onClick(View view) {
-                Intent i = new Intent(CustomerMainMenuActivity.this, FavoritesActivity.class);
-                startActivity(i);
-            }
-        });
+                public void onClick(View view) {
+                    Intent i = new Intent(CustomerMainMenuActivity.this, SocialFeedActivity.class);
+                    startActivity(i);
+                }
+            });
 
-        // add click listener to top food trucks button
-        Button topTrucksButton = (Button) findViewById(R.id.button_top_trucks);
-        topTrucksButton.setOnClickListener(new AdapterView.OnClickListener() {
+            DatabaseReference myOrdersRef = databaseRef.child(currentUserID).child("MyOrders");
+            myOrdersRef.addChildEventListener(new ChildEventListener() {
+                String vendorUniqueID = "";
+                String instanceId = "";
+                String order = "";
+                String customerName = "";
+                String pushId = "";
+                String foodTruckName = "";
+                double price = 0.0;
 
-            public void onClick(View view) {
-                Intent i = new Intent(CustomerMainMenuActivity.this, TopFoodTrucksActivity.class);
-                startActivity(i);
-            }
-        });
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                    boolean status = false;
 
-        // add click listener to social feed button
-        Button socialFeedButton = (Button) findViewById(R.id.button_social_feed);
-        socialFeedButton.setOnClickListener(new AdapterView.OnClickListener() {
+                    HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
+                    for (String type : values.keySet()) {
 
-            public void onClick(View view) {
-                Intent i = new Intent(CustomerMainMenuActivity.this, SocialFeedActivity.class);
-                startActivity(i);
-            }
-        });
+                        if (type.equals("CustomerInstanceId")) {
+                            this.instanceId = (String) values.get(type);
+                        } else if (type.equals("Order")) {
+                            this.order = (String) values.get(type);
+                        } else if (type.equals("CustomerName")) {
+                            this.customerName = (String) values.get(type);
+                        } else if (type.equals("PushId")) {
+                            this.pushId = (String) values.get(type);
+                        } else if (type.equals("vendorUniqueID")) {
+                            this.vendorUniqueID = (String) values.get(type);
+                        } else if (type.equals("FoodTruckName")) {
+                            this.foodTruckName = (String) values.get(type);
+                        } else if (type.equals("Price")) {
+                            try {
+                                this.price = (Double) values.get(type);
+                            }
+                            catch (ClassCastException e) {
+                                Long l = new Long((Long) values.get(type));
+                                this.price= l.doubleValue();
 
-        DatabaseReference myOrdersRef = databaseRef.child(currentUserID).child("MyOrders");
-        myOrdersRef.addChildEventListener(new ChildEventListener() {
-            String vendorUniqueID = "";
-            String instanceId = "";
-            String order = "";
-            String customerName = "";
-            String pushId = "";
-            String foodTruckName = "";
-            double price = 0.0;
+                            }
 
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                boolean status = false;
-
-                HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
-                for (String type : values.keySet()) {
-
-                    if (type.equals("CustomerInstanceId")) {
-                        this.instanceId = (String) values.get(type);
-                    } else if (type.equals("Order")) {
-                        this.order = (String) values.get(type);
-                    } else if (type.equals("CustomerName")) {
-                        this.customerName = (String) values.get(type);
-                    } else if (type.equals("PushId")) {
-                        this.pushId = (String) values.get(type);
-                    } else if (type.equals("vendorUniqueID")) {
-                        this.vendorUniqueID = (String) values.get(type);
-                    } else if (type.equals("FoodTruckName")) {
-                        this.foodTruckName = (String) values.get(type);
-                    } else if (type.equals("Price")) {
-                        try {
-                            this.price = (Double) values.get(type);
-                        }
-                        catch (ClassCastException e) {
-                            Long l = new Long((Long) values.get(type));
-                            this.price= l.doubleValue();
-
+                        } else if (type.equals("Submitted")) {
+                            String choice = (String) values.get(type);
+                            if (choice.equals("true")) {
+                                status = true;
+                            }
                         }
 
-                    } else if (type.equals("Submitted")) {
-                        String choice = (String) values.get(type);
-                        if (choice.equals("true")) {
-                            status = true;
-                        }
                     }
+                    Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+                    customerOrder.setStatus(status);
+                    customerOrder.setFoodTruckName(foodTruckName);
+                    customerOrder.setPrice(price);
+                    orders.add(customerOrder);
+                    updateTotal();
 
                 }
-                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
-                customerOrder.setStatus(status);
-                customerOrder.setFoodTruckName(foodTruckName);
-                customerOrder.setPrice(price);
-                orders.add(customerOrder);
-                updateTotal();
 
-            }
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+                    boolean status = false;
+                    HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
+                    for (String type : values.keySet()) {
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-                boolean status = false;
-                HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
-                for (String type : values.keySet()) {
+                        if (type.equals("CustomerInstanceId")) {
+                            this.instanceId = (String) values.get(type);
 
-                    if (type.equals("CustomerInstanceId")) {
-                        this.instanceId = (String) values.get(type);
+                        } else if (type.equals("Order")) {
+                            this.order = (String) values.get(type);
+                        } else if (type.equals("CustomerName")) {
+                            this.customerName = (String) values.get(type);
+                        } else if (type.equals("PushId")) {
+                            this.pushId = (String) values.get(type);
+                        } else if (type.equals("vendorUniqueID")) {
+                            this.vendorUniqueID = (String) values.get(type);
+                        } else if (type.equals("FoodTruckName")) {
+                            this.foodTruckName = (String) values.get(type);
+                        } else if (type.equals("Price")) {
+                            try {
+                                this.price = (Double) values.get(type);
+                            }
+                            catch (ClassCastException e) {
+                                Long l = new Long((Long) values.get(type));
+                                this.price= l.doubleValue();
 
-                    } else if (type.equals("Order")) {
-                        this.order = (String) values.get(type);
-                    } else if (type.equals("CustomerName")) {
-                        this.customerName = (String) values.get(type);
-                    } else if (type.equals("PushId")) {
-                        this.pushId = (String) values.get(type);
-                    } else if (type.equals("vendorUniqueID")) {
-                        this.vendorUniqueID = (String) values.get(type);
-                    } else if (type.equals("FoodTruckName")) {
-                        this.foodTruckName = (String) values.get(type);
-                    } else if (type.equals("Price")) {
-                        try {
-                            this.price = (Double) values.get(type);
+                            }
+                        } else if (type.equals("Submitted")) {
+                            String choice = (String) values.get(type);
+                            if (choice.equals("true")) {
+                                status = true;
+                            }
                         }
-                        catch (ClassCastException e) {
-                            Long l = new Long((Long) values.get(type));
-                            this.price= l.doubleValue();
 
-                        }
-                    } else if (type.equals("Submitted")) {
-                        String choice = (String) values.get(type);
-                        if (choice.equals("true")) {
-                            status = true;
-                        }
                     }
+                    Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+
+                    //deletes old order
+                    orders.remove(customerOrder);
+
+                    //adds new order at end of queue
+
+                    customerOrder.setStatus(status);
+                    customerOrder.setFoodTruckName(foodTruckName);
+                    customerOrder.setPrice(price);
+
+                    orders.add(customerOrder);
+                    updateTotal();
 
                 }
-                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
 
-                //deletes old order
-                orders.remove(customerOrder);
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                //adds new order at end of queue
+                    HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
+                    for (String type : values.keySet()) {
 
-                customerOrder.setStatus(status);
-                customerOrder.setFoodTruckName(foodTruckName);
-                customerOrder.setPrice(price);
+                        if (type.equals("CustomerInstanceId")) {
+                            this.instanceId = (String) values.get(type);
 
-                orders.add(customerOrder);
-                updateTotal();
+                        } else if (type.equals("Order")) {
+                            this.order = (String) values.get(type);
+                        } else if (type.equals("CustomerName")) {
+                            this.customerName = (String) values.get(type);
+                        } else if (type.equals("PushId")) {
+                            this.pushId = (String) values.get(type);
+                        } else if (type.equals("vendorUniqueID")) {
+                            this.vendorUniqueID = (String) values.get(type);
+                        }
 
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
-                for (String type : values.keySet()) {
-
-                    if (type.equals("CustomerInstanceId")) {
-                        this.instanceId = (String) values.get(type);
-
-                    } else if (type.equals("Order")) {
-                        this.order = (String) values.get(type);
-                    } else if (type.equals("CustomerName")) {
-                        this.customerName = (String) values.get(type);
-                    } else if (type.equals("PushId")) {
-                        this.pushId = (String) values.get(type);
-                    } else if (type.equals("vendorUniqueID")) {
-                        this.vendorUniqueID = (String) values.get(type);
                     }
+                    Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
+                    orders.remove(customerOrder);
+                    updateTotal();
 
                 }
-                Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
-                orders.remove(customerOrder);
-                updateTotal();
 
-            }
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
+                }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+            // if the customer is still banned then go back to log in,
+            // else reset No Show counters and ban time
+            databaseRef.child(currentUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild("Ban Time")) {
+                        String timeInSeconds = dataSnapshot.child("Ban Time").getValue().toString();
+                        int banTime = Integer.parseInt(timeInSeconds);
+                        int currentTime = (int)Math.round(System.currentTimeMillis() / 1000.0);
 
-        // if the customer is still banned then go back to log in,
-        // else reset No Show counters and ban time
-        databaseRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild("Ban Time")) {
-                    String timeInSeconds = dataSnapshot.child("Ban Time").getValue().toString();
-                    int banTime = Integer.parseInt(timeInSeconds);
-                    int currentTime = (int)Math.round(System.currentTimeMillis() / 1000.0);
+                        if (currentTime - banTime < 864000) {
+                            Toast.makeText(CustomerMainMenuActivity.this,
+                                    "You have been banned for not picking up your orders, come back tomorrow!",
+                                    Toast.LENGTH_LONG).show();
 
-                    if (currentTime - banTime < 864000) {
-                        Toast.makeText(CustomerMainMenuActivity.this,
-                                "You have been banned for not picking up your orders, come back tomorrow!",
-                                Toast.LENGTH_LONG).show();
+                            mAuth.signOut();
+                            Intent i = new Intent(CustomerMainMenuActivity.this, LoginActivity.class);
+                            startActivity(i);
+                            finish();
+                        } else {
+                            resetBanTime(currentUserID);
+                        }
 
-                        mAuth.signOut();
-                        Intent i = new Intent(CustomerMainMenuActivity.this, LoginActivity.class);
-                        startActivity(i);
-                        finish();
-                    } else {
-                        resetBanTime(currentUserID);
                     }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+            });
+        }
+        catch(NullPointerException e) {
+            Toast.makeText(CustomerMainMenuActivity.this,
+                    "You have been banned for not picking up your orders, come back tomorrow!",
+                    Toast.LENGTH_LONG).show();
+            Intent i = new Intent(CustomerMainMenuActivity.this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }
 
     }
 
@@ -329,7 +330,6 @@ public class CustomerMainMenuActivity extends AppCompatActivity implements Googl
         startActivity(i);
         finish();
     }
-
 
 
     private void updateTotal(){

@@ -44,6 +44,10 @@
             android:exported="true"
             android:label="Registration" />
         <activity
+            android:name=".SocialFeedActivity"
+            android:exported="true"
+            android:label="Social Feed" />
+        <activity
             android:name=".RegistrationVendor"
             android:label="Registration Vendor" />
         <activity
@@ -112,8 +116,9 @@
 
         <activity android:name=".VendorReviewsActivity" />
         <activity android:name=".ShareFavoritesActivity" />
-        <activity android:name=".SearchFoodActivity"></activity>
-            android:label="@string/title_activity_maps" />
+        <activity android:name=".SearchFoodActivity" />
+
+
 
         <activity
             android:name=".VendorAnalyticsActivity"

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -389,7 +390,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                         startActivity(i);
                     }
-                    else if (type.equals("Costumer")) {
+                    else if (type.equals("Customer")) {
                         Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
                         i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                         startActivity(i);

@@ -57,6 +57,9 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
                 Intent j = new Intent(TopFoodTrucksActivity.this, CustomerMainMenuActivity.class);
                 startActivity(j);
                 return true;
+            case R.id.search_button_menu:
+                Intent x = new Intent(TopFoodTrucksActivity.this, SearchFoodActivity.class);
+                startActivity(x);
 
             default:
                 // If we got here, the user's action was not recognized.

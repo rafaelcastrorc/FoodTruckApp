@@ -186,8 +186,13 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         hoursRef.child("CloseWeekendTime").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                TextView textView = (TextView) findViewById(R.id.customer_vendor_close_weekend_time);
-                textView.setText(dataSnapshot.getValue().toString());
+                try {
+                    TextView textView = (TextView) findViewById(R.id.customer_vendor_close_weekend_time);
+                    textView.setText(dataSnapshot.getValue().toString());
+                }
+                catch(NullPointerException e) {
+
+                }
             }
 
             @Override
