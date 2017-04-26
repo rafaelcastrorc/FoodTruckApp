@@ -105,7 +105,6 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         topTrucksRating[6] = seventhVendorRating;
         topTrucksRating[7] = eighthVendorRating;
 
-        // Todo: Populate TextViews to have name of vendors
         // I put the names of the TextViews in an array because I think that Firebase will return
         // an ArrayList of the Vendors & it'll be an easy conversion
         databaseRef = FirebaseDatabase.getInstance().getReference().child("Users");
