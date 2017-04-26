@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -18,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -26,6 +28,8 @@ import java.util.HashMap;
 
 public class CustomerMainMenuActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private DatabaseReference databaseRef;
+    private String currentUserID;
     ArrayList<Order> orders = new ArrayList<>();
 
 
@@ -63,7 +67,9 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_main_menu);
         mAuth = FirebaseAuth.getInstance();
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users");
+        databaseRef = FirebaseDatabase.getInstance().getReference("Users");
+        currentUserID = mAuth.getCurrentUser().getUid();
+
 
 
         // add click listener to Food Trucks near me button
@@ -96,7 +102,7 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
             }
         });
 
-        DatabaseReference myOrdersRef = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders");
+        DatabaseReference myOrdersRef = databaseRef.child(currentUserID).child("MyOrders");
 
         myOrdersRef.addChildEventListener(new ChildEventListener() {
 
@@ -241,16 +247,57 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
             }
         });
 
+        // if the customer is still banned then go back to log in,
+        // else reset No Show counters and ban time
+        databaseRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild("Ban Time")) {
+                    String timeInSeconds = dataSnapshot.child("Ban Time").getValue().toString();
+                    int banTime = Integer.parseInt(timeInSeconds);
+                    int currentTime = (int)Math.round(System.currentTimeMillis() / 1000.0);
+
+                    if (currentTime - banTime < 864000) {
+                        Toast.makeText(CustomerMainMenuActivity.this,
+                                "You have been banned for not picking up your orders, come back tomorrow!",
+                                Toast.LENGTH_LONG).show();
+
+                        mAuth.signOut();
+                        Intent i = new Intent(CustomerMainMenuActivity.this, LoginActivity.class);
+                        startActivity(i);
+                        finish();
+                    } else {
+                        resetBanTime(currentUserID);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
-    public void sign_out_onClick(View v) {
+    private void resetBanTime(String userId) {
+        databaseRef.child(userId).child("Ban Time").removeValue();
+        databaseRef.child(userId).child("No Show").setValue(0);
+    }
+
+
+    public void shareOnClick(View v) {
+        Intent i = new Intent(CustomerMainMenuActivity.this, ShareEmailActivity.class);
+        startActivity(i);
+    }
+
+    public void signOutOnClick(View v) {
         mAuth.signOut();
         Intent i = new Intent(CustomerMainMenuActivity.this, LoginActivity.class);
         startActivity(i);
         finish();
     }
-
 
 
     private void updateTotal(){

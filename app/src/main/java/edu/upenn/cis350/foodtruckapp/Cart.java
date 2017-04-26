@@ -371,8 +371,6 @@ public class Cart extends AppCompatActivity {
     }
 
 
-
-
     // update order
     public void updateOrder_OnClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
@@ -458,7 +456,7 @@ public class Cart extends AppCompatActivity {
     }
 
 
-    // submit order
+    // cancel order
     public void cartOrderCancelled_onClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(Cart.this, "You must select an order first", Toast.LENGTH_LONG).show();

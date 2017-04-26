@@ -1,5 +1,6 @@
 package edu.upenn.cis350.foodtruckapp;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,8 +28,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
  * Created by rafaelcastro on 2/20/17.
  */
 
-public class LoginActivity extends AppCompatActivity {
-
+public class LoginActivity extends Activity {
 
     private FirebaseAuth firebaseAuth;
     private EditText emailLogin;
@@ -40,13 +40,14 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_page);
-        emailLogin = (EditText) findViewById(R.id.email_login_field);
-        pswd = (EditText) findViewById(R.id.password_field_login);
-        firebaseAuth = FirebaseAuth.getInstance();
 
+        setContentView(R.layout.activity_login_page);
+        emailLogin = (EditText) findViewById(R.id.input_email);
+        pswd = (EditText) findViewById(R.id.input_password);
+
+        firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
 
@@ -85,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     // [END on_stop_remove_listener]
+
 
 
     public void main_login_button_click(View v) {

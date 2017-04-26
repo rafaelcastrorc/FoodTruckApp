@@ -27,7 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
-    DatabaseReference currentOrders;
+    private DatabaseReference currentOrders;
 
     protected ListView orderList;
     protected ArrayList<Order> orders = new ArrayList<>();
@@ -113,7 +113,6 @@ public class VendorOrdersActivity extends AppCompatActivity {
             String customerName = "";
             String pushId = "";
             String customerUniqueID = "";
-            int counter = 0;
 
 
 
@@ -250,7 +249,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
 
     // Order is Done
-    public void orderDone_onClick(View v) {
+    public void orderDoneOnClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(VendorOrdersActivity.this, "You must select an order first", Toast.LENGTH_LONG).show();
             return;
@@ -258,7 +257,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
         // setup Complete Order popup
         AlertDialog.Builder confirmPopupBuilder = new AlertDialog.Builder(this);
-        confirmPopupBuilder.setTitle("This order has been completes");
+        confirmPopupBuilder.setTitle("This order has been completed");
         confirmPopupBuilder.setMessage("Are you sure you want to mark this order as completed: " + selectedOrder.getCustomerName().toString()
                 + "'s order?");
 
@@ -268,7 +267,6 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
                 currentOrders.child(selectedOrder.getPushId()).removeValue();
                 databaseRef.child(selectedOrder.getCustomerUniqueID()).child("MyOrders").child(selectedOrder.getVendorUniqueID()).removeValue();
-
 
                 // make text normal
                 try {
@@ -300,7 +298,6 @@ public class VendorOrdersActivity extends AppCompatActivity {
         AlertDialog alert = confirmPopupBuilder.create();
         alert.show();
     }
-
 
 
     // Send notification to customer that their order is ready
@@ -350,6 +347,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
         alert.show();
     }
 
+
     // Send notification to customer that their order was cancelled
     public void OrderCancelledOnClick(View v) {
 
@@ -366,16 +364,15 @@ public class VendorOrdersActivity extends AppCompatActivity {
         cancelledPopupBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCustomerName() + "'s " +
-                        " order has been cancelled", Toast.LENGTH_LONG).show();
+                Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCustomerName() +
+                        "has been signaled, we are sorry for the inconvenience.", Toast.LENGTH_LONG).show();
+
                 String customerInstanceId = selectedOrder.getCustomerInstanceID();
               //  customerInstanceId = FirebaseInstanceId.getInstance().getId();          // for testing purposes
                 FoodTruckOrderMGM notifications = new FoodTruckOrderMGM(customerInstanceId);
                 notifications.orderDone(2);
                 currentOrders.child(selectedOrder.getPushId()).removeValue();
                 databaseRef.child(selectedOrder.getCustomerUniqueID()).child("MyOrders").child(selectedOrder.getVendorUniqueID()).removeValue();
-
-
 
                 // make text normal
                 previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
@@ -402,6 +399,89 @@ public class VendorOrdersActivity extends AppCompatActivity {
         alert.show();
     }
 
+
+    public void OrderNoShowOnClick(View v) {
+        // button clicked but no order selected
+        if (selectedOrder == null) {
+            Toast.makeText(VendorOrdersActivity.this, "You must select an order first", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // setup noshow popup
+        AlertDialog.Builder cancelledPopupBuilder = new AlertDialog.Builder(this);
+        cancelledPopupBuilder.setTitle("No Show");
+        cancelledPopupBuilder.setMessage("Are you sure " + selectedOrder.getCustomerName().toString()
+                + " did not show up?");
+
+        cancelledPopupBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(VendorOrdersActivity.this, selectedOrder.getCustomerName() +
+                        " has been flagged.", Toast.LENGTH_LONG).show();
+
+                String customerInstanceId = selectedOrder.getCustomerInstanceID();
+                //  customerInstanceId = FirebaseInstanceId.getInstance().getId();          // for testing purposes
+
+//                currentOrders.child(selectedOrder.getPushId()).removeValue();
+//                databaseRef.child(selectedOrder.getCustomerUniqueID()).child("MyOrders").child(selectedOrder.getVendorUniqueID()).removeValue();
+
+                // update noshow count
+                updateCustomerNoShow(selectedOrder.getCustomerUniqueID());
+
+                // make text normal
+                previousChildSelected.getText1().setTypeface(null, Typeface.NORMAL);
+                previousChildSelected.getText2().setTypeface(null, Typeface.NORMAL);
+                previousChildSelected = null;
+                isOrderSelected = false;
+
+                dialog.dismiss();
+            }
+        });
+
+        cancelledPopupBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+            }
+        });
+
+        // show Complete Order popup
+
+        AlertDialog alert = cancelledPopupBuilder.create();
+        alert.show();
+    }
+
+    // add 1 to the customer's no-show count
+    public void updateCustomerNoShow(String customerID) {
+        final String id = customerID;
+
+        databaseRef.child(customerID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild("No Show")) {
+                    databaseRef.child(id).child("No Show").setValue("1");
+                }
+                else {
+                    int noShowCounter = Integer.parseInt(dataSnapshot.child("No Show")
+                            .getValue().toString());
+                    databaseRef.child(id).child("No Show").setValue(++noShowCounter);
+
+                    if (noShowCounter == 3) {
+                        Log.d("noshow test", "counter is 3");
+                        databaseRef.child(id).child("Ban Time").setValue(
+                                Math.round(System.currentTimeMillis() / 1000.0));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     class MyAdapter extends BaseAdapter {
 
