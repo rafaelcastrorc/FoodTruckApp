@@ -11,11 +11,10 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/email_login_field"
-        tools:text="Email"
-        android:layout_marginBottom="34dp"
-        android:layout_above="@+id/password_field_login"
-        android:layout_alignRight="@+id/email_field_login"
-        android:layout_alignEnd="@+id/email_field_login" />
+        android:hint="Email"
+        android:layout_alignTop="@+id/email_field_login"
+        android:layout_toEndOf="@+id/textView5"
+        android:layout_marginTop="64dp" />
 
     <TextView
         android:text="Email:"
@@ -24,11 +23,9 @@
         android:id="@+id/textView5"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:layout_marginRight="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_alignBottom="@+id/email_login_field"
-        android:layout_toLeftOf="@+id/email_login_field"
-        android:layout_toStartOf="@+id/email_login_field"
-        android:textColor="@color/BLACK" />
+        android:textColor="@color/BLACK"
+        android:layout_alignStart="@+id/email_field_login"
+        android:layout_above="@+id/textView3" />
 
     <TextView
         android:text="Please login or register below."
@@ -37,9 +34,9 @@
         android:id="@+id/email_field_login"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="24sp"
-        android:layout_above="@+id/email_login_field"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp" />
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:text="Password:"
@@ -60,13 +57,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/main_register_button"
         android:height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/textView5"
-        android:layout_alignStart="@+id/textView5"
-        android:layout_marginBottom="19dp"
-        android:layout_alignParentRight="true"
+        android:onClick="main_register_button_click"
+        android:layout_below="@+id/main_login_button"
         android:layout_alignParentEnd="true"
-        android:onClick="main_register_button_click" />
+        android:layout_marginTop="28dp"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:text="Login"
@@ -79,11 +74,10 @@
         android:id="@+id/main_login_button"
         android:onClick="main_login_button_click"
         android:height="100dp"
-        android:layout_below="@+id/textView3"
-        android:layout_alignParentRight="true"
+        android:layout_below="@+id/password_field_login"
         android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/main_register_button"
-        android:layout_alignStart="@+id/main_register_button" />
+        android:layout_marginTop="32dp"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -92,11 +86,31 @@
         android:ems="10"
         android:id="@+id/password_field_login"
         android:layout_weight="0.43"
-        android:text="Password"
+        android:hint="Password"
         android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/textView3"
+        android:layout_alignTop="@+id/textView3"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/textView3"
         android:layout_toEndOf="@+id/textView3" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_register_button"
+        android:layout_alignEnd="@+id/email_login_field"
+        android:layout_marginTop="9dp" />
+
+    <!--<Button-->
+        <!--android:id="@+id/google_sign_out_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_toEndOf="@+id/textView5"-->
+        <!--android:onClick="onClick"-->
+        <!--android:text="Sign Out" />-->
+
+
 
 </RelativeLayout>

@@ -44,6 +44,9 @@
     <string name="TheirReveiws"><u>Reviews</u></string>
     <string name="TheierRating"><u>Rating</u></string>
 
+    <string name="facebook_app_id">309905269442288</string>
+
+    <string name="app_id">906039078080-2cmjii5bqjti72ftpn5ff8if80725brj.apps.googleusercontent.com</string>
 
     <string name="large_text">
         "Material is the metaphor.\n\n"

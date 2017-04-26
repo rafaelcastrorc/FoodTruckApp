@@ -2,8 +2,9 @@ package edu.upenn.cis350.foodtruckapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +13,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.plus.People;
+import com.google.android.gms.plus.Plus;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -24,10 +30,11 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CustomerMainMenuActivity extends AppCompatActivity {
+public class CustomerMainMenuActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        ResultCallback<People.LoadPeopleResult>, View.OnClickListener {
     private FirebaseAuth mAuth;
     ArrayList<Order> orders = new ArrayList<>();
-
+    private GoogleApiClient googleApiClient;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,6 +72,11 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users");
 
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).addApi(Plus.API)
+                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
+
 
         // add click listener to Food Trucks near me button
         Button nearMeButton = (Button) findViewById(R.id.button_near_me);
@@ -96,10 +108,18 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
             }
         });
 
+        // add click listener to social feed button
+        Button socialFeedButton = (Button) findViewById(R.id.button_social_feed);
+        socialFeedButton.setOnClickListener(new AdapterView.OnClickListener() {
+
+            public void onClick(View view) {
+                Intent i = new Intent(CustomerMainMenuActivity.this, SocialFeedActivity.class);
+                startActivity(i);
+            }
+        });
+
         DatabaseReference myOrdersRef = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders");
-
         myOrdersRef.addChildEventListener(new ChildEventListener() {
-
             String vendorUniqueID = "";
             String instanceId = "";
             String order = "";
@@ -246,7 +266,10 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
 
     public void sign_out_onClick(View v) {
         mAuth.signOut();
+
         Intent i = new Intent(CustomerMainMenuActivity.this, LoginActivity.class);
+        setResult(1, i);
+        i.putExtra("google", "1");
         startActivity(i);
         finish();
     }
@@ -271,4 +294,42 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
         total.setText("$"+ formatter.format(result));
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Plus.PeopleApi.loadVisible(googleApiClient, null).setResultCallback(
+                this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        googleApiClient.connect();
+
+    }
+
+    protected void onStart() {
+        super.onStart();
+        googleApiClient.connect();
+    }
+
+    protected void onStop() {
+        super.onStop();
+        if (googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onResult(@NonNull People.LoadPeopleResult loadPeopleResult) {
+
+    }
 }

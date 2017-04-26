@@ -15,6 +15,8 @@ public class Order {
     private double price;
     private String customerUniqueID;
     private String time;
+    private String firstLine;
+    private String secondLine;
 
     Order(String customerInstanceID, String order, String name, String pushId, String vendorUniqueID) {
         this.customerInstanceID = customerInstanceID;
@@ -120,4 +122,18 @@ public class Order {
     public String getTime() {
         return time;
     }
+
+    void setFormatStrings(String firstLine, String secondLine) {
+        this.firstLine = firstLine;
+        this.secondLine = secondLine;
+    }
+
+    String getFirstLine() {
+        return firstLine;
+    }
+
+    String getSecondLine() {
+        return secondLine;
+    }
 }
+
