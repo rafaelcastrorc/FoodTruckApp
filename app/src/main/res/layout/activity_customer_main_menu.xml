@@ -15,76 +15,67 @@
         android:id="@+id/main_buttons_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_above="@+id/linearLayout2"
-        android:weightSum="4"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical"
+        android:weightSum="6">
 
         <Button
             android:id="@+id/button_near_me"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            android:layout_marginBottom="@dimen/fab_margin"
             android:background="@drawable/button_style"
-            android:onClick="nearMeOnClick (CustomerMainMenuActivity)"
+            android:paddingBottom="1dp"
             android:text="@string/near_me"
             android:textAllCaps="false"
             android:textSize="12pt"
             android:textStyle="bold" />
 
-
         <Button
             android:id="@+id/button_top_trucks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            android:layout_marginBottom="@dimen/fab_margin"
             android:background="@drawable/button_style"
-            android:onClick="topFoodTrucksOnClick (CustomerMainMenuActivity)"
             android:text="@string/top_food_trucks"
             android:textAllCaps="false"
             android:textSize="12pt"
             android:textStyle="bold" />
-    <Button
-        android:id="@+id/button_search_food"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/button_favs"
-        android:layout_marginTop="26dp"
-        android:height="wrap_content"
-        anrdroid:layout_weight="1"
-        android:background="@drawable/button_style"
-        android:onClick="searchFoodOnClick (CustomerMainMenuActivity)"
-        android:text="Search For Food"
-        android:textAllCaps="false"
-        android:textSize="12pt"
-        android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/button_near_me"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:height="85dp"
-        android:background="@drawable/button_style"
-        android:text="Food Trucks Near Me"
-        android:textAllCaps="false"
-        android:textSize="12pt"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/button_search_food"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="0.99"
+            android:background="@drawable/button_style"
+            android:text="@string/search_food"
+            android:textAllCaps="false"
+            android:textSize="12pt"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button_social_feed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="0.99"
+            android:background="@drawable/button_style"
+            android:text="@string/social_feed"
+            android:textAllCaps="false"
+            android:textSize="12pt"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button_favs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            android:layout_marginBottom="@dimen/fab_margin"
             android:background="@drawable/button_style"
-            android:onClick="favesOnClick (CustomerMainMenuActivity)"
             android:text="@string/my_favorite_trucks"
             android:textAllCaps="false"
             android:textSize="12pt"
@@ -94,6 +85,7 @@
             android:id="@+id/share"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:background="@drawable/button_style"
             android:onClick="shareOnClick"
@@ -143,23 +135,6 @@
             android:onClick="signOutOnClick"
             android:text="@string/sign_out"
             android:textSize="17sp" />
-
-        <Button
-            android:id="@+id/button_social_feed"
-            android:layout_width="wrap_content"
-            android:layout_height="75dp"
-            android:layout_weight="1"
-            android:height="120dp"
-            android:background="@drawable/button_style"
-            android:elevation="0dp"
-            android:text="Social Feed"
-            android:textAllCaps="false"
-            android:textSize="12pt"
-            android:textStyle="bold"
-            android:layout_below="@+id/button_top_trucks"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="30dp"
-            android:layout_alignParentEnd="true" />
 
     </LinearLayout>
 

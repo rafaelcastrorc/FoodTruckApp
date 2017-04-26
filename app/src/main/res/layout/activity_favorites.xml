@@ -26,7 +26,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:text="Here are the trucks you've ordered from the most:"
+            android:text="@string/favorites_text"
             android:textColor="@color/BLACK"
             android:textSize="10pt" />
 
@@ -81,7 +81,8 @@
             android:layout_alignTop="@+id/linearLayout"
             android:layout_weight="0.81"
             android:onClick="goToShareFavs"
-            android:text="Share Favorites" />
+            android:text="Share Favorites"
+            android:background="@drawable/button_style"/>
 
     </LinearLayout>
 

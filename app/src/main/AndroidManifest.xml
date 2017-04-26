@@ -129,7 +129,6 @@
             android:name=".Cart"
             android:exported="true"
             android:label="My Orders" />
-        <activity android:name=".VendorReviewsActivity" />
         <activity
             android:name=".ShareEmailActivity"
             android:label="@string/title_activity_share_email"
