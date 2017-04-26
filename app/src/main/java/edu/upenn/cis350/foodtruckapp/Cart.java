@@ -38,6 +38,7 @@ import java.util.HashMap;
 
 /**
  * Created by rafaelcastro on 4/02/17.
+ * Handles all the functionality of the customer cart
  */
 
 public class Cart extends AppCompatActivity {
@@ -52,19 +53,22 @@ public class Cart extends AppCompatActivity {
     private TwoLineListItem previousChildSelected = null;
     private Order selectedOrder;
 
+    /**
+     * Inflates the menu with the shopping cart icon
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.shopping_cart, menu);
+        inflater.inflate(R.menu.menu_for_cart, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.shopping_cart_button:
+            case R.id.user_history:
 
-                Intent i = new Intent(Cart.this, Cart.class);
+                Intent i = new Intent(Cart.this, CustomerOrderHistoryActivity.class);
                 startActivity(i);
                 return true;
             case R.id.home_button:
@@ -314,12 +318,14 @@ public class Cart extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-        });;
+        });
     }
 
 
 
-    // submit order
+    /**
+     * Handles the code for the Submit button
+     */
     public void submitOrder_onClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(Cart.this, "You must select an order first", Toast.LENGTH_LONG).show();
@@ -371,7 +377,10 @@ public class Cart extends AppCompatActivity {
     }
 
 
-    // update order
+
+    /**
+     * Handles the code for the Update Order button
+     */
     public void updateOrder_OnClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(Cart.this, "You must select an order first", Toast.LENGTH_LONG).show();
@@ -434,7 +443,6 @@ public class Cart extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     //Go to the vendor profile page
                     selectedOrder.getVendorUniqueID();
-                    //Todo: Go to specific vendor profile
                     Intent i = new Intent(Cart.this, VendorProfileForCustomerActivity.class);
                     i.putExtra("vendorUniqueID", selectedOrder.getVendorUniqueID());
                     startActivity(i);
@@ -456,7 +464,7 @@ public class Cart extends AppCompatActivity {
     }
 
 
-    // cancel order
+    // submit order
     public void cartOrderCancelled_onClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(Cart.this, "You must select an order first", Toast.LENGTH_LONG).show();
@@ -537,7 +545,9 @@ public class Cart extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Custom adapter class that handles how the items are displayed in the cart
+     */
 
     class MyAdapter extends BaseAdapter {
 
@@ -588,6 +598,10 @@ public class Cart extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the bar that displays the total. It is constantly updated.
+     */
+
     private void updateTotal(){
         TextView total = (TextView)findViewById(R.id.total_shopping_cart);
         double result = 0.0;
@@ -599,13 +613,6 @@ public class Cart extends AppCompatActivity {
         total.setText("$"+ formatter.format(result));
     }
 
-    public void addFavTruck(View v){
-       // DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users");
-       // FirebaseAuth mAuth;
-       // mAuth = FirebaseAuth.getInstance();
-       // databaseRef.child(mAuth.getCurrentUser().getUid()).child("Favorites").child(singleTruckItem).setValue(singleTruckItem);
-
-    }
 
 }
 

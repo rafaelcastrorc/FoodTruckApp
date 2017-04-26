@@ -1,7 +1,6 @@
 package edu.upenn.cis350.foodtruckapp;
 
 
-import android.util.Log;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,13 +36,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.text.NumberFormat;
-import java.text.DecimalFormat;
-
 
 import static edu.upenn.cis350.foodtruckapp.VendorProfileActivity.setListViewHeightBasedOnChildren;
 
@@ -246,10 +245,24 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+                if (dataSnapshot.getKey().equals("MyOrders")) {
+                    Map<String, Object> orderInfo = (Map<String, Object>) dataSnapshot.getValue();
+                    for (Map.Entry<String, Object> entry : orderInfo.entrySet()) {
+                        if (entry.getKey().equals("Order")) {
+                            String order = (String) entry.getValue();
+                            TreeMap<String, Integer> currentItemsInCart = customerOrderMGM.ordersParser(order);
+                            Log.d("CURR", currentItemsInCart.toString());
+                            for (Map.Entry<String, Integer> item : currentItemsInCart.entrySet()) {
+                                setQuantityByName(item.getKey(), item.getValue());
+                            }
+                        }
+                    }
+                }
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+
             }
 
             @Override
@@ -281,10 +294,8 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 boolean status = false;
-
                 HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
                 for (String type : values.keySet()) {
-
                     if (type.equals("CustomerInstanceId")) {
                         this.instanceId = (String) values.get(type);
                     } else if (type.equals("Order")) {
@@ -306,14 +317,12 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                             this.price= l.doubleValue();
 
                         }
-
                     } else if (type.equals("Submitted")) {
                         String choice = (String) values.get(type);
                         if (choice.equals("true")) {
                             status = true;
                         }
                     }
-
                 }
                 Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
                 customerOrder.setStatus(status);
@@ -428,18 +437,19 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         StorageReference imagesRef = storageRef.child("images");
         StorageReference vendorStorageRef = imagesRef.child(vendorUniqueID);
         final long ONE_MEGABYTE = 1024 * 1024;
+        final ImageView vendorImage = (ImageView) findViewById(R.id.cust_vendor_profile_image);
         vendorStorageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 BitmapDrawable drawableBitmap = new BitmapDrawable(
                         getApplicationContext().getResources(), bitmap);
-                ImageView vendorImage = (ImageView) findViewById(R.id.cust_vendor_profile_image);
                 vendorImage.setBackground(drawableBitmap);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                vendorImage.setBackgroundResource(R.drawable.image_not_found);
             }
         });
     }
@@ -572,6 +582,7 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
                         (String) dataSnapshot.getKey(), (String) dataSnapshot.getValue());
                 menu.remove(menuItem);
                 myAdapter.notifyDataSetChanged();
+                setListViewHeightBasedOnChildren(menuListView);
             }
 
             @Override
@@ -601,25 +612,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
         total.setText("$" + formatter.format(result));
     }
-
-
-    
-    //Todo: For Desmond
-//To add item to cart
-       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-//        customerOrderMGM.addOrderToCart("Candies", "Insert the name of the food truck here", 10.50);
-
- //To remove item
-       // CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-       // customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-        //customerOrderMGM.removeOrderFromCart("Candies", "Insert the name of the food truck here", 10.50);
-
-//To parse the order String
-// CustomerOrderMGM customerOrderMGM = new CustomerOrderMGM();
-// customerOrderMGM.setVendorUniqueID(vendorUniqueID);
-//customerOrderMGM.ordersParser("[1] Chocolate. \n");
-
 
     public void submitReview(View v){
         DatabaseReference reviewRef = vendorRef.child("Reviews");
@@ -652,34 +644,27 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
 
    private void addRating(Integer rating){
-       Log.d("MyTruck", "in this bitch");
 
 
 
        final DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
-       Log.d("MyTruck", "bitch1");
        final DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
-       Log.d("MyTruck", "bitch2");
 
 
        final Integer userRating = rating;
 
         final Double[] avgRating = new Double[1];
-       Log.d("MyTruck", "bitch3");
         final Integer[] totalRatings = new Integer[1];
-       Log.d("MyTruck", "bitch4");
 
         avgRatingRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 try {
-                    Log.d("MyTruck", "bitch5");
                     avgRating[0] = (Double) dataSnapshot.getValue();
                     Log.d("MyTruckAvgRating", ""+avgRating[0]);
                 }
                 catch (ClassCastException e){
-                    Log.d("MyTruck", "bitch6");
                     Long temp = (Long) dataSnapshot.getValue();
                     avgRating[0] = temp.doubleValue();
                     Log.d("MyTruckAvgRating", ""+avgRating[0]);
@@ -696,12 +681,10 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    Log.d("MyTruck", "bitch7");
                     totalRatings[0] = (Integer) dataSnapshot.getValue();
                     Log.d("MyTruckTotalRatings", ""+ totalRatings[0]);
                 }
                 catch (ClassCastException e){
-                    Log.d("MyTruck", "bitch8");
                     Long temp = (Long) dataSnapshot.getValue();
                     totalRatings[0] = temp.intValue();
                     Log.d("MyTruckTotalRatings", ""+ totalRatings[0]);
@@ -722,6 +705,12 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void seeReviews(View v){
+        Intent i = new Intent(VendorProfileForCustomerActivity.this, VendorReviewsActivity.class);
+        i.putExtra("UniqueID", vendorUniqueID);
+        startActivity(i);
     }
 
 

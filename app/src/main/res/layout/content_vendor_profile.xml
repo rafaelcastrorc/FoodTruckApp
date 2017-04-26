@@ -245,7 +245,7 @@
             android:textStyle="bold" />
 
         <RatingBar
-            android:id="@+id/ratingBar"
+            android:id="@+id/ratingBarForVendor"
             android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"

@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -254,12 +255,43 @@ public class VendorProfileActivity extends AppCompatActivity {
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         mAuth = FirebaseAuth.getInstance();
         uniqueID = mAuth.getCurrentUser().getUid();
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         DatabaseReference foodtruck = databaseRef.child(uniqueID).child("Name Of Food Truck");
         foodtruck.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     vendorName = dataSnapshot.getValue().toString();
+                    try {
+                        getSupportActionBar().setTitle(vendorName);
+                    }
+                    catch (NullPointerException e) {
+                        getSupportActionBar().setTitle("No name found");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        DatabaseReference rating = databaseRef.child(uniqueID).child("Average Rating");
+        rating.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    try {
+                        Double rating = (Double) dataSnapshot.getValue();
+                        RatingBar bar = (RatingBar) findViewById(R.id.ratingBarForVendor);
+                        bar.setRating(rating.floatValue());
+                    }
+                    catch (ClassCastException e) {
+                        Long rating = (Long) dataSnapshot.getValue();
+                        RatingBar bar = (RatingBar) findViewById(R.id.ratingBarForVendor);
+                        bar.setRating(rating.floatValue());
+                    }
                     getSupportActionBar().setTitle(vendorName);
                 }
             }
@@ -355,7 +387,7 @@ public class VendorProfileActivity extends AppCompatActivity {
     }
 
     void makeChildrenEditable(View view) {
-        if (!(view instanceof ViewGroup)) {
+        if (!(view instanceof ViewGroup) || view instanceof RatingBar) {
             return;
         }
         else {
@@ -413,12 +445,21 @@ public class VendorProfileActivity extends AppCompatActivity {
     // used for handling mouseclick in menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         if (item.getTitle().equals("Edit")) {
             makeFieldsEditable();
         } else if (item.getTitle().equals("Save")) {
             uploadVendorPicToServer();
             makeFieldsStatic();
             notifyDatabaseOfChange();
+        }
+        else if (item.getTitle().equals("My stats")) {
+            Intent j = new Intent(VendorProfileActivity.this, VendorAnalyticsActivity.class);
+            startActivity(j);
+        }
+        else if (item.getTitle().equals("Home")) {
+            Intent j = new Intent(VendorProfileActivity.this, VendorMainMenuActivity.class);
+            startActivity(j);
         }
         return true;
     }
@@ -667,7 +708,6 @@ public class VendorProfileActivity extends AppCompatActivity {
     }
 
     public void seeReviews(View v){
-        Log.d("BITHCHH", "IN THIS BITCH");
         Intent i = new Intent(VendorProfileActivity.this, VendorReviewsActivity.class);
         i.putExtra("UniqueID", uniqueID);
         startActivity(i);

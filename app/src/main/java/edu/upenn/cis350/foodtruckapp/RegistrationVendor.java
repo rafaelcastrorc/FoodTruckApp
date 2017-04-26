@@ -24,6 +24,8 @@ public class RegistrationVendor extends AppCompatActivity {
     private String userID;
     EditText typeOfFood;
     EditText nameOfFoodTruck;
+    boolean thereIsAName;
+
 
 
 
@@ -32,7 +34,6 @@ public class RegistrationVendor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_vendor);
-        uploadButton = (Button) findViewById(R.id.truckPhoto);
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
 
@@ -43,24 +44,7 @@ public class RegistrationVendor extends AppCompatActivity {
         }
         typeOfFood = (EditText) findViewById(R.id.foodTypeField);
         nameOfFoodTruck = (EditText) findViewById(R.id.truckNameField);
-    }
-
-    protected void btnUploadTruckPhoto(View view){
-        Intent choosePhoto = new Intent(Intent.ACTION_PICK);
-        //intent to pick a picture from gallery
-
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
-        //get path where images are stored
-
-        Uri pictureDirectory = Uri.parse(path);
-        //converts the string of the path to a Uniform Resource Identifier which is used to access directory
-
-        choosePhoto.setDataAndType(pictureDirectory,"image/*");
-        //show images of all types in the directory
-
-        startActivityForResult(choosePhoto,IMAGE_GALLERY);
-        //start the image gallery activity. It will return with value IMAGE_GALLERY and invoke onActivityResult()
-
+        thereIsAName = false;
     }
 
     @Override
@@ -92,6 +76,7 @@ public class RegistrationVendor extends AppCompatActivity {
             return;
         }
 
+        thereIsAName = true;
         String tof = typeOfFood.getText().toString();
         String noft = nameOfFoodTruck.getText().toString();
 
@@ -112,8 +97,8 @@ public class RegistrationVendor extends AppCompatActivity {
 
         currentVendorReference.child("Average Rating").setValue(avgRating); //Initialize the vendor's Average Rating to 0.00
         currentVendorReference.child("Total Ratings").setValue(totalRatings); //Initialize the vendor's Total Ratings to 0
-        currentVendorReference.child("UniqueUserID").setValue(userID); //??? What is this for ???
-        currentVendorReference.child("NameOfFoodTruck").setValue(nameOfFoodTruck.getText().toString());
+        currentVendorReference.child("UniqueUserID").setValue(userID);
+        currentVendorReference.child("NameOfFoodTruck").setValue(nameOfFoodTruck.getText().toString()); //WHY????!!!
         currentVendorReference.child("Menu");
 
         DatabaseReference hoursRef = currentVendorReference.child("Hours");
@@ -126,10 +111,10 @@ public class RegistrationVendor extends AppCompatActivity {
         hoursRef.child("CloseWeekendTime");
         hoursRef.child("CloseWeekendPeriod");
 
-
-        //Todo: Vendor page
-        Intent i = new Intent(RegistrationVendor.this, VendorMainMenuActivity.class);
-        startActivity(i);
+        if (thereIsAName) {
+            Intent i = new Intent(RegistrationVendor.this, VendorMainMenuActivity.class);
+            startActivity(i);
+        }
     }
 
 }
