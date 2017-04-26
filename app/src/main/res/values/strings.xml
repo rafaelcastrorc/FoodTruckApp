@@ -91,12 +91,12 @@
     <string name="done">Done</string>
     <string name="no_show">No Show</string>
     <string name="zero">$00.00</string>
-    <string name="near_me">Food Trucks Near Me</string>
-    <string name="my_favorite_trucks">My Favorite Trucks</string>
+    <string name="near_me">Near Me</string>
+    <string name="my_favorite_trucks">Favorites</string>
     <string name="sign_out">Sign Out</string>
     <string name="total">Total:</string>
-    <string name="top_food_trucks">Top Food Trucks</string>
-    <string name="share">Share with friends</string>
+    <string name="top_food_trucks">Top Trucks</string>
+    <string name="share">Invite Friends to App</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_share_email">ShareEmailActivity</string>
     <string name="send_email">Send email</string>

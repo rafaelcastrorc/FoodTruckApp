@@ -110,13 +110,13 @@ public class LoginActivity extends Activity {
                         progressDialog.dismiss();
 
                         if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                             Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
                             i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                             startActivity(i);
                         } else {
                             Log.e("ERROR", task.getException().toString());
-                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 
                         }
                     }

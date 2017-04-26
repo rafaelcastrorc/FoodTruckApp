@@ -115,8 +115,11 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
 
             @Override
             public void onClick(View v) {
-
-                setLocation(location);
+                try {
+                    setLocation(location);
+                } catch(NullPointerException e) {
+                    Toast.makeText(VendorMainMenuActivity.this, "Unable to find current location", Toast.LENGTH_LONG);
+                }
             }
         });
 
