@@ -88,7 +88,7 @@ public class CustomerMainMenuActivity extends AppCompatActivity implements Googl
                     .addOnConnectionFailedListener(this).addApi(Plus.API)
                     .addScope(Plus.SCOPE_PLUS_LOGIN).build();
 
-            // add click listener to Food Trucks near me button
+            // add click listener to near me button
             Button nearMeButton = (Button) findViewById(R.id.button_near_me);
             nearMeButton.setOnClickListener(new AdapterView.OnClickListener() {
                 public void onClick(View view) {
