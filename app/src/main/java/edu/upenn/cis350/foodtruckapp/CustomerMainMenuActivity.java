@@ -60,6 +60,9 @@ public class CustomerMainMenuActivity extends AppCompatActivity implements Googl
                 Intent j = new Intent(CustomerMainMenuActivity.this, CustomerMainMenuActivity.class);
                 startActivity(j);
                 return true;
+            case R.id.search_button_menu:
+                Intent x = new Intent(CustomerMainMenuActivity.this, SearchFoodActivity.class);
+                startActivity(x);
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -95,15 +98,6 @@ public class CustomerMainMenuActivity extends AppCompatActivity implements Googl
             }
         });
 
-        // add click listener to search food button
-        Button searchFoodButton = (Button) findViewById(R.id.button_search_food);
-        searchFoodButton.setOnClickListener(new AdapterView.OnClickListener() {
-
-            public void onClick(View view) {
-                Intent i = new Intent(CustomerMainMenuActivity.this, SearchFoodActivity.class);
-                startActivity(i);
-            }
-        });
 
         // add click listener to favorites button
         Button favsButton = (Button) findViewById(R.id.button_favs);

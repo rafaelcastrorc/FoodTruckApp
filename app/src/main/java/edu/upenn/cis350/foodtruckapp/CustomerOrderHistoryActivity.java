@@ -73,6 +73,9 @@ public class CustomerOrderHistoryActivity extends AppCompatActivity {
                 Intent j = new Intent(CustomerOrderHistoryActivity.this, CustomerMainMenuActivity.class);
                 startActivity(j);
                 return true;
+            case R.id.search_button_menu:
+                Intent x = new Intent(CustomerOrderHistoryActivity.this, SearchFoodActivity.class);
+                startActivity(x);
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -80,7 +83,6 @@ public class CustomerOrderHistoryActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

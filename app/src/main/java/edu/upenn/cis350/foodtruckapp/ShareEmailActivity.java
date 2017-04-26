@@ -4,12 +4,46 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class ShareEmailActivity extends AppCompatActivity {
     private EditText email;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.shopping_cart, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.shopping_cart_button:
+
+                Intent i = new Intent(ShareEmailActivity.this, Cart.class);
+                startActivity(i);
+                return true;
+            case R.id.home_button:
+                Intent j = new Intent(ShareEmailActivity.this, CustomerMainMenuActivity.class);
+                startActivity(j);
+                return true;
+            case R.id.search_button_menu:
+                Intent x = new Intent(ShareEmailActivity.this, SearchFoodActivity.class);
+                startActivity(x);
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

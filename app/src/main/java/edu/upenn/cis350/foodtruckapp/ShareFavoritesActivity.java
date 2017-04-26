@@ -5,6 +5,9 @@ import android.content.res.ColorStateList;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.SearchView;
 import android.view.View;
 import android.widget.CheckBox;
@@ -30,6 +33,36 @@ public class ShareFavoritesActivity extends AppCompatActivity {
     final Map<CheckBox, String> userCheckboxesAndEmails = new HashMap<>();
 
     String MyFavorites;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.shopping_cart, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.shopping_cart_button:
+
+                Intent i = new Intent(ShareFavoritesActivity.this, Cart.class);
+                startActivity(i);
+                return true;
+            case R.id.home_button:
+                Intent j = new Intent(ShareFavoritesActivity.this, CustomerMainMenuActivity.class);
+                startActivity(j);
+                return true;
+            case R.id.search_button_menu:
+                Intent x = new Intent(ShareFavoritesActivity.this, SearchFoodActivity.class);
+                startActivity(x);
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
