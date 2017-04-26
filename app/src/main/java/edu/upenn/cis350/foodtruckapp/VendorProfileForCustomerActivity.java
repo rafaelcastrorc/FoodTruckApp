@@ -662,12 +662,13 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
                 try {
                     avgRating[0] = (Double) dataSnapshot.getValue();
-                    Log.d("MyTruckAvgRating", ""+avgRating[0]);
+
                 }
                 catch (ClassCastException e){
+
                     Long temp = (Long) dataSnapshot.getValue();
                     avgRating[0] = temp.doubleValue();
-                    Log.d("MyTruckAvgRating", ""+avgRating[0]);
+
                 }
             }
 
@@ -681,20 +682,20 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
+
                     totalRatings[0] = (Integer) dataSnapshot.getValue();
-                    Log.d("MyTruckTotalRatings", ""+ totalRatings[0]);
+
                 }
                 catch (ClassCastException e){
+
                     Long temp = (Long) dataSnapshot.getValue();
                     totalRatings[0] = temp.intValue();
-                    Log.d("MyTruckTotalRatings", ""+ totalRatings[0]);
+
                 }
 
                 Double newRating = (avgRating[0] * totalRatings[0] + userRating)/(totalRatings[0] + 1);
                 Integer newTotalRatings = totalRatings[0] + 1;
 
-                Log.d("MyTrucknewRating", ""+ newRating);
-                Log.d("MyTrucknewTotalRatings", ""+ newTotalRatings);
 
                 avgRatingRef.setValue(newRating);
                 totalRatingsRef.setValue(newTotalRatings);

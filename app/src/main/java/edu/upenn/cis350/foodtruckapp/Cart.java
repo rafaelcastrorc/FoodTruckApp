@@ -325,7 +325,8 @@ public class Cart extends AppCompatActivity {
 
     /**
      * Handles the code for the Submit button
-     */    public void submitOrder_onClick(View v) {
+     */
+    public void submitOrder_onClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(Cart.this, "You must select an order first", Toast.LENGTH_LONG).show();
             return;

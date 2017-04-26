@@ -57,7 +57,7 @@
             android:id="@+id/nameField" />
     </LinearLayout>
 
- //Since Firebase has pre built login for email, we are not using users anymore
+ <!--Since Firebase has pre built login for email, we are not using users anymore-->
     <LinearLayout
 
         android:layout_width="match_parent"
@@ -118,7 +118,7 @@
         android:layout_marginTop="25dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="btnRegistrationCostumer_Click"
+        android:onClick="btnRegistrationCustomer_Click"
         />
 
 </LinearLayout>

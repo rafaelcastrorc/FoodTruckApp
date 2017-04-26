@@ -44,6 +44,9 @@
     <string name="TheirReveiws"><u>Reviews</u></string>
     <string name="TheierRating"><u>Rating</u></string>
 
+    <string name="facebook_app_id">309905269442288</string>
+
+    <string name="app_id">906039078080-2cmjii5bqjti72ftpn5ff8if80725brj.apps.googleusercontent.com</string>
 
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -82,6 +85,35 @@
     <string name="active_toggle_active">Active</string>
     <string name="active_toggle_inactive">Inactive</string>
     <string name="set_location">Set Location</string>
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="no_pw_yet">No account yet? Create one</string>
+    <string name="password_hint">Password</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="order_ready">Order Is Ready!</string>
+    <string name="done">Done</string>
+    <string name="no_show">No Show</string>
+    <string name="zero">$00.00</string>
+    <string name="near_me">Food Trucks Near Me</string>
+    <string name="my_favorite_trucks">My Favorite Trucks</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="total">Total:</string>
+    <string name="top_food_trucks">Top Food Trucks</string>
+    <string name="share">Share with friends</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_share_email">ShareEmailActivity</string>
+    <string name="send_email">Send email</string>
+    <string name="main_text_share_email">Help friends find food trucks near them!</string>
+    <string name="email_subject">Food trucks near you</string>
+    <string name="social_feed">Social Feed</string>
+    <string name="search_food"> Search for Food</string>
+    <string name="favorites_text"> Here are the food trucks you\'ve favorited:</string>
+    <string name="email_content">
+        Do you hate waiting in line at your favorite food truck? \n
+        Do you want to know what food trucks are open near you? \n\n
+
+        No problem! Click the link below to try this unique experience!
+    </string>
 
 
 </resources>

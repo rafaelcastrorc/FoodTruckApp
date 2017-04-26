@@ -2,6 +2,8 @@ package edu.upenn.cis350.foodtruckapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -11,23 +13,33 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.plus.People;
+import com.google.android.gms.plus.Plus;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CustomerMainMenuActivity extends AppCompatActivity {
+public class CustomerMainMenuActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        ResultCallback<People.LoadPeopleResult>, View.OnClickListener {
     private FirebaseAuth mAuth;
+    private DatabaseReference databaseRef;
+    private String currentUserID;
     ArrayList<Order> orders = new ArrayList<>();
-
+    private GoogleApiClient googleApiClient;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,7 +75,14 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_main_menu);
         mAuth = FirebaseAuth.getInstance();
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users");
+        databaseRef = FirebaseDatabase.getInstance().getReference("Users");
+        currentUserID = mAuth.getCurrentUser().getUid();
+
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).addApi(Plus.API)
+                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
 
 
         // add click listener to Food Trucks near me button
@@ -72,6 +91,16 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
 
             public void onClick(View view) {
                 Intent i = new Intent(CustomerMainMenuActivity.this, NearMeActivity.class);
+                startActivity(i);
+            }
+        });
+
+        // add click listener to search food button
+        Button searchFoodButton = (Button) findViewById(R.id.button_search_food);
+        searchFoodButton.setOnClickListener(new AdapterView.OnClickListener() {
+
+            public void onClick(View view) {
+                Intent i = new Intent(CustomerMainMenuActivity.this, SearchFoodActivity.class);
                 startActivity(i);
             }
         });
@@ -96,10 +125,18 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
             }
         });
 
-        DatabaseReference myOrdersRef = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders");
+        // add click listener to social feed button
+        Button socialFeedButton = (Button) findViewById(R.id.button_social_feed);
+        socialFeedButton.setOnClickListener(new AdapterView.OnClickListener() {
 
+            public void onClick(View view) {
+                Intent i = new Intent(CustomerMainMenuActivity.this, SocialFeedActivity.class);
+                startActivity(i);
+            }
+        });
+
+        DatabaseReference myOrdersRef = databaseRef.child(currentUserID).child("MyOrders");
         myOrdersRef.addChildEventListener(new ChildEventListener() {
-
             String vendorUniqueID = "";
             String instanceId = "";
             String order = "";
@@ -241,10 +278,52 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
             }
         });
 
+        // if the customer is still banned then go back to log in,
+        // else reset No Show counters and ban time
+        databaseRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild("Ban Time")) {
+                    String timeInSeconds = dataSnapshot.child("Ban Time").getValue().toString();
+                    int banTime = Integer.parseInt(timeInSeconds);
+                    int currentTime = (int)Math.round(System.currentTimeMillis() / 1000.0);
+
+                    if (currentTime - banTime < 864000) {
+                        Toast.makeText(CustomerMainMenuActivity.this,
+                                "You have been banned for not picking up your orders, come back tomorrow!",
+                                Toast.LENGTH_LONG).show();
+
+                        mAuth.signOut();
+                        Intent i = new Intent(CustomerMainMenuActivity.this, LoginActivity.class);
+                        startActivity(i);
+                        finish();
+                    } else {
+                        resetBanTime(currentUserID);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
-    public void sign_out_onClick(View v) {
+    private void resetBanTime(String userId) {
+        databaseRef.child(userId).child("Ban Time").removeValue();
+        databaseRef.child(userId).child("No Show").setValue(0);
+    }
+
+
+    public void shareOnClick(View v) {
+        Intent i = new Intent(CustomerMainMenuActivity.this, ShareEmailActivity.class);
+        startActivity(i);
+    }
+
+    public void signOutOnClick(View v) {
         mAuth.signOut();
         Intent i = new Intent(CustomerMainMenuActivity.this, LoginActivity.class);
         startActivity(i);
@@ -271,4 +350,42 @@ public class CustomerMainMenuActivity extends AppCompatActivity {
         total.setText("$"+ formatter.format(result));
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Plus.PeopleApi.loadVisible(googleApiClient, null).setResultCallback(
+                this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        googleApiClient.connect();
+
+    }
+
+    protected void onStart() {
+        super.onStart();
+        googleApiClient.connect();
+    }
+
+    protected void onStop() {
+        super.onStop();
+        if (googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onResult(@NonNull People.LoadPeopleResult loadPeopleResult) {
+
+    }
 }

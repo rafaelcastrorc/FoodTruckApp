@@ -26,7 +26,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:text="Here are the trucks you've ordered from the most:"
+            android:text="@string/favorites_text"
             android:textColor="@color/BLACK"
             android:textSize="10pt" />
 
@@ -64,16 +64,28 @@
 
         <TextView
             android:id="@+id/total_shopping_cart"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="17dp"
-            android:layout_weight="0.41"
+            android:layout_weight="0.14"
             android:text="$00.00"
             android:textSize="24sp"
             android:textStyle="bold"
             tools:text="$00.00" />
 
+        <Button
+            android:id="@+id/shareFavs"
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/linearLayout"
+            android:layout_weight="0.81"
+            android:onClick="goToShareFavs"
+            android:text="Share Favorites"
+            android:background="@drawable/button_style"/>
+
     </LinearLayout>
+
+
 
 </RelativeLayout>
