@@ -107,7 +107,6 @@ public class FavoritesActivity extends AppCompatActivity {
         });
 
         list.setAdapter(adapter);
-
         list.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,

@@ -24,8 +24,6 @@ import java.util.TreeSet;
 
 public class TopFoodTrucksActivity extends AppCompatActivity {
 
-
-
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
     private DatabaseReference rating;
@@ -45,7 +43,6 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.shopping_cart_button:
-
                 Intent i = new Intent(TopFoodTrucksActivity.this, Cart.class);
                 startActivity(i);
                 return true;
@@ -65,7 +62,6 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_food_trucks);
-
 
         TextView firstVendorName = (TextView) findViewById(R.id.top_trucks_vendor_one);
         TextView secondVendorName = (TextView) findViewById(R.id.top_trucks_vendor_two);
@@ -160,6 +156,22 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
 
         });
         populateTextFields();
+
+//        list.setAdapter(adapter);
+//        list.setOnItemClickListener(new OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position,
+//                                    long id) {
+//                Intent intent = new Intent(FavoritesActivity.this, VendorProfileForCustomerActivity.class);
+//                final TextView selectedChild = (TextView) parent.getChildAt(position);
+//
+//                String selectedVendorID = (String) selectedChild.getText();
+//                Log.d(selectedVendorID, selectedVendorID);
+//                intent.putExtra("vendorUniqueID", vendors.get(selectedVendorID));
+//                startActivity(intent);
+//            }
+//        });
+//        list.setDividerHeight(10);
     }
 
     void populateTextFields() {
@@ -173,6 +185,8 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
             Vendor vendor = listOfSortedVendors.get(i);
             topTrucks[i].setText(vendor.getName());
             topTrucksRating[i].setRating(vendor.getRating().floatValue());
+            //topTrucksRating[i].setEnabled(false);
+
         }
     }
 }
