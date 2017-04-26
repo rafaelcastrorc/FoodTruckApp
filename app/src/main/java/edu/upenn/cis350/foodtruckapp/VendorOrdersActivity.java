@@ -299,7 +299,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
 
 
     /*Handles the order done button*/
-    public void orderDone_onClick(View v) {
+    public void orderDone_OnClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
             Toast.makeText(VendorOrdersActivity.this, "You must select an order first", Toast.LENGTH_LONG).show();
             return;
