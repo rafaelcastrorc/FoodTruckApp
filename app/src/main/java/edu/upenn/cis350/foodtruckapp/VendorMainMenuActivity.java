@@ -6,6 +6,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +19,11 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.plus.People;
+import com.google.android.gms.plus.Plus;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -25,7 +32,8 @@ import com.google.firebase.database.FirebaseDatabase;
  * Created by desmondhoward on 3/13/17.
  */
 
-public class VendorMainMenuActivity extends AppCompatActivity implements LocationListener{
+public class VendorMainMenuActivity extends AppCompatActivity implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        ResultCallback<People.LoadPeopleResult>, View.OnClickListener {
 
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
@@ -95,7 +103,6 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
             }
         });
 
-
         // add click listener to Active toggle button
         toggleButton = (ToggleButton) findViewById(R.id.active_toggleButton);
         toggleButton.setOnClickListener(new View.OnClickListener() {
@@ -128,8 +135,21 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
     public void sign_out_Vendor_onClick(View v) {
         setActiveStatus(false);
         mAuth.signOut();
+        final GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).addApi(Plus.API)
+                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
+
+        Log.d("LOGOUT", "TEST");
+        if (googleApiClient.isConnected()) {
+            Plus.AccountApi.clearDefaultAccount(googleApiClient);
+            googleApiClient.disconnect();
+            googleApiClient.connect();
+        }
+
         Intent i = new Intent(VendorMainMenuActivity.this, LoginActivity.class);
-        startActivity(i);
+        //startActivity(i);
+        startActivityForResult(i, 1);
         finish();
     }
 
@@ -165,5 +185,31 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
     public void setActiveStatus(boolean status) {
         String userId  = mAuth.getCurrentUser().getUid();
         databaseRef.child(userId).child("Active").setValue(status);
+    }
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onResult(@NonNull People.LoadPeopleResult loadPeopleResult) {
+
     }
 }

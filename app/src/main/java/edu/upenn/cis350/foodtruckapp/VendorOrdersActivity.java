@@ -48,7 +48,7 @@ public class VendorOrdersActivity extends AppCompatActivity {
     private boolean isOrderSelected = false;
     private TwoLineListItem previousChildSelected = null;
     private Order selectedOrder;
-    String truckName = "";
+    private String truckName = "";
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

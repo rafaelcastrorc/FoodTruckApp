@@ -52,17 +52,29 @@ public class RegistrationActivity extends AppCompatActivity {
         String typeSelected = "";
         if(b != null)
             typeSelected = b.getString("type");
-        if (typeSelected.equals("Costumer")) {
-            type = "Costumer";
+        if (typeSelected.equals("Customer")) {
+            type = "Customer";
         }
         else {
             type = "Vendor";
         }
+
+        // user is logged in with Google
+        String email = b.getString("email");
+        String name = b.getString("name");
+        if (email != null) {
+            EditText emailField = (EditText) findViewById(R.id.emailField);
+            emailField.setText(email);
+            Log.d("HEY!!!", "HELLO");
+        }
+        if (name != null) {
+            EditText emailField = (EditText) findViewById(R.id.nameField);
+            emailField.setText(name);
+        }
     }
 
-
     //Register a
-    public void btnRegistrationCostumer_Click(View v) {
+    public void btnRegistrationCustomer_Click(View v) {
         userRegister(v);
     }
 
@@ -89,10 +101,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //password needs to contain one number
         if (!isSecure(password)) {
-            password.setError("You need at leat one number in your password");
+            password.setError("You need at least one number in your password");
 
         }
-
 
         if (isSecure) {
             final ProgressDialog progressDialog = ProgressDialog.show(RegistrationActivity.this, "Please wait", "Processing", true);
@@ -117,7 +128,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                                 //Destination where the user should go once register successfully
                                 //Depends on the type of user
-                                if (type.equals("Costumer")) {
+                                if (type.equals("Customer")) {
                                     Intent i = new Intent(RegistrationActivity.this, CustomerMainMenuActivity.class);
                                     startActivity(i);
                                     finish();

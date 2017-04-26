@@ -1,19 +1,20 @@
 package edu.upenn.cis350.foodtruckapp;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.content.res.ColorStateList;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -23,22 +24,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FavoritesActivity extends AppCompatActivity {
+public class SearchFoodActivity extends AppCompatActivity {
 
-    private FirebaseDatabase database;
-    private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
-    private HashMap<String, String> vendors = new HashMap<String, String>();
-    protected ArrayList<Order> orders = new ArrayList<>();
-    final List<String> favoriteTrucks = new ArrayList<String>();
-
+    Map<String,String> foodList;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -52,16 +47,13 @@ public class FavoritesActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.shopping_cart_button:
 
-                Intent i = new Intent(FavoritesActivity.this, Cart.class);
+                Intent i = new Intent(SearchFoodActivity.this, Cart.class);
                 startActivity(i);
                 return true;
             case R.id.home_button:
-                Intent j = new Intent(FavoritesActivity.this, CustomerMainMenuActivity.class);
+                Intent j = new Intent(SearchFoodActivity.this, CustomerMainMenuActivity.class);
                 startActivity(j);
                 return true;
-            case R.id.search_button_menu:
-                Intent x = new Intent(FavoritesActivity.this, SearchFoodActivity.class);
-                startActivity(x);
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -70,73 +62,158 @@ public class FavoritesActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorites);
-        ListView list = (ListView) findViewById(R.id.favs_list);
+        setContentView(R.layout.activity_search_food);
+        databaseRef =FirebaseDatabase.getInstance().getReference("Users");
+        foodList = new HashMap<>();
 
-       final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item_style2 ,
-                favoriteTrucks) {
+        SearchView sv = (SearchView) findViewById(R.id.searchForFood);
+
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView textView = ((TextView) view.findViewById(android.R.id.text1));
-                textView.setHeight(200);
-                return view;
-            }
-        };
+            public boolean onQueryTextSubmit(String query) {
 
-        mAuth = FirebaseAuth.getInstance();
-        databaseRef = FirebaseDatabase.getInstance().getReference("Users").child(mAuth.getCurrentUser().getUid()).child("Favorites");
-        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child : children) {
+                final String queryUsable = query;
 
-                    String favTruck = child.getValue(String.class);
-                    favoriteTrucks.add(favTruck);
-                }
-                adapter.notifyDataSetChanged();
+                databaseRef.addValueEventListener(new ValueEventListener() {
 
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                Intent intent = new Intent(FavoritesActivity.this, VendorProfileForCustomerActivity.class);
-                final TextView selectedChild = (TextView) parent.getChildAt(position);
-
-                String selectedVendorID = (String) selectedChild.getText();
-                Log.d(selectedVendorID, selectedVendorID);
-                intent.putExtra("vendorUniqueID", vendors.get(selectedVendorID));
-                startActivity(intent);
-            }
-        });
-        list.setDividerHeight(10);
-
-        databaseRef = FirebaseDatabase.getInstance().getReference("Users");
-        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        getAllVendors((Map<String,Object>) dataSnapshot.getValue());
+                        foodList.clear();
+                        Iterable<DataSnapshot> users = dataSnapshot.getChildren();
+                        for (DataSnapshot user : users) {
+                            DataSnapshot name = user.child("Name");
+                            DataSnapshot type = user.child("Type");
+
+
+                            if (type.getValue(String.class).equals("Vendor")) {
+                                DataSnapshot TOF = user.child("Type Of Food");
+                                DataSnapshot uniqueID = user.child("UniqueID");
+                                if (((String)TOF.getValue()).equalsIgnoreCase(queryUsable)){
+                                    foodList.put(name.getValue(String.class),uniqueID.getValue(String.class));
+                                }
+                                else {
+                                    DataSnapshot menuItems = user.child("Menu");
+                                    HashMap<String, Object> values = (HashMap<String, Object>) menuItems.getValue();
+                                    if (values != null) {
+                                        for (String item : values.keySet()) {
+                                            if (item.equalsIgnoreCase(queryUsable)) {
+                                                foodList.put(name.getValue(String.class),uniqueID.getValue(String.class));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        setListView();
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
 
+                    }
+
+
+                });
+                return true; // is it okay to return true on default?
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                final String queryUsable = newText;
+
+                databaseRef.addValueEventListener(new ValueEventListener() {
+
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        foodList.clear();
+                        Iterable<DataSnapshot> users = dataSnapshot.getChildren();
+                        for (DataSnapshot user : users) {
+                            DataSnapshot name = user.child("Name");
+                            DataSnapshot type = user.child("Type");
+
+
+                            if (type.getValue(String.class).equals("Vendor")) {
+                                DataSnapshot TOF = user.child("Type Of Food");
+                                DataSnapshot uniqueID = user.child("UniqueID");
+                                if (((String)TOF.getValue()).equalsIgnoreCase(queryUsable)) {
+                                    foodList.put(name.getValue(String.class), uniqueID.getValue(String.class));
+                                } else {
+                                    DataSnapshot menuItems = user.child("Menu");
+                                    HashMap<String, Object> values = (HashMap<String, Object>) menuItems.getValue();
+                                    if (values != null) {
+                                        for (String item : values.keySet()) {
+                                            if (item.equalsIgnoreCase(queryUsable)) {
+                                                foodList.put(name.getValue(String.class), uniqueID.getValue(String.class));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        setListView();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+
+
+                });
+                return true; // is it okay to return true on default?
+            }
+
+        });
+
+
+
+
+    }
+
+    private void setListView() {
+        final ListView list = (ListView) findViewById(R.id.foodTruckList);
+
+        list.setAdapter( new CustomTruckListAdapter(this, new String[0]));
+
+        String[] trucksNearMe = new String[foodList.size()] ;
+        foodList.keySet().toArray(trucksNearMe);
+
+
+        Arrays.sort(trucksNearMe);
+
+        ListAdapter truckAdapter = new CustomTruckListAdapter(this, trucksNearMe);
+        list.setAdapter(truckAdapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                String truckName = String.valueOf(parent.getItemAtPosition(position));
+                Toast.makeText(SearchFoodActivity.this, truckName, Toast.LENGTH_LONG).show();
+                Intent i = new Intent(SearchFoodActivity.this, VendorProfileForCustomerActivity.class);
+                i.putExtra("vendorUniqueID", foodList.get(truckName));
+                i.putExtra("truckName", truckName);
+                startActivity(i);
+            }
+
+        });
+
+        list.setDividerHeight(10);
+
+        /*
         //Handle total bar
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users");
+
         DatabaseReference myOrdersRef = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders");
         myOrdersRef.addChildEventListener(new ChildEventListener() {
             public String vendorUniqueID = "";
@@ -146,6 +223,7 @@ public class FavoritesActivity extends AppCompatActivity {
             String pushId = "";
             String foodTruckName = "";
             double price = 0.0;
+
 
 
             @Override
@@ -181,12 +259,14 @@ public class FavoritesActivity extends AppCompatActivity {
                             this.price = l.doubleValue();
                         }
                     }
+
                     else if(type.equals("Submitted")) {
                         String choice  = (String) values.get(type);
                         if (choice.equals("true")) {
                             status = true;
                         }
                     }
+
                 }
                 Order customerOrder = new Order(instanceId, order, customerName, pushId, vendorUniqueID);
                 customerOrder.setStatus(status);
@@ -194,6 +274,8 @@ public class FavoritesActivity extends AppCompatActivity {
                 customerOrder.setPrice(price);
                 orders.add(customerOrder);
                 updateTotal();
+
+
             }
 
             @Override
@@ -201,8 +283,10 @@ public class FavoritesActivity extends AppCompatActivity {
                 boolean status = false;
                 HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
                 for (String type: values.keySet()) {
+
                     if (type.equals("CustomerInstanceId")) {
                         this.instanceId = (String) values.get(type);
+
                     }
                     else if (type.equals("Order")) {
                         this.order = (String) values.get(type);
@@ -292,53 +376,9 @@ public class FavoritesActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+        Dont know what to do with this for now */
 
     }
 
-    void getAllVendors(Map<String,Object> users) {
-        for (Map.Entry<String, Object> entry : users.entrySet()){
-            Map user = (Map) entry.getValue();
-            String name = (String) user.get("Name Of Food Truck");
 
-            if (name != null) {
-                Log.d(name, name);
-                if (name.equals("My truck")) {
-                    Log.d((String) user.get("UniqueID"), (String) user.get("UniqueID"));
-                }
-                vendors.put(name, (String) user.get("UniqueID"));
-            }
-        }
-    }
-
-    private void updateTotal(){
-        TextView total = (TextView)findViewById(R.id.total_shopping_cart);
-        total.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(FavoritesActivity.this, Cart.class);
-                startActivity(i);
-            }
-        });
-        double result = 0.0;
-        for (Order order: orders) {
-            result = result + order.getPrice();
-        }
-        NumberFormat formatter = new DecimalFormat("#0.00");
-
-        total.setText("$"+ formatter.format(result));
-    }
-
-
-    public void goToShareFavs(View v){
-        String MyFavorites;
-        MyFavorites = "Hey, \n I just wanted to share my favorite food trucks from " +
-                "the UPenn food truck ordering app. \n My Favorites are \n";
-        for (int i = 0; i<favoriteTrucks.size();i++) {
-            MyFavorites = MyFavorites + i + ". " + favoriteTrucks.get(i) + "\n";
-        }
-
-        Intent i = new Intent(FavoritesActivity.this, ShareFavoritesActivity.class);
-        i.putExtra("MyFavs", MyFavorites);
-        startActivity(i);
-    }
 }

@@ -67,5 +67,13 @@
             android:text="@string/no_pw_yet"
             android:textSize="16dip" />
 
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/google_sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/main_register_button"
+            android:layout_alignEnd="@+id/email_login_field"
+            android:layout_marginTop="9dp" />
+
     </LinearLayout>
 </ScrollView>

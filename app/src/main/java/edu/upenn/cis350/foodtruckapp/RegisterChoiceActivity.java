@@ -21,10 +21,10 @@ public class RegisterChoiceActivity extends AppCompatActivity {
         startActivity(i);
         finish();
     }
-    public void button_costumer_click(View v) {
+    public void button_customer_click(View v) {
         Intent i = new Intent(RegisterChoiceActivity.this, RegistrationActivity.class);
         Bundle b = new Bundle();
-        b.putString("type", "Costumer");
+        b.putString("type", "Customer");
         i.putExtras(b);
         startActivity(i);
         finish();

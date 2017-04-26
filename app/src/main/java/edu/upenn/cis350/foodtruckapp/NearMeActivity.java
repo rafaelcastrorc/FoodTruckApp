@@ -60,6 +60,9 @@ public class NearMeActivity extends AppCompatActivity {
                 Intent j = new Intent(NearMeActivity.this, CustomerMainMenuActivity.class);
                 startActivity(j);
                 return true;
+            case R.id.search_button_menu:
+                Intent x = new Intent(NearMeActivity.this, SearchFoodActivity.class);
+                startActivity(x);
 
             default:
                 // If we got here, the user's action was not recognized.

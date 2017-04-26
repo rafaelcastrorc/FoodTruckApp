@@ -287,6 +287,11 @@
         android:layout_alignRight="@id/top_trucks_vendor_eight_rating"
         android:layout_height="1dp" />
 
+    <!--<ListView-->
+        <!--android:id="@+id/top_food_trucks_list"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"></ListView>-->
+
 
 </LinearLayout>
 

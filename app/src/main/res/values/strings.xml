@@ -44,6 +44,9 @@
     <string name="TheirReveiws"><u>Reviews</u></string>
     <string name="TheierRating"><u>Rating</u></string>
 
+    <string name="facebook_app_id">309905269442288</string>
+
+    <string name="app_id">906039078080-2cmjii5bqjti72ftpn5ff8if80725brj.apps.googleusercontent.com</string>
 
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -102,11 +105,15 @@
     <string name="send_email">Send email</string>
     <string name="main_text_share_email">Help friends find food trucks near them!</string>
     <string name="email_subject">Food trucks near you</string>
+    <string name="social_feed">Social Feed</string>
+    <string name="search_food"> Search for Food</string>
+    <string name="favorites_text"> Here are the food trucks you\'ve favorited:</string>
     <string name="email_content">
         Do you hate waiting in line at your favorite food truck? \n
         Do you want to know what food trucks are open near you? \n\n
 
         No problem! Click the link below to try this unique experience!
     </string>
+
 
 </resources>
