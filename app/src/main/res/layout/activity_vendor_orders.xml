@@ -21,54 +21,53 @@
         android:layout_width="match_parent"
         android:layout_height="59dp"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="4">
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/button_vendor_order_cancelled"
-            android:layout_width="100dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="6dp"
             android:height="120dp"
             android:background="@drawable/button_style"
             android:onClick="OrderCancelledOnClick"
-            android:text="Cancel Order"
+            android:text="@string/cancel_order"
             android:textAllCaps="false"
             android:textStyle="bold" />
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/button_vendor_order_ready"
-            android:layout_width="100dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="0.19"
             android:height="120dp"
             android:background="@drawable/button_style"
             android:onClick="OrderReadyOnClick"
-            android:text="Order Is Ready!"
+            android:text="@string/order_ready"
             android:textAllCaps="false"
             android:textStyle="bold" />
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/orderDone"
-            android:layout_width="100dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="17dp"
             android:height="120dp"
             android:background="@drawable/button_style"
-            android:onClick="orderDone_onClick"
-            android:text="Done"
+            android:onClick="orderDoneOnClick"
+            android:text="@string/done"
+            android:textAllCaps="false"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/noShow"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:height="120dp"
+            android:background="@drawable/button_style"
+            android:onClick="OrderNoShowOnClick"
+            android:text="@string/no_show"
             android:textAllCaps="false"
             android:textStyle="bold" />
 

@@ -1,5 +1,6 @@
 package edu.upenn.cis350.foodtruckapp;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,12 +34,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
  * Created by rafaelcastro on 2/20/17.
  */
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends Activity implements View.OnClickListener {
 
 
     private FirebaseAuth firebaseAuth;
@@ -54,11 +56,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
-        emailLogin = (EditText) findViewById(R.id.email_login_field);
-        pswd = (EditText) findViewById(R.id.password_field_login);
+        emailLogin = (EditText) findViewById(R.id.input_email);
+        pswd = (EditText) findViewById(R.id.input_password);
+
         firebaseAuth = FirebaseAuth.getInstance();
+
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
 

@@ -77,8 +77,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 HashMap<String, Object> values =  (HashMap<String, Object>) dataSnapshot.getValue();
-                for (String id : values.keySet()) {
-                    HashMap<String, Object> userInfo =  (HashMap<String, Object>) values.get(id);
+                for (String UserId : values.keySet()) {
+                    HashMap<String, Object> userInfo =  (HashMap<String, Object>) values.get(UserId);
 
                     if (userInfo.get("Type").equals("Vendor")
                             && userInfo.containsKey("Location")

@@ -27,6 +27,7 @@ import java.util.TreeMap;
 
 /**
  * Created by rafaelcastro on 3/17/17.
+ * Handles how the customer orders are sent from the user to the vendor.
  */
 
 public class CustomerOrderMGM {
@@ -52,7 +53,13 @@ public class CustomerOrderMGM {
 
     protected String getUniqueID() { return mAuth.getCurrentUser().getUid(); }
 
-    //Call from vendor profile on customer side
+    /**
+     * Adds an order to the cart
+     * @param customerOrder - String representing the order of the customer.
+     * @param foodTruckName - Name of the food truck the user ordered from
+     * @param price - Price of the item the user ordered
+     * @return void
+     */
     protected void addOrderToCart(String customerOrder, String foodTruckName, double price) {
         this.foodTruckName = foodTruckName;
         this.price = price;
@@ -61,7 +68,13 @@ public class CustomerOrderMGM {
         updateOrder(customerOrder, price, false);
     }
 
-
+    /**
+     * Removes an order from the cart
+     * @param customerOrder - String representing the order of the customer.
+     * @param foodTruckName - Name of the food truck the user ordered from
+     * @param price - Price of the item the user ordered
+     * @return void
+     */
     protected void removeOrderFromCart(String customerOrder, String foodTruckName, double price) {
         //Check if there is no item.
         //Remove order completly if order is empty
@@ -74,8 +87,14 @@ public class CustomerOrderMGM {
     }
 
 
-
-
+    /**
+     * Updates a current order in the cart
+     * There is a time limit to update the order
+     * @param newOrder - The new item that you are adding to the order.
+     * @param newPrice - The price of the item you are adding to the cart
+     * @param remove - True if you are removing the current item, false otherwise.
+     * @return void
+     */
     protected void updateOrder(final String newOrder, final double newPrice, final boolean remove) {
         //On customer side, find the current order by using the vendor
         DatabaseReference currUser = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
@@ -87,7 +106,7 @@ public class CustomerOrderMGM {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null) {
-                   //This will only happen if there is no order asccoiated with the vendor.
+                   //This will only happen if there is no order associated with the vendor.
                     if(remove) {
                         //If we are removing and there is no order, we just return
                         return;
@@ -100,9 +119,7 @@ public class CustomerOrderMGM {
                 }
                 else {
                     //If there already exist an order, do the following
-
                     HashMap<String, Object> currOrder = (HashMap<String, Object>) dataSnapshot.getValue();
-                    Log.d("fuck order:", newOrder);
                     TreeMap<String, Integer> orderToQuantity;
 
                     //Gets the current order
@@ -130,7 +147,6 @@ public class CustomerOrderMGM {
                         if (orderToQuantity.keySet().size() == 0) {
                             DatabaseReference currUserOrder = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
                             currUserOrder.removeValue();
-                            Log.d("fuck", "here");
                             return;
                         }
                         //If cart does not contain the order, return
@@ -151,8 +167,6 @@ public class CustomerOrderMGM {
                                 orderToQuantity.remove(newOrder);
                             }
                         }
-
-
                     }
 
                     //Get the prev price
@@ -196,6 +210,7 @@ public class CustomerOrderMGM {
                         //Get time of order. Can only change to false if the order has already being submitted
                         DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
                         DateTime prevDT = formatter.parseDateTime((String)currOrder.get("Time"));
+                        //Time limit of 1 minut
                         isValidTime = time(prevDT, 1);
 
                         if (isValidTime) {
@@ -227,6 +242,13 @@ public class CustomerOrderMGM {
 
     }
 
+    /**
+     * Cancels an order, notifies the vendor
+     * There is a time limit to cancel the order
+     * @param submitted - Has the order been submitted to the vendor or not.
+     * @param pushID - pushId of the user
+     * @return void
+     */
     protected void cancelOrder(String pushID, boolean submitted) {
         DatabaseReference currUserOrder = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
         currUserOrder.removeValue();
@@ -296,8 +318,11 @@ public class CustomerOrderMGM {
     }
 
 
-
-    //Call from the cart
+    /**
+     * Sends the order to the vendor, adds it to the database
+     * @param order - String representing the order of the customer.
+     * @return void
+     */
     protected void sendOrderToVendor(Order order) {
         this.customerOrder = order.getCustomerOrder();
         this.foodTruckName = order.getFoodTruckName();
@@ -311,12 +336,19 @@ public class CustomerOrderMGM {
         pushOrderToFirebase(vendorOrdersRef, true);
     }
 
-
+    /**
+     * Subscribes a user to receieve notifications on his device
+     */
     private void subscribe() {
         //Subscribe user to topic so that he can get the notification
         FirebaseMessaging.getInstance().subscribeToTopic("user_" + id);
     }
 
+    /**
+     * Parses an order into a map
+     * @param prevOrder - String representing the order of the customer.
+     * @return TreeMap mapping item to frequency
+     */
     protected TreeMap<String, Integer> ordersParser(String prevOrder) {
         if (prevOrder == null || prevOrder.isEmpty()) {
             return new TreeMap<String, Integer>();
@@ -329,7 +361,6 @@ public class CustomerOrderMGM {
             StringBuilder quantity = new StringBuilder();
 
             String line = scanner.nextLine();
-            Log.d("fuck", "ordersParser: "+line  );
 
             boolean isQuantity = false;
             //Format fo the order [n] Name Of food.\n
@@ -366,6 +397,12 @@ public class CustomerOrderMGM {
         return orderToQuantity;
     }
 
+    /**
+     * Adds a time limite to perform a certain operation
+     * @param date - date the order was sent
+     * @param timeLimit - Amount of minutes user has before he is unable to perform a function
+     * @return boolean
+     */
 
     protected boolean time(DateTime date, int timeLimit) {
         //Allow to change order up to 5 minuts
@@ -379,11 +416,50 @@ public class CustomerOrderMGM {
         return false;
 
     }
-
     protected void setContext(Context context) {
         this.context = context;
     }
 
+
+
+    /**
+     * Adds an order from the history activity
+     * @param customerOrder - the entire order you want to add
+     * @param foodTruckName - the name of the food truck
+     * @param price - total price of the order
+     * @return boolean - true if push was successgul, false if client already submitted order to vendor.
+     */
+    protected void addOrderFromHistory(String customerOrder, String foodTruckName, double price) {
+
+        this.foodTruckName = foodTruckName;
+        this.price = price;
+        this.customerOrder = customerOrder;
+
+        DatabaseReference currUserOrdersRef = databaseRef.child(mAuth.getCurrentUser().getUid()).child("MyOrders").child(vendorUniqueID);
+        currUserOrdersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+
+                    Toast toast = Toast.makeText(context, "You have already submitted an order to this vendor", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+
+                } else {
+                    DatabaseReference vendorRef = databaseRef.child(vendorUniqueID);
+                    final DatabaseReference vendorOrdersRef = vendorRef.child("Orders");
+                    pushOrderToFirebase(vendorOrdersRef, true);
+                    return;
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 
 

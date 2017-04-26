@@ -64,6 +64,10 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
                 Intent j = new Intent(VendorMainMenuActivity.this, VendorMainMenuActivity.class);
                 startActivity(j);
                 return true;
+            case R.id.stats_button:
+                j = new Intent(VendorMainMenuActivity.this, VendorAnalyticsActivity.class);
+                startActivity(j);
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -112,6 +116,7 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, this);
 
+        // add click listener to set location button
         setLocationButton = (Button) findViewById(R.id.set_location);
         setLocationButton.setOnClickListener(new View.OnClickListener() {
 

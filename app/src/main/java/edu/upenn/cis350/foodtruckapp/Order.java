@@ -2,6 +2,7 @@ package edu.upenn.cis350.foodtruckapp;
 
 /**
  * Created by rafaelcastro on 4/3/17.
+ * Order object that s
  */
 
 public class Order {

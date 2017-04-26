@@ -445,12 +445,21 @@ public class VendorProfileActivity extends AppCompatActivity {
     // used for handling mouseclick in menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         if (item.getTitle().equals("Edit")) {
             makeFieldsEditable();
         } else if (item.getTitle().equals("Save")) {
             uploadVendorPicToServer();
             makeFieldsStatic();
             notifyDatabaseOfChange();
+        }
+        else if (item.getTitle().equals("My stats")) {
+            Intent j = new Intent(VendorProfileActivity.this, VendorAnalyticsActivity.class);
+            startActivity(j);
+        }
+        else if (item.getTitle().equals("Home")) {
+            Intent j = new Intent(VendorProfileActivity.this, VendorMainMenuActivity.class);
+            startActivity(j);
         }
         return true;
     }
@@ -699,7 +708,6 @@ public class VendorProfileActivity extends AppCompatActivity {
     }
 
     public void seeReviews(View v){
-        Log.d("BITHCHH", "IN THIS BITCH");
         Intent i = new Intent(VendorProfileActivity.this, VendorReviewsActivity.class);
         i.putExtra("UniqueID", uniqueID);
         startActivity(i);
