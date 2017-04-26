@@ -2,17 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.upenn.cis350.foodtruckapp">
 
-    <permission android:name="edu.upenn.cis350.foodtruckapp.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature"/>
-    <uses-permission android:name="com.weaverprojects.gpstest.permission.MAPS_RECEIVE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <permission
+        android:name="edu.upenn.cis350.foodtruckapp.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.weaverprojects.gpstest.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
 
     <application
         android:allowBackup="true"
@@ -20,9 +21,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".CustomerMainMenuActivity"
@@ -59,7 +60,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".VendorOrdersActivity"
             android:label="My Orders" />
@@ -73,9 +73,7 @@
         <activity
             android:name=".VendorProfileForCustomerActivity"
             android:label="@string/title_activity_vendor_profile"
-            android:theme="@style/AppTheme"
-            />
-
+            android:theme="@style/AppTheme" />
 
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
@@ -102,14 +100,14 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
-
-        <activity android:name=".Cart"
-            android:label="My Orders"
-            android:exported="true">
-
-        </activity>
-        <activity android:name=".VendorReviewsActivity"></activity>
+            android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".Cart"
+            android:exported="true"
+            android:label="My Orders" />
+        <activity android:name=".VendorReviewsActivity" />
+        <activity android:name=".ShareFavoritesActivity" />
+        <activity android:name=".SearchFoodActivity"></activity>
     </application>
 
 </manifest>
