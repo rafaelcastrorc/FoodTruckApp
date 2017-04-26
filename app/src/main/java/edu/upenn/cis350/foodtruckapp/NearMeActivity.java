@@ -8,28 +8,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 public class NearMeActivity extends AppCompatActivity {
     protected ArrayList<Order> orders = new ArrayList<>();
@@ -85,13 +77,8 @@ public class NearMeActivity extends AppCompatActivity {
     private void setListView() {
         final ListView list = (ListView) findViewById(R.id.nearMeList);
 
-        Log.d(TAG, "map size:"+nameIDMap.size());
-
-
         Object[] trucksNearMeObj = nameIDMap.keySet().toArray();
         String[] trucksNearMe = new String[trucksNearMeObj.length];
-
-        Log.d(TAG, "array length:"+nameIDMap.keySet().size());
 
         for (int i = 0; i < trucksNearMeObj.length; i++) {
             trucksNearMe[i] = (String) trucksNearMeObj[i];
@@ -147,18 +134,9 @@ public class NearMeActivity extends AppCompatActivity {
                             && userInfo.containsKey("Type Of Food")
                             && userInfo.containsKey("Active")
                             && userInfo.containsKey("Menu")) {
-
-                        //Log.d(TAG, "user is vendor");
-                        // get info from vendor
                         String vendorName = (String) userInfo.get("Name Of Food Truck");
-                        Log.d(TAG, "vendorName: "+vendorName);
-
                         String uniqueID = (String) userInfo.get("UniqueID");
-                        Log.d(TAG, "uniqueID: "+uniqueID);
-
                         nameIDMap.put(vendorName, uniqueID);
-                        Log.d("getNameIDMap", "putting "+vendorName+ ", "+uniqueID
-                                +" to map. New size = "+nameIDMap.size());
                     }
                     setListView();
                 }

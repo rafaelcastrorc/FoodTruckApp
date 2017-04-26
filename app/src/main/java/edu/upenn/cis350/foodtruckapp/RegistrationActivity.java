@@ -144,8 +144,22 @@ public class RegistrationActivity extends AppCompatActivity {
                                 }
 
                             } else {
-                                Log.e("There is an error", task.getException().toString());
-                                Toast.makeText(RegistrationActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                writeNewUser(name.getText().toString(), mAuth.getCurrentUser().getUid(), type, email.getText().toString());
+                                if (type.equals("Customer")) {
+                                    Intent i = new Intent(RegistrationActivity.this, CustomerMainMenuActivity.class);
+                                    startActivity(i);
+                                    finish();
+                                }
+                                else {
+                                    //If it is a vendor, it goes here
+                                    Intent i = new Intent(RegistrationActivity.this, RegistrationVendor.class);
+                                    Bundle b = new Bundle();
+                                    b.putString("UserId", mAuth.getCurrentUser().getUid()); //Vendor user id to next
+                                    i.putExtras(b); //Put your id to your next Intent
+                                    startActivity(i);
+                                    finish();
+                                }
+//                                Log.d("CRED", )
                             }
                         }
                     });
