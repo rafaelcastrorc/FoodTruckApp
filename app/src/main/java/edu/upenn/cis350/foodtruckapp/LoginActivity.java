@@ -348,7 +348,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                         startActivity(i);
                     }
-                    else if (type.equals("Costumer")) {
+                    else if (type.equals("Customer")) {
                         Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
                         i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                         startActivity(i);

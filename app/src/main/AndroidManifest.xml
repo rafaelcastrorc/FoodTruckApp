@@ -116,6 +116,8 @@
 
         <activity android:name=".VendorReviewsActivity" />
         <activity android:name=".ShareFavoritesActivity" />
+        <activity android:name=".SearchFoodActivity" />
+
 
 
         <activity
