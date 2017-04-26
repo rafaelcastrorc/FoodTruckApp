@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -58,8 +59,8 @@ public class ShareEmailActivity extends AppCompatActivity {
         String content = getResources().getString(R.string.email_content);
 
         Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc/822");
-        i.putExtra(Intent.EXTRA_EMAIL  , address);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{address});
         i.putExtra(Intent.EXTRA_SUBJECT, subject);
         i.putExtra(Intent.EXTRA_TEXT   , content);
         try {
