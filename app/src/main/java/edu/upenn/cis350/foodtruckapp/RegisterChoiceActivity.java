@@ -13,6 +13,10 @@ public class RegisterChoiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register_choice);
     }
 
+    /**
+     * register vendor
+     * @param v
+     */
     public void button_vendor_click(View v) {
         Intent i = new Intent(RegisterChoiceActivity.this, RegistrationActivity.class);
         Bundle b = new Bundle();
@@ -21,6 +25,11 @@ public class RegisterChoiceActivity extends AppCompatActivity {
         startActivity(i);
         finish();
     }
+
+    /**
+     * register customer
+     * @param v
+     */
     public void button_customer_click(View v) {
         Intent i = new Intent(RegisterChoiceActivity.this, RegistrationActivity.class);
         Bundle b = new Bundle();
@@ -30,13 +39,4 @@ public class RegisterChoiceActivity extends AppCompatActivity {
         finish();
     }
 
-    public void registerVendor(View view) {
-        Intent i = new Intent(this, RegistrationVendor.class);
-        startActivity(i);
-    }
-
-    public void registerCustomer(View view) {
-        Intent i = new Intent(this, RegistrationActivity.class);
-        startActivity(i);
-    }
 }

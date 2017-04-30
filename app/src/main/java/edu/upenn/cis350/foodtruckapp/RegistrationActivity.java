@@ -65,7 +65,6 @@ public class RegistrationActivity extends AppCompatActivity {
         if (email != null) {
             EditText emailField = (EditText) findViewById(R.id.emailField);
             emailField.setText(email);
-            Log.d("HEY!!!", "HELLO");
         }
         if (name != null) {
             EditText emailField = (EditText) findViewById(R.id.nameField);
@@ -73,12 +72,18 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-    //Register a
+    /**
+     * start registration from user
+     * @param v
+     */
     public void btnRegistrationCustomer_Click(View v) {
         userRegister(v);
     }
 
-
+    /**
+     * handle with user registration, make sure input parameters of email/pw are respected
+     * @param v
+     */
     private void userRegister(View v) {
         // email cannot be empty
         if (TextUtils.isEmpty(email.getText().toString())) {
@@ -166,6 +171,11 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * check if pw is secure
+     * @param password
+     * @return true if pw is secure false otherwise
+     */
     private boolean isSecure(EditText password) {
         String currPassword = password.getText().toString();
         for (char c : currPassword.toCharArray()) {
@@ -178,6 +188,13 @@ public class RegistrationActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * set new user in database
+     * @param name
+     * @param uniqueName
+     * @param type
+     * @param email
+     */
     private void writeNewUser(String name, String uniqueName, String type, String email) {
         User user = new User(name, uniqueName, type, email);
 

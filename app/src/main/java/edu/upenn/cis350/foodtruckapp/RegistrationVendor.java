@@ -26,10 +26,6 @@ public class RegistrationVendor extends AppCompatActivity {
     EditText nameOfFoodTruck;
     boolean thereIsAName;
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +43,12 @@ public class RegistrationVendor extends AppCompatActivity {
         thereIsAName = false;
     }
 
+    /**
+     * sets image background
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -61,7 +63,10 @@ public class RegistrationVendor extends AppCompatActivity {
         }
     }
 
-    //Once regiter button is pressed
+    /**
+     * register vendor
+     * @param v
+     */
     public void btnRegistrationVendor2_Click(View v) {
 
         // typeOfFood cannot be empty

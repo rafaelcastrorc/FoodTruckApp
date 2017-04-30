@@ -1,5 +1,8 @@
 package edu.upenn.cis350.foodtruckapp;
 
+/**
+ * basic Menu Item class with getters and setters for item price, and quantity
+ */
 public class MyMenuItem {
 
         private String item;
@@ -21,10 +24,6 @@ public class MyMenuItem {
         }
 
         int getQuantity() { return quantity; }
-
-        void incrQuantity() { quantity++; }
-
-        void decrQuantity() { quantity--; }
 
         void setQuantity(int quantity) {this.quantity = quantity; }
 
