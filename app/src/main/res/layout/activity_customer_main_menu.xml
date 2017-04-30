@@ -120,6 +120,7 @@
             android:width="0dp"
             android:onClick="signOutOnClick"
             android:text="@string/sign_out"
+            android:background="@drawable/button_style"
             android:textSize="17sp" />
 
     </LinearLayout>

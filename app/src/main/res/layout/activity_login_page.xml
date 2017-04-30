@@ -67,15 +67,31 @@
             android:text="@string/no_pw_yet"
             android:textSize="16dip" />
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/google_sign_in_button"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/email_login_field"
-            android:layout_below="@+id/main_register_button"
-            android:layout_marginTop="9dp"
-            android:layout_gravity="right"
-            />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/sign_out_google"
+                android:layout_width="122dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:background="@drawable/button_style"
+                android:text="Sign out of Google"
+                android:textSize="17sp" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/google_sign_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="70dp"
+                android:layout_marginTop="9dp" />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 </ScrollView>
