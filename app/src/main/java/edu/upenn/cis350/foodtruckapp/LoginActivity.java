@@ -318,35 +318,23 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
                             if (task.isSuccessful()) {
                                 Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_LONG).show();
-                                Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
-                                i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
-                                startActivity(i);
+                                FirebaseUser user = firebaseAuth.getCurrentUser();
+                                updateUI(user);
+                                //Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
+                                //i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
+                                //startActivity(i);
+                                finish();
+                                overridePendingTransition(0, 0);
+                                startActivity(getIntent());
+                                overridePendingTransition(0, 0);
                             } else {
-                                Log.e("ERROR", task.getException().toString());
-                                //linkWithGoogle();
-                                firebaseAuth.getCurrentUser().linkWithCredential(credential)
-                                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                                if (task.isSuccessful()) {
-                                                    Log.d("HEY", "linkWithCredential:success");
-                                                    FirebaseUser user = task.getResult().getUser();
-                                                    updateUI(user);
-                                                } else {
-                                                    Log.w("HEY", "linkWithCredential:failure", task.getException());
-                                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                                            Toast.LENGTH_SHORT).show();
-                                                    updateUI(null);
-                                                }
 
-                                                // ...
-                                            }
-                                        });
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
 
                             }
                         }
                     });
+
     }
 
     void linkWithGoogle() {
@@ -359,15 +347,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             FirebaseUser user = task.getResult().getUser();
                             updateUI(user);
                         } else {
-                            Log.w("HEY", "linkWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
                         }
 
                         // ...
                     }
                 });
+
     }
 
     public void main_register_button_click(View v) {
@@ -389,11 +376,19 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         //registerGoogleUser(user.getEmail(), user.getDisplayName());
                     }
                     else if (type.equals("Vendor")) {
+
                         Intent i = new Intent(LoginActivity.this, VendorMainMenuActivity.class);
                         i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                         startActivity(i);
+
+
+
                     }
                     else if (type.equals("Customer")) {
+                        finish();
+                        overridePendingTransition(0, 0);
+                        startActivity(getIntent());
+                        overridePendingTransition(0, 0);
                         Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
                         i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                         startActivity(i);
