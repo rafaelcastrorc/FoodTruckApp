@@ -105,12 +105,21 @@ public class SearchFoodActivity extends AppCompatActivity {
 
                             if (type.getValue(String.class).equals("Vendor")) {
                                 DataSnapshot TOF = user.child("Type Of Food");
+                                if (TOF.getValue() == null){
+                                    break;
+                                }
                                 DataSnapshot uniqueID = user.child("UniqueID");
+                                if (uniqueID.getValue() == null){
+                                    break;
+                                }
                                 if (((String)TOF.getValue()).equalsIgnoreCase(queryUsable)){
                                     foodList.put(name.getValue(String.class),uniqueID.getValue(String.class));
                                 }
                                 else {
                                     DataSnapshot menuItems = user.child("Menu");
+                                    if (menuItems.getValue() == null){
+                                        break;
+                                    }
                                     HashMap<String, Object> values = (HashMap<String, Object>) menuItems.getValue();
                                     if (values != null) {
                                         for (String item : values.keySet()) {
