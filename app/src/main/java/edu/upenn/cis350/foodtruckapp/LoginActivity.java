@@ -79,7 +79,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 .build();
         googleApiClient.connect();
 
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
@@ -121,6 +120,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
     // method to sign out Google user
     static void signOut() {
+        if (googleApiClient == null) {
+            return;
+        }
         googleApiClient.connect();
         firebaseAuth.signOut();
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(

@@ -26,12 +26,10 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText password;
     private EditText name;
     private String type;
-
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
     private FirebaseDatabase database;
     boolean isSecure = false;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
