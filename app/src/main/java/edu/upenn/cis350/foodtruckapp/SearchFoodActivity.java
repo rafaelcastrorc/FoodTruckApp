@@ -99,7 +99,7 @@ public class SearchFoodActivity extends AppCompatActivity {
                         foodList.clear();
                         Iterable<DataSnapshot> users = dataSnapshot.getChildren();
                         for (DataSnapshot user : users) {
-                            DataSnapshot name = user.child("Name of Food Truck");
+                            DataSnapshot name = user.child("Name Of Food Truck");
                             DataSnapshot type = user.child("Type");
 
 
@@ -112,10 +112,9 @@ public class SearchFoodActivity extends AppCompatActivity {
                                 if (uniqueID.getValue() == null){
                                     continue;
                                 }
-                                if (((String)TOF.getValue()).equalsIgnoreCase(queryUsable)){
-                                    foodList.put(name.getValue(String.class),uniqueID.getValue(String.class));
-                                }
-                                else {
+                                if (((String)TOF.getValue()).equalsIgnoreCase(queryUsable)) {
+                                    foodList.put(name.getValue(String.class), uniqueID.getValue(String.class));
+                                } else {
                                     DataSnapshot menuItems = user.child("Menu");
                                     if (menuItems.getValue() == null){
                                         continue;
@@ -124,7 +123,7 @@ public class SearchFoodActivity extends AppCompatActivity {
                                     if (values != null) {
                                         for (String item : values.keySet()) {
                                             if (item.equalsIgnoreCase(queryUsable)) {
-                                                foodList.put(name.getValue(String.class),uniqueID.getValue(String.class));
+                                                foodList.put(name.getValue(String.class), uniqueID.getValue(String.class));
                                             }
                                         }
                                     }
@@ -134,7 +133,6 @@ public class SearchFoodActivity extends AppCompatActivity {
 
                         setListView();
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
