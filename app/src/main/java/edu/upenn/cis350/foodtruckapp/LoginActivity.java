@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -54,6 +54,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private boolean sawType = false;
     private boolean once = false;
     private AuthCredential credential;
+    private boolean hasFired = false;
 
 
     @Override
@@ -87,7 +88,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.d("User is signed in", user.getUid());
+                    //Log.d("User is signed in", user.getUid());
                     updateUI(user);
                 } else {
                     // User is signed out
@@ -104,6 +105,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         };
 
         findViewById(R.id.google_sign_in_button).setOnClickListener(this);
+        Button googleSignOutBtn = (Button) findViewById(R.id.sign_out_google);
+        googleSignOutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signOut();
+            }
+        });
 
     }
 
@@ -117,7 +125,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     void signOut() {
         googleApiClient.connect();
         firebaseAuth.signOut();
-        Log.d("SIGN", "SIGN");
+        //Log.d("SIGN", "SIGN");
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
@@ -191,13 +199,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Object type = (Object) dataSnapshot.getValue();
+                hasFired = true;
                 if (type.equals("Customer")) {
                     Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
                     i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                     sawType = true;
                     startActivityForResult(i, 1);
                     Log.d("custttttttt", "fdfsfdsf?");
-                    return;
                 }
                 else if (type.equals("Vendor")) {
                     Intent i = new Intent(LoginActivity.this, VendorMainMenuActivity.class);
@@ -231,6 +239,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         });
 
         if (!sawType) {
+            registerGoogleUser(acct.getEmail(), acct.getDisplayName());
+        }
+    }
+
+    void launchPopup(GoogleSignInAccount acct) {
+        if (hasFired && !sawType) {
             registerGoogleUser(acct.getEmail(), acct.getDisplayName());
         }
     }
@@ -321,6 +335,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             } else {
                                 Log.e("ERROR", task.getException().toString());
                                 //linkWithGoogle();
+                                if (firebaseAuth.getCurrentUser() == null) {
+                                    return;
+                                }
                                 firebaseAuth.getCurrentUser().linkWithCredential(credential)
                                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                             @Override

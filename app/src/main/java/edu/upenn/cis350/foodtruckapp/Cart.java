@@ -515,7 +515,7 @@ public class Cart extends AppCompatActivity {
 
 
             AlertDialog.Builder confirmPopupBuilder = new AlertDialog.Builder(this);
-            confirmPopupBuilder.setTitle("You are about to remove this oder");
+            confirmPopupBuilder.setTitle("You are about to remove this order");
             confirmPopupBuilder.setMessage("Are you sure you want to remove this order: " + selectedOrder.getCustomerOrder().toString()+ "?") ;
 
             confirmPopupBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
