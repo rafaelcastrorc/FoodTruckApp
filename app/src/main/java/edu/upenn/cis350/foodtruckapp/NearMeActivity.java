@@ -13,6 +13,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -102,6 +103,13 @@ public class NearMeActivity extends AppCompatActivity {
         Arrays.sort(trucksNearMe);
 
         ListAdapter truckAdapter = new CustomTruckListAdapter(this, trucksNearMe);
+
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Users");
+        FirebaseAuth mAuth;
+        mAuth = FirebaseAuth.getInstance();
+        String test = mAuth.getCurrentUser().getUid();
+
+
         list.setAdapter(truckAdapter);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -141,8 +149,23 @@ public class NearMeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
+
+                if (dataSnapshot == null){
+                    Log.d("NULL", "Null found");
+
+                }
                 for (String id : values.keySet()) {
                     HashMap<String, Object> userInfo = (HashMap<String, Object>) values.get(id);
+
+                    if (userInfo == null){
+                        Log.d("NULL", "Null found");
+
+                    }
+
+                    if (userInfo.get("Type")== null){
+                        Log.d("NULL2", "Null found");
+
+                    }
 
                     if (userInfo.get("Type").equals("Vendor")
                             && userInfo.containsKey("Location")

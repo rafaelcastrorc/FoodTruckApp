@@ -34,6 +34,9 @@ public class CustomTruckListAdapter extends ArrayAdapter<String> {
         final String singleTruckItem = getItem(position);
         TextView textView = (TextView) customView.findViewById(R.id.truckName);
         Button button = (Button) customView.findViewById(R.id.fav);
+
+
+
         button.setOnClickListener(new View.OnClickListener(){
 
             @Override
