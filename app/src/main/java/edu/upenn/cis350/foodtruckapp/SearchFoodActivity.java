@@ -99,7 +99,7 @@ public class SearchFoodActivity extends AppCompatActivity {
                         foodList.clear();
                         Iterable<DataSnapshot> users = dataSnapshot.getChildren();
                         for (DataSnapshot user : users) {
-                            DataSnapshot name = user.child("Name");
+                            DataSnapshot name = user.child("Name of Food Truck");
                             DataSnapshot type = user.child("Type");
 
 
