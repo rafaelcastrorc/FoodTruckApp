@@ -68,10 +68,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         uiSettings.setCompassEnabled(true);
     }
 
+    /**
+     * get markers of vendors to display on the map activity
+     */
     private void getMarkers()  {
 
         // Read from the database
         databaseRef.addValueEventListener(new ValueEventListener() {
+            /**
+             * listener to get data of vendors from firebase db
+             * @param dataSnapshot
+             */
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -130,6 +137,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
 
+            /**
+             * handles error from db
+             * @param error
+             */
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -138,7 +149,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-
+    /**
+     * basic location class with coordinates and getters and setters
+     */
     public class Location {
         private double lat;
         private double lng;

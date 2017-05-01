@@ -48,7 +48,11 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
     Button favsButton;
 
     Location location;
-
+    /**
+     * Creates menu bar
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -56,6 +60,11 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
         return true;
     }
 
+    /**
+     * Starts activities selected from menu bar
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -132,6 +141,10 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
 
     }
 
+    /**
+     * Signs out of vendor activity
+     * @param v
+     */
     public void sign_out_Vendor_onClick(View v) {
         setActiveStatus(false);
         mAuth.signOut();
@@ -153,7 +166,10 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
         finish();
     }
 
-
+    /**
+     * Updates location once changed
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
@@ -174,6 +190,10 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
 
     }
 
+    /**
+     * Sets location of vendor to given coordinates
+     * @param location
+     */
     public void setLocation(Location location){
         String userId  = mAuth.getCurrentUser().getUid();
         String lat = Double.toString(location.getLatitude());
@@ -182,6 +202,10 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
         Toast.makeText(getApplicationContext(), "You have correctly set your location!", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Sets if vendor is active or not
+     * @param status
+     */
     public void setActiveStatus(boolean status) {
         String userId  = mAuth.getCurrentUser().getUid();
         databaseRef.child(userId).child("Active").setValue(status);

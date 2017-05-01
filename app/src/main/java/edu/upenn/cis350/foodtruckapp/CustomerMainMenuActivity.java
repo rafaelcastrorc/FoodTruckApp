@@ -48,6 +48,11 @@ public class CustomerMainMenuActivity extends AppCompatActivity implements Googl
         return true;
     }
 
+    /**
+     * Starts selected activity
+     * @param item
+     * @return true if selected activity valid
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -313,25 +318,38 @@ public class CustomerMainMenuActivity extends AppCompatActivity implements Googl
 
     }
 
+    /**
+     * Resets ban time to 0. called after a day from original ban time
+     * @param userId user involved
+     */
     private void resetBanTime(String userId) {
         databaseRef.child(userId).child("Ban Time").removeValue();
         databaseRef.child(userId).child("No Show").setValue(0);
     }
 
-
-    public void shareOnClick(View v) {
+    /**
+     * Starts shar email activity
+     * @param view
+     */
+    public void shareOnClick(View view) {
         Intent i = new Intent(CustomerMainMenuActivity.this, ShareEmailActivity.class);
         startActivity(i);
     }
 
-    public void signOutOnClick(View v) {
+    /**
+     * Signs out
+     * @param view
+     */
+    public void signOutOnClick(View view) {
         mAuth.signOut();
         Intent i = new Intent(CustomerMainMenuActivity.this, LoginActivity.class);
         startActivity(i);
         finish();
     }
 
-
+    /**
+     * update cart total
+     */
     private void updateTotal(){
         TextView total = (TextView)findViewById(R.id.total_shopping_cart);
         total.setOnClickListener(new View.OnClickListener() {
@@ -350,8 +368,9 @@ public class CustomerMainMenuActivity extends AppCompatActivity implements Googl
         total.setText("$"+ formatter.format(result));
     }
 
+
     @Override
-    public void onClick(View v) {
+    public void onClick(View view) {
 
     }
 
@@ -367,11 +386,17 @@ public class CustomerMainMenuActivity extends AppCompatActivity implements Googl
 
     }
 
+    /**
+     * Called to connect to google api client
+     */
     protected void onStart() {
         super.onStart();
         googleApiClient.connect();
     }
 
+    /**
+     * Disconnects google
+     */
     protected void onStop() {
         super.onStop();
         if (googleApiClient.isConnected()) {

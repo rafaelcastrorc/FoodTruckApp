@@ -15,6 +15,11 @@ import android.widget.Toast;
 public class ShareEmailActivity extends AppCompatActivity {
     private EditText email;
 
+    /**
+     * create menu bar
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -22,6 +27,11 @@ public class ShareEmailActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * start activities selected from menu bar
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -53,6 +63,10 @@ public class ShareEmailActivity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.input_email_share);
     }
 
+    /**
+     * open local email app with TO, Subject fields, and content
+     * @param v
+     */
     public void sendEmailOnClick(View v) {
         String address = email.getText().toString();
         String subject = getResources().getString(R.string.email_subject);

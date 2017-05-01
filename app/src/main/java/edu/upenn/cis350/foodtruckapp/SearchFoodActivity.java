@@ -35,6 +35,11 @@ public class SearchFoodActivity extends AppCompatActivity {
     private DatabaseReference databaseRef;
     Map<String,String> foodList;
 
+    /**
+     * add shopping cart to menu bar
+     * @param menu
+     * @return true if selected activity valid
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -42,6 +47,11 @@ public class SearchFoodActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * start activities clicked in menu bar
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -62,7 +72,10 @@ public class SearchFoodActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * creates and handles search logic
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +99,7 @@ public class SearchFoodActivity extends AppCompatActivity {
                         foodList.clear();
                         Iterable<DataSnapshot> users = dataSnapshot.getChildren();
                         for (DataSnapshot user : users) {
-                            DataSnapshot name = user.child("Name Of Food Truck");
+                            DataSnapshot name = user.child("Name");
                             DataSnapshot type = user.child("Type");
 
 
@@ -135,7 +148,7 @@ public class SearchFoodActivity extends AppCompatActivity {
                         foodList.clear();
                         Iterable<DataSnapshot> users = dataSnapshot.getChildren();
                         for (DataSnapshot user : users) {
-                            DataSnapshot name = user.child("Name Of Food Truck");
+                            DataSnapshot name = user.child("Name");
                             DataSnapshot type = user.child("Type");
 
 
@@ -168,7 +181,7 @@ public class SearchFoodActivity extends AppCompatActivity {
 
 
                 });
-                return true; // is it okay to return true on default?
+                return true;
             }
 
         });
@@ -178,6 +191,9 @@ public class SearchFoodActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * set list view of food trucks found
+     */
     private void setListView() {
         final ListView list = (ListView) findViewById(R.id.foodTruckList);
 
@@ -208,6 +224,7 @@ public class SearchFoodActivity extends AppCompatActivity {
         });
 
         list.setDividerHeight(10);
+
 
     }
 

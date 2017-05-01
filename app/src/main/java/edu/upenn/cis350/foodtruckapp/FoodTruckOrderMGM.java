@@ -31,6 +31,10 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
         this.username  = username;
     }
 
+    /**
+     * Process order operation
+     * @param i 1 if order ready, 2 if order cancelled
+     */
     protected void orderDone(int i) {
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         mAuth = FirebaseAuth.getInstance();
@@ -42,6 +46,9 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
         }
     }
 
+    /**
+     * Send notification that order is ready
+     */
     private void sendOrder() {
         String uniqueUID = mAuth.getCurrentUser().getUid();
         DatabaseReference nameofft = databaseRef.child(uniqueUID).child("Name Of Food Truck");
@@ -60,6 +67,9 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
         });
     }
 
+    /**
+     * Send notification that order was cancelled
+     */
     private void sendOrder2() {
         String uniqueUID = mAuth.getCurrentUser().getUid();
         DatabaseReference nameofft = databaseRef.child(uniqueUID).child("Name Of Food Truck");
@@ -78,8 +88,12 @@ public class FoodTruckOrderMGM extends AppCompatActivity  {
         });
     }
 
-    //This sends a request to the queue, then the Node script handles everything in our other server,
-    //and sends notification to user. PLEASE DO NOT MODIFY ANYTHING IN THIS FILE!
+    /**
+     * This sends a request to the queue, then the Node script handles everything in our other server,
+     * send notif to user
+     * @param user
+     * @param message
+     */
     private void sendNotificationToUser(String user, final String message) {
         //Access the queue part of the database
         database = FirebaseDatabase.getInstance();

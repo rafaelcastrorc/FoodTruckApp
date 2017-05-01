@@ -47,6 +47,11 @@ public class FavoritesActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Start selected activity
+     * @param item
+     * @return true if selected activity valid
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -295,6 +300,10 @@ public class FavoritesActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Get favorite vendors, add them to class variable
+     * @param users
+     */
     void getAllVendors(Map<String,Object> users) {
         for (Map.Entry<String, Object> entry : users.entrySet()){
             Map user = (Map) entry.getValue();
@@ -310,6 +319,9 @@ public class FavoritesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Update shopping cart total
+     */
     private void updateTotal(){
         TextView total = (TextView)findViewById(R.id.total_shopping_cart);
         total.setOnClickListener(new View.OnClickListener() {
@@ -328,7 +340,10 @@ public class FavoritesActivity extends AppCompatActivity {
         total.setText("$"+ formatter.format(result));
     }
 
-
+    /**
+     * Start activity to share favs with friend
+     * @param v
+     */
     public void goToShareFavs(View v){
         String MyFavorites;
         MyFavorites = "Hey, \n I just wanted to share my favorite food trucks from " +

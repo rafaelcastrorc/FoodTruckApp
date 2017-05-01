@@ -53,32 +53,11 @@ import java.util.HashMap;
 
 public class VendorProfileActivity extends AppCompatActivity {
 
-    private Spinner openWeekdayTimeSpinner;
-    private Spinner openWeekdayPeriodSpinner;
-    private Spinner closeWeekdayTimeSpinner;
-    private Spinner closeWeekdayPeriodSpinner;
-    private Spinner openWeekendTimeSpinner;
-    private Spinner openWeekendPeriodSpinner;
-    private Spinner closeWeekendTimeSpinner;
-    private Spinner closeWeekendPeriodSpinner;
-    ArrayList<Integer> itemIds;
-    ArrayList<Integer> priceIds;
+
     ArrayList<Integer> pickerIds;
-    ArrayList<Integer> allIds;
-    private String selection;
     private Toolbar toolbar;
-    private EditText itemPrice;
-    private EditText itemTwoPrice;
-    private EditText itemThreePrice;
-    private EditText itemFourPrice;
-    private EditText itemFivePrice;
-    private EditText itemSixPrice;
-    private EditText itemSevenPrice;
-    private EditText itemEightPrice;
-    private EditText itemNinePrice;
     private Button profilePic;
     public static int PICK_PROFILE_PIC = 1;
-    private FirebaseDatabase database;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
     private FirebaseStorage storage;
@@ -89,7 +68,6 @@ public class VendorProfileActivity extends AppCompatActivity {
     private StorageReference vendorRef;
     private ArrayList<MyMenuItem> menu;
     private ListView menuListView;
-    private HashMap<String, String> textValues = new HashMap<String, String>();
     private int openWeekdayTime = 0;
     private String openWeekdayPeriod = "";
     private int closeWeekdayTime = 0;
@@ -372,6 +350,10 @@ public class VendorProfileActivity extends AppCompatActivity {
         makeFieldsStatic();
     }
 
+    /**
+     * Make items static
+     * @param view
+     */
     void makeChildrenStatic(View view) {
         if (!(view instanceof ViewGroup)) {
             return;
@@ -386,6 +368,10 @@ public class VendorProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Make items editable
+     * @param view
+     */
     void makeChildrenEditable(View view) {
         if (!(view instanceof ViewGroup) || view instanceof RatingBar) {
             return;
@@ -400,18 +386,28 @@ public class VendorProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Calls makeChilrenEditable
+     */
     void makeFieldsStatic() {
         LinearLayout overallLayout = (LinearLayout) findViewById(R.id.vendor_profile_overall_layout);
         makeChildrenStatic(overallLayout);
         menuListView.setEnabled(false);
     }
 
+    /**
+     * Calls makeChilrenStatic
+     */
     void makeFieldsEditable() {
         LinearLayout overallLayout = (LinearLayout) findViewById(R.id.vendor_profile_overall_layout);
         makeChildrenEditable(overallLayout);
         menuListView.setEnabled(false);
     }
 
+    /**
+     * Sets ListView
+     * @param listView
+     */
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter arrayAdapter = listView.getAdapter();
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(
@@ -434,7 +430,11 @@ public class VendorProfileActivity extends AppCompatActivity {
         listView.setLayoutParams(params);
     }
 
-    // used to create menu
+    /**
+     * Creates menu bar
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -442,7 +442,11 @@ public class VendorProfileActivity extends AppCompatActivity {
         return true;
     }
 
-    // used for handling mouseclick in menu
+    /**
+     * Starts activities selected from menu bar
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -464,6 +468,9 @@ public class VendorProfileActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Uploads vendor profile pic
+     */
     void uploadVendorPicToServer() {
         Button imageBtn = (Button) findViewById(R.id.vendor_profile_image);
         Drawable drawable = imageBtn.getBackground();
@@ -495,7 +502,12 @@ public class VendorProfileActivity extends AppCompatActivity {
         });
     }
 
-    // used for receiving image from user & changing background of button to that image
+    /**
+     * Once finished uploading, sets background image
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {
@@ -518,6 +530,9 @@ public class VendorProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Creates bitmap for image
+     */
     void populateVendorPicture() {
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
@@ -540,6 +555,9 @@ public class VendorProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * updates db
+     */
     void notifyDatabaseOfChange() {
         databaseRef = FirebaseDatabase.getInstance().getReference("Users");
         mAuth = FirebaseAuth.getInstance();
@@ -580,7 +598,9 @@ public class VendorProfileActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Adapter for view
+     */
     class MyAdapter extends BaseAdapter {
 
         private Context context;

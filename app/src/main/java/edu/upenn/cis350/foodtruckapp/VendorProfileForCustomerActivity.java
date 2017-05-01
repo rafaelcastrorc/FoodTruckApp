@@ -58,6 +58,11 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     ArrayList<Order> orders = new ArrayList<>();
 
 
+    /**
+     * Creates menu bar
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -65,6 +70,11 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Starts activities selected from menu bar
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -427,6 +437,11 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Sets quantity of given item
+     * @param name
+     * @param quantity
+     */
     void setQuantityByName(String name, int quantity) {
         for (MyMenuItem item : menu) {
             if (item.getItem().equals(name)) {
@@ -435,7 +450,9 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         }
     }
 
-    // get vendor picture
+    /**
+     * Gets vendor's picture
+     */
     void populateVendorPicture() {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -459,7 +476,9 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         });
     }
 
-    // custom adapter for menu listview
+    /**
+     * custom adapter for menu listview
+     */
     public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
         private Context context;
         int quantity = 0;
@@ -557,6 +576,9 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Creates Menu of vendor
+     */
     private void populateMenu() {
         menu = new ArrayList<MyMenuItem>();
         final MyCustomAdapter myAdapter = new MyCustomAdapter(this);
@@ -600,6 +622,9 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Updates total of the shopping cart
+     */
     private void updateTotal() {
         TextView total = (TextView) findViewById(R.id.total_shopping_cart);
         total.setOnClickListener(new View.OnClickListener() {
@@ -626,8 +651,6 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
 
         reviewRef.child(customerUniqueID).setValue(review);
 
-          //customerUniqueID needs to be set somewhere
-          //How to notify vendor of new update?
     }
 
     public void addRatingOf1(View v){
@@ -647,11 +670,11 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Add rating from 1 to 5
+     * @param rating
+     */
    private void addRating(Integer rating){
-
-
-
        final DatabaseReference avgRatingRef = vendorRef.child("Average Rating");
        final DatabaseReference totalRatingsRef = vendorRef.child("Total Ratings");
 
@@ -713,6 +736,10 @@ public class VendorProfileForCustomerActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Starts VendorReviewActivity
+     * @param v
+     */
     public void seeReviews(View v){
         Intent i = new Intent(VendorProfileForCustomerActivity.this, VendorReviewsActivity.class);
         i.putExtra("UniqueID", vendorUniqueID);

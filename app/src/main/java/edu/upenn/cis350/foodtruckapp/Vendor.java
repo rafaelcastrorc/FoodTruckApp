@@ -2,6 +2,7 @@ package edu.upenn.cis350.foodtruckapp;
 
 /**
  * Created by desmondhoward on 3/24/17.
+ * Vendor class with getter and setters for name and rating
  */
 
 public class Vendor implements Comparable<Vendor> {

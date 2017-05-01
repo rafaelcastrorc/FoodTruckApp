@@ -107,7 +107,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
     }
 
-    // method to sign in Google user
+    /**
+     * sing in gogoel user
+     */
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -140,8 +142,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching th
-        // e Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             GoogleSignInAccount account = result.getSignInAccount();
@@ -273,19 +273,15 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     @Override
     public void onStart() {
         firebaseAuth.addAuthStateListener(mAuthListener);
-//        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestEmail()
-//                .requestIdToken("906039078080-2cmjii5bqjti72ftpn5ff8if80725brj.apps.googleusercontent.com")
-//                .build();
-//        googleApiClient = new GoogleApiClient.Builder(this)
-//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-//                .build();
-//        googleApiClient.connect();
+
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         updateUI(currentUser);
         super.onStart();
     }
 
+    /**
+     * disconnect fireAuth
+     */
     @Override
     public void onStop() {
         super.onStop();
