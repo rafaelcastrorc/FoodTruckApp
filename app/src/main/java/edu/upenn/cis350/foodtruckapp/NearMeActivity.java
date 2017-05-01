@@ -33,6 +33,11 @@ public class NearMeActivity extends AppCompatActivity {
 
     private final String TAG = "NearMeActivity";
 
+    /**
+     * inflate Meny to be displayed
+     * @param menu
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -40,6 +45,11 @@ public class NearMeActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * start selected activity
+     * @param item
+     * @return true if selected activity valid
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -76,7 +86,9 @@ public class NearMeActivity extends AppCompatActivity {
         setListView();
     }
 
-
+    /**
+     * set list view of vendors and click listeners to go to relative vendor page
+     */
     private void setListView() {
         final ListView list = (ListView) findViewById(R.id.nearMeList);
 
@@ -86,11 +98,6 @@ public class NearMeActivity extends AppCompatActivity {
         for (int i = 0; i < trucksNearMeObj.length; i++) {
             trucksNearMe[i] = (String) trucksNearMeObj[i];
         }
-
-//        for (int i = 0; i < trucksNearMe.length; i++) {
-//            Log.d(TAG, "in for loop "+trucksNearMe[i]);
-//        }
-//        String[] trucksNearMe = {"Hemo's", "Real Leann's", "Halal Guys", "Magic Carpet"};
 
         Arrays.sort(trucksNearMe);
 
@@ -115,12 +122,18 @@ public class NearMeActivity extends AppCompatActivity {
         list.setDividerHeight(10);
     }
 
-
+    /**
+     * start map activity upon click
+     * @param view
+     */
     public void onMapButtonClick(View view) {
         Intent i = new Intent(NearMeActivity.this, MapsActivity.class);
         startActivity(i);
     }
 
+    /**
+     * saves map of vendor name (key) and id (value)
+     */
     private void getNameIDMap() {
         //read from database
         databaseRef.addValueEventListener(new ValueEventListener() {

@@ -34,6 +34,11 @@ public class ShareFavoritesActivity extends AppCompatActivity {
 
     String MyFavorites;
 
+    /**
+     * create menu bar
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -41,6 +46,11 @@ public class ShareFavoritesActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * start activities selected from menu bar
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -64,6 +74,10 @@ public class ShareFavoritesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * usual onCreate and also handles email sharing
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +94,6 @@ public class ShareFavoritesActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
 
                 final String queryUsable = query;
-                Log.d("FUCK", queryUsable);
                 databaseRef.addValueEventListener(new ValueEventListener() {
 
 
@@ -98,7 +111,6 @@ public class ShareFavoritesActivity extends AppCompatActivity {
                             String userEmail = email.getValue(String.class);
 
                             if (userName.equals(queryUsable)){
-                                Log.d("InThisBitch", userName);
                                 CheckBox userToEmail = new CheckBox(getApplicationContext());
                                 userToEmail.setText(userName);
                                 userToEmail.setTextColor(getResources().getColor(R.color.BLACK));
@@ -173,6 +185,10 @@ public class ShareFavoritesActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * sends email to selected user with favorites
+     * @param v
+     */
     public void shareFavorites(View v){
             for (Map.Entry<CheckBox,String> c: userCheckboxesAndEmails.entrySet()){
                 if (c.getKey().isChecked()){

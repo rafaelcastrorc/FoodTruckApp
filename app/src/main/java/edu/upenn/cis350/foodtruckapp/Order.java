@@ -27,50 +27,90 @@ public class Order {
         this.vendorUniqueID = vendorUniqueID;
     }
 
+    /**
+     *
+     * @return customerInstanceID
+     */
     public String getCustomerInstanceID() {
         return customerInstanceID;
     }
 
+    /**
+     *
+     * @return current customer order
+     */
     public String getCustomerOrder() {
         return order;
     }
 
+    /**
+     *
+     * @return current push ID
+     */
     public String getPushId() {
         return pushId;
     }
 
-
+    /**
+     *
+     * @return customer name
+     */
     public String getCustomerName() {
         return customerName;
     }
 
+    /**
+     *
+     * @return vendor's unique id
+     */
     public String getVendorUniqueID() {
         return vendorUniqueID;
     }
 
+    /**
+     *  set whether order has been submitted
+     * @param status: if order has been submitted yet
+     */
     public void setStatus(boolean status) {
         submitted = status;
     }
 
+    /**
+     *
+     * @return true if submitted, false otherwise
+     */
     public boolean getStatus() {
         return submitted;
     }
 
-
+    /**
+     *
+     * @param name vendor name
+     */
     public void setFoodTruckName(String name) {
         vendorName = name;
     }
 
-
+    /**
+     *
+     * @return vendorName
+     */
     public String getFoodTruckName() {
         return vendorName;
     }
 
+    /**
+     * set price
+     * @param price
+     */
     public void setPrice(double price) {
         this.price = price;
     }
 
-
+    /**
+     *
+     * @return get price
+     */
     public double getPrice() {
         return price;
     }
@@ -108,31 +148,60 @@ public class Order {
         return result;
     }
 
+    /**
+     * set customer id
+     * @param customerUniqueID
+     */
     protected void setCustomerUniqueID(String customerUniqueID) {
         this.customerUniqueID = customerUniqueID;
     }
 
+    /**
+     *
+     * @return customerUniqueID
+     */
     public String getCustomerUniqueID() {
         return customerUniqueID;
     }
 
+    /**
+     * set time of order
+     * @param time
+     */
     public void setTime(String time) {
         this.time = time;
     }
 
+    /**
+     *
+     * @return get time of order
+     */
     public String getTime() {
         return time;
     }
 
+    /**
+     * format strings to be displayed in list
+     * @param firstLine
+     * @param secondLine
+     */
     void setFormatStrings(String firstLine, String secondLine) {
         this.firstLine = firstLine;
         this.secondLine = secondLine;
     }
 
+    /**
+     *
+     * @return first line
+     */
     String getFirstLine() {
         return firstLine;
     }
 
+    /**
+     *
+     * @return second line
+     */
     String getSecondLine() {
         return secondLine;
     }

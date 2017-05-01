@@ -38,7 +38,11 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
     private HashMap<String, String> nameIDMap;
 
 
-
+    /**
+     * add shopping cart to menu bar
+     * @param menu
+     * @return true if selected activity valid
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -46,6 +50,11 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * start activities clicked in menu bar
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -68,48 +77,14 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * usual onCreate plus gets vendor information from db
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_food_trucks);
-//
-//        TextView firstVendorName = (TextView) findViewById(R.id.top_trucks_vendor_one);
-//        TextView secondVendorName = (TextView) findViewById(R.id.top_trucks_vendor_two);
-//        TextView thirdVendorName = (TextView) findViewById(R.id.top_trucks_vendor_three);
-//        TextView fourthVendorName = (TextView) findViewById(R.id.top_trucks_vendor_four);
-//        TextView fifthVendorName = (TextView) findViewById(R.id.top_trucks_vendor_five);
-//        TextView sixthVendorName = (TextView) findViewById(R.id.top_trucks_vendor_six);
-//        TextView seventhVendorName = (TextView) findViewById(R.id.top_trucks_vendor_seven);
-//        TextView eighthVendorName = (TextView) findViewById(R.id.top_trucks_vendor_eight);
-//
-//        topTrucks = new TextView[8];
-//        topTrucks[0] = firstVendorName;
-//        topTrucks[1] = secondVendorName;
-//        topTrucks[2] = thirdVendorName;
-//        topTrucks[3] = fourthVendorName;
-//        topTrucks[4] = fifthVendorName;
-//        topTrucks[5] = sixthVendorName;
-//        topTrucks[6] = seventhVendorName;
-//        topTrucks[7] = eighthVendorName;
-//
-//        RatingBar firstVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_one_rating);
-//        RatingBar secondVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_two_rating);
-//        RatingBar thirdVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_three_rating);
-//        RatingBar fourthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_four_rating);
-//        RatingBar fifthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_five_rating);
-//        RatingBar sixthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_six_rating);
-//        RatingBar seventhVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_seven_rating);
-//        RatingBar eighthVendorRating = (RatingBar) findViewById(R.id.top_trucks_vendor_eight_rating);
-//
-//        topTrucksRating = new RatingBar[8];
-//        topTrucksRating[0] = firstVendorRating;
-//        topTrucksRating[1] = secondVendorRating;
-//        topTrucksRating[2] = thirdVendorRating;
-//        topTrucksRating[3] = fourthVendorRating;
-//        topTrucksRating[4] = fifthVendorRating;
-//        topTrucksRating[5] = sixthVendorRating;
-//        topTrucksRating[6] = seventhVendorRating;
-//        topTrucksRating[7] = eighthVendorRating;
 
         ListView list = (ListView) findViewById(R.id.top_food_trucks_list);
         final TopTrucksAdapter adapter = new TopTrucksAdapter(this);
@@ -183,25 +158,11 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
             }
 
         });
-       // populateTextFields();
     }
 
-//    void populateTextFields() {
-//        TreeSet<Vendor> sortedVendors = new TreeSet<Vendor>();
-//        sortedVendors.addAll(vendors);
-//        Log.d("sorted vendors", sortedVendors.toString());
-//        ArrayList<Vendor> listOfSortedVendors = new ArrayList<Vendor>();
-//        listOfSortedVendors.addAll(sortedVendors);
-//
-//        for (int i = 0; i < Math.min(8, sortedVendors.size()); i++) {           // populate either top 8 or size of sortedVendors
-//            Vendor vendor = listOfSortedVendors.get(i);
-//            topTrucks[i].setText(vendor.getName());
-//            topTrucksRating[i].setRating(vendor.getRating().floatValue());
-//            topTrucksRating[i].setEnabled(false);
-//
-//        }
-//    }
-
+    /**
+     * Adapter to show trucks in a View
+     */
     public class TopTrucksAdapter extends BaseAdapter {
         private Context context;
 
@@ -246,32 +207,4 @@ public class TopFoodTrucksActivity extends AppCompatActivity {
         }
     }
 
-    private void getNameIDMap() {
-        //read from database
-        databaseRef.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String, Object> values = (HashMap<String, Object>) dataSnapshot.getValue();
-                for (String id : values.keySet()) {
-                    HashMap<String, Object> userInfo = (HashMap<String, Object>) values.get(id);
-
-                    if (userInfo.get("Type").equals("Vendor")
-                            && userInfo.containsKey("Location")
-                            && userInfo.containsKey("Name Of Food Truck")
-                            && userInfo.containsKey("Type Of Food")
-                            && userInfo.containsKey("Active")
-                            && userInfo.containsKey("Menu")) {
-                        String vendorName = (String) userInfo.get("Name Of Food Truck");
-                        String uniqueID = (String) userInfo.get("UniqueID");
-                        nameIDMap.put(vendorName, uniqueID);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
-    }
 }

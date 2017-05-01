@@ -37,6 +37,11 @@ public class SocialFeedActivity extends AppCompatActivity {
     private DatabaseReference databaseRef;
     private ListView orderList;
 
+    /**
+     * add shopping cart to menu bar
+     * @param menu
+     * @return true if selected activity valid
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -44,6 +49,11 @@ public class SocialFeedActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * start activities clicked in menu bar
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -253,7 +263,9 @@ public class SocialFeedActivity extends AppCompatActivity {
         });
     }
 
-    // custom adapter for menu listview
+    /**
+     * custom adapter for menu listview
+     */
     public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
         private Context context;
 
@@ -276,6 +288,13 @@ public class SocialFeedActivity extends AppCompatActivity {
             return pos;
         }
 
+        /**
+         * set content of each feed view item
+         * @param position
+         * @param convertView
+         * @param parent
+         * @return
+         */
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -303,7 +322,7 @@ public class SocialFeedActivity extends AppCompatActivity {
             StringBuilder sb = new StringBuilder();
 
             for (int i = 0; i < customerOrder.length(); i++) {
-                if (customerOrder.charAt(i) == '[') {         // don't do this for the fist order
+                if (customerOrder.charAt(i) == '[') {
                     boolean firstSpace = false;
                     boolean secondSpace = false;
                     int j = i + 1;

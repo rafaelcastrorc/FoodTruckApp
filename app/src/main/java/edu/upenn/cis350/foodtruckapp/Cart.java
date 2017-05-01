@@ -63,6 +63,11 @@ public class Cart extends AppCompatActivity {
         return true;
     }
 
+    /**
+     *
+     * @param item menu item seletced
+     * @return if option item selected was valid, true
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -559,21 +564,42 @@ public class Cart extends AppCompatActivity {
             this.orders = orders;
         }
 
+        /**
+         *
+         * @return order count
+         */
         @Override
         public int getCount() {
             return orders.size();
         }
 
+        /**
+         *
+         * @param position
+         * @return item at given position
+         */
         @Override
         public Object getItem(int position) {
             return orders.get(position);
         }
 
+        /**
+         *
+         * @param position
+         * @return 0
+         */
         @Override
         public long getItemId(int position) {
             return 0;
         }
 
+        /**
+         *
+         * @param position
+         * @param convertView
+         * @param parent
+         * @return expanded view of selected item
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -601,7 +627,6 @@ public class Cart extends AppCompatActivity {
     /**
      * Handles the bar that displays the total. It is constantly updated.
      */
-
     private void updateTotal(){
         TextView total = (TextView)findViewById(R.id.total_shopping_cart);
         double result = 0.0;

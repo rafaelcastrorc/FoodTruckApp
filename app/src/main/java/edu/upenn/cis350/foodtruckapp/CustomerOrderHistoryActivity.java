@@ -61,6 +61,11 @@ public class CustomerOrderHistoryActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * start selected activity
+     * @param item
+     * @return true if selected activity valid
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -83,6 +88,7 @@ public class CustomerOrderHistoryActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -312,13 +318,9 @@ public class CustomerOrderHistoryActivity extends AppCompatActivity {
         });;
     }
 
-
-
-
     /**
      * Custom adapter class that handles how the items are displayed in the history
      */
-
     class MyAdapter extends BaseAdapter {
 
         private Context context;
@@ -386,7 +388,8 @@ public class CustomerOrderHistoryActivity extends AppCompatActivity {
     }
 
     /**
-     * Handles the code for the order again button
+     *  Handles the code for the order again button
+     * @param v
      */
     public void order_again_onClick(View v) {
         if (selectedOrder == null) {            // button clicked but no order selected
