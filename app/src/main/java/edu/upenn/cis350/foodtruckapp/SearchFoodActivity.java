@@ -106,11 +106,11 @@ public class SearchFoodActivity extends AppCompatActivity {
                             if (type.getValue(String.class).equals("Vendor")) {
                                 DataSnapshot TOF = user.child("Type Of Food");
                                 if (TOF.getValue() == null){
-                                    break;
+                                    continue;
                                 }
                                 DataSnapshot uniqueID = user.child("UniqueID");
                                 if (uniqueID.getValue() == null){
-                                    break;
+                                    continue;
                                 }
                                 if (((String)TOF.getValue()).equalsIgnoreCase(queryUsable)){
                                     foodList.put(name.getValue(String.class),uniqueID.getValue(String.class));
@@ -118,7 +118,7 @@ public class SearchFoodActivity extends AppCompatActivity {
                                 else {
                                     DataSnapshot menuItems = user.child("Menu");
                                     if (menuItems.getValue() == null){
-                                        break;
+                                        continue;
                                     }
                                     HashMap<String, Object> values = (HashMap<String, Object>) menuItems.getValue();
                                     if (values != null) {
@@ -164,18 +164,18 @@ public class SearchFoodActivity extends AppCompatActivity {
                             if (type.getValue(String.class).equals("Vendor")) {
                                 DataSnapshot TOF = user.child("Type Of Food");
                                 if (TOF.getValue() == null){
-                                    break;
+                                    continue;
                                 }
                                 DataSnapshot uniqueID = user.child("UniqueID");
                                 if (uniqueID.getValue() == null){
-                                    break;
+                                    continue;
                                 }
                                 if (((String)TOF.getValue()).equalsIgnoreCase(queryUsable)) {
                                     foodList.put(name.getValue(String.class), uniqueID.getValue(String.class));
                                 } else {
                                     DataSnapshot menuItems = user.child("Menu");
                                     if (menuItems.getValue() == null){
-                                        break;
+                                        continue;
                                     }
                                     HashMap<String, Object> values = (HashMap<String, Object>) menuItems.getValue();
                                     if (values != null) {
