@@ -29,7 +29,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RatingBar;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,7 +48,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class VendorProfileActivity extends AppCompatActivity {
 
@@ -219,11 +217,11 @@ public class VendorProfileActivity extends AppCompatActivity {
         npCloseWeekendPeriod.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                if (npOpenWeekendPeriod.getValue() == 0) {
-                    openWeekendPeriod = "AM";
+                if (npCloseWeekendPeriod.getValue() == 0) {
+                    closeWeekendPeriod = "AM";
                 }
                 else {
-                    openWeekendPeriod = "PM";
+                    closeWeekendPeriod = "PM";
 
                 }
             }
@@ -331,6 +329,101 @@ public class VendorProfileActivity extends AppCompatActivity {
               }
         });
 
+        DatabaseReference hoursRef = databaseRef.child(currVendor).child("Hours");
+        hoursRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                if (dataSnapshot.getKey() != null) {
+                    String key = dataSnapshot.getKey();
+                    if (key.equals("CloseWeekendPeriod")) {
+                        String closeWeekendPeriod = (String) dataSnapshot.getValue();
+                        if (closeWeekendPeriod.equals("AM")) {
+                            npCloseWeekendPeriod.setValue(0);
+                        }
+                        else {
+                            npCloseWeekendPeriod.setValue(1);
+                        }
+                    }
+                    else if (dataSnapshot.getKey().equals("CloseWeekendTime")) {
+                        try {
+                            npCloseWeekendTime.setValue(((Long) dataSnapshot.getValue()).intValue());
+                        }
+                        catch (Exception e) {
+                            npCloseWeekendTime.setValue(10);
+                        }
+                    }
+                    else if (key.equals("OpenWeekendPeriod")) {
+                        String closeWeekendPeriod = (String) dataSnapshot.getValue();
+                        if (closeWeekendPeriod.equals("AM")) {
+                            npOpenWeekendPeriod.setValue(0);
+                        }
+                        else {
+                            npCloseWeekendPeriod.setValue(1);
+                        }
+                    }
+                    else if (dataSnapshot.getKey().equals("OpenWeekendTime")) {
+                        try {
+                            npOpenWeekendTime.setValue(((Long) dataSnapshot.getValue()).intValue());
+                        }
+                        catch (Exception e) {
+                            npOpenWeekendTime.setValue(10);
+                        }
+                    }
+                    else if (key.equals("CloseWeekdayPeriod")) {
+                        String closeWeekdayPeriod = (String) dataSnapshot.getValue();
+                        if (closeWeekdayPeriod.equals("AM")) {
+                            npCloseWeekdayPeriod.setValue(0);
+                        }
+                        else {
+                            npCloseWeekdayPeriod.setValue(1);
+                        }
+                    }
+                    else if (dataSnapshot.getKey().equals("CloseWeekdayTime")) {
+                        try {
+                            npCloseWeekdayTime.setValue(((Long) dataSnapshot.getValue()).intValue());
+                        }
+                        catch (Exception e) {
+                            npCloseWeekdayTime.setValue(10);
+                        }
+                    }
+                    else if (key.equals("OpenWeekdayPeriod")) {
+                        String closeWeekdayPeriod = (String) dataSnapshot.getValue();
+                        if (closeWeekdayPeriod.equals("AM")) {
+                            npOpenWeekdayPeriod.setValue(0);
+                        }
+                        else {
+                            npCloseWeekdayPeriod.setValue(1);
+                        }
+                    }
+                    else if (dataSnapshot.getKey().equals("OpenWeekdayTime")) {
+                        try {
+                            npOpenWeekdayTime.setValue(((Long) dataSnapshot.getValue()).intValue());
+                        }
+                        catch (Exception e) {
+                            npOpenWeekdayTime.setValue(10);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
         populateVendorPicture();
 
         Button addMenuItemBtn = (Button) findViewById(R.id.vendor_add_menu_item_button);
@@ -342,7 +435,6 @@ public class VendorProfileActivity extends AppCompatActivity {
                     menu.add(newItem);
                 }
                 arrayAdapter.notifyDataSetChanged();
-                Log.d("MENU", arrayAdapter.getMenu().toString());
                 setListViewHeightBasedOnChildren(menuListView);
             }
         });
@@ -567,6 +659,7 @@ public class VendorProfileActivity extends AppCompatActivity {
             hoursRef.child("OpenWeekdayTime").setValue(openWeekdayTime);
         }
         if (!openWeekdayPeriod.isEmpty()) {
+            Log.d("TAG", "empty?");
             hoursRef.child("OpenWeekdayPeriod").setValue(openWeekdayPeriod);
         }
         if (closeWeekdayTime != 0) {
@@ -584,7 +677,7 @@ public class VendorProfileActivity extends AppCompatActivity {
         if (closeWeekendTime != 0) {
             hoursRef.child("CloseWeekendTime").setValue(closeWeekendTime);
         }
-        if (!closeWeekdayPeriod.isEmpty()) {
+        if (!closeWeekendPeriod.isEmpty()) {
             hoursRef.child("CloseWeekendPeriod").setValue(closeWeekendPeriod);
         }
 

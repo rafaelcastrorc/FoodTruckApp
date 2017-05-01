@@ -72,25 +72,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/sign_out_google"
-                android:layout_width="122dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:background="@drawable/button_style"
-                android:text="Sign out of Google"
-                android:textSize="17sp" />
-
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/google_sign_in_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginLeft="70dp"
-                android:layout_marginTop="9dp" />
-
         </LinearLayout>
 
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/google_sign_in_button"
+            android:layout_width="131dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end" />
 
 
     </LinearLayout>

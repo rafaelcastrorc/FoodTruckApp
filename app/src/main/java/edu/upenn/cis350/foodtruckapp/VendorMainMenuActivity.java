@@ -161,9 +161,9 @@ public class VendorMainMenuActivity extends AppCompatActivity implements Locatio
         }
 
         Intent i = new Intent(VendorMainMenuActivity.this, LoginActivity.class);
-        //startActivity(i);
         startActivityForResult(i, 1);
         finish();
+        LoginActivity.signOut();
     }
 
     /**

@@ -10,7 +10,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -18,6 +17,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -42,13 +42,13 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends Activity implements View.OnClickListener {
 
 
-    private FirebaseAuth firebaseAuth;
+    private static FirebaseAuth firebaseAuth;
     private EditText emailLogin;
     private EditText pswd;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference databaseRef;
     private FirebaseDatabase database;
-    private GoogleApiClient googleApiClient;
+    private static GoogleApiClient googleApiClient;
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInOptions gso;
     private boolean sawType = false;
@@ -90,12 +90,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     Log.d("User is signed in", user.getUid());
                     updateUI(user);
                 } else {
-                    // User is signed out
-                    //Log.d("User is signed out", "onAuthStateChanged:signed_out");
-                    firebaseAuth.signOut();
-                    // Sign out Google user if they were signed in
+
                     if (googleApiClient.isConnected() && !once) {
-                        //signOut();
+                        signOut();
+                        firebaseAuth.signOut();
                         once = true;
                     }
                 }
@@ -104,18 +102,18 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         };
 
         findViewById(R.id.google_sign_in_button).setOnClickListener(this);
-        Button googleSignOutBtn = (Button) findViewById(R.id.sign_out_google);
-        googleSignOutBtn.setOnClickListener(new View.OnClickListener() {
+        SignInButton googleSignInBtn = (SignInButton) findViewById(R.id.google_sign_in_button);
+        googleSignInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signOut();
+                signIn();
             }
         });
 
     }
 
     /**
-     * sing in gogoel user
+     * sing in Google user
      */
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
@@ -123,10 +121,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     }
 
     // method to sign out Google user
-    void signOut() {
+    static void signOut() {
         googleApiClient.connect();
         firebaseAuth.signOut();
-        Log.d("SIGN", "SIGN");
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
@@ -145,18 +142,17 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    // handle activity result from Google login popup
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            GoogleSignInAccount account = result.getSignInAccount();
-            //firebaseAuthWithGoogle(account);
             handleSignInResult(result);
         }
     }
 
+    // handle sign in result from Google login popup
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             // sign in successful, login Google user to Firebase
@@ -169,7 +165,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 signInGoogleUser(acct);
-
                                 Log.d("Activity", "signInWithCredential:success");
                                 signInGoogleUser(acct);
                             } else {
@@ -182,15 +177,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
                         }
                     });
-        } else {
-
         }
     }
 
     public void signInGoogleUser(GoogleSignInAccount acct) {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user == null) {
-
+            return;
         }
         databaseRef = FirebaseDatabase.getInstance().getReference().child("Users");
         DatabaseReference userRef = databaseRef.child(user.getUid());
@@ -203,17 +196,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                     sawType = true;
                     startActivityForResult(i, 1);
-                    Log.d("custttttttt", "fdfsfdsf?");
-                    return;
                 }
                 else if (type.equals("Vendor")) {
                     Intent i = new Intent(LoginActivity.this, VendorMainMenuActivity.class);
                     i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                     startActivity(i);
                     sawType = true;
-                }
-                else {
-                    Log.d("TYPE", type.toString());
                 }
             }
 
@@ -238,10 +226,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         });
 
         if (!sawType) {
+            finish();
             registerGoogleUser(acct.getEmail(), acct.getDisplayName());
         }
     }
 
+    // display user type popup for Google registration
     public void registerGoogleUser(final String email, final String name) {
         // ask user which type of user they want to register as
         AlertDialog.Builder confirmPopupBuilder = new AlertDialog.Builder(this);
@@ -272,8 +262,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             }
         });
         // show User Type popup
-        AlertDialog alert = confirmPopupBuilder.create();
-        alert.show();
+        if (!sawType) {
+            AlertDialog alert = confirmPopupBuilder.create();
+            alert.show();
+        }
     }
 
     // [START on_start_add_listener]
@@ -318,15 +310,17 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
                             if (task.isSuccessful()) {
                                 Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_LONG).show();
+                                updateUI(firebaseAuth.getCurrentUser());
                                 FirebaseUser user = firebaseAuth.getCurrentUser();
                                 updateUI(user);
+
                                 //Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
                                 //i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                                 //startActivity(i);
-                                finish();
-                                overridePendingTransition(0, 0);
-                                startActivity(getIntent());
-                                overridePendingTransition(0, 0);
+//                                finish();
+//                                overridePendingTransition(0, 0);
+//                                startActivity(getIntent());
+//                                overridePendingTransition(0, 0);
                             } else {
 
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -334,7 +328,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             }
                         }
                     });
-
+        updateUI(firebaseAuth.getCurrentUser());
     }
 
     void linkWithGoogle() {
@@ -380,9 +374,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         Intent i = new Intent(LoginActivity.this, VendorMainMenuActivity.class);
                         i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
                         startActivity(i);
-
-
-
                     }
                     else if (type.equals("Customer")) {
                         finish();
@@ -396,6 +387,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 }
 
                 @Override
+
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
