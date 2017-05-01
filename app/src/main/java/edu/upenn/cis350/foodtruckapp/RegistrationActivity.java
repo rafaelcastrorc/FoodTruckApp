@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -149,6 +149,10 @@ public class RegistrationActivity extends AppCompatActivity {
                                 }
 
                             } else {
+                                if (mAuth.getCurrentUser() == null) {
+                                    Toast.makeText(RegistrationActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    return;
+                                }
                                 writeNewUser(name.getText().toString(), mAuth.getCurrentUser().getUid(), type, email.getText().toString());
                                 if (type.equals("Customer")) {
                                     Intent i = new Intent(RegistrationActivity.this, CustomerMainMenuActivity.class);
@@ -164,7 +168,6 @@ public class RegistrationActivity extends AppCompatActivity {
                                     startActivity(i);
                                     finish();
                                 }
-//                                Log.d("CRED", )
                             }
                         }
                     });

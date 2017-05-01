@@ -28,7 +28,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,7 +65,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("Users");
 
@@ -80,6 +78,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         googleApiClient.connect();
+
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -163,16 +162,24 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                signInGoogleUser(acct);
-                                Log.d("Activity", "signInWithCredential:success");
-                                signInGoogleUser(acct);
+                                firebaseAuth.getCurrentUser().linkWithCredential(credential)
+                                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d("HEY", "linkWithCredential:success");
+                                                    FirebaseUser user = task.getResult().getUser();
+                                                    updateUI(user);
+                                                } else {
+                                                    registerGoogleUser(firebaseAuth.getCurrentUser().getEmail(), firebaseAuth.getCurrentUser().getDisplayName());
+                                                }
+                                            }
+                                        });
+
                             } else {
                                 // If sign in fails, display a message to the user.
-                                Log.d("Activity", "signInWithCredential:failure" + task.getException());
-                                Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                                updateUI(null);
+
+//                                updateUI(null);
                             }
 
                         }
@@ -180,56 +187,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public void signInGoogleUser(GoogleSignInAccount acct) {
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user == null) {
-            return;
-        }
-        databaseRef = FirebaseDatabase.getInstance().getReference().child("Users");
-        DatabaseReference userRef = databaseRef.child(user.getUid());
-        userRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Object type = (Object) dataSnapshot.getValue();
-                if (type.equals("Customer")) {
-                    Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
-                    i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
-                    sawType = true;
-                    startActivityForResult(i, 1);
-                }
-                else if (type.equals("Vendor")) {
-                    Intent i = new Intent(LoginActivity.this, VendorMainMenuActivity.class);
-                    i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
-                    startActivity(i);
-                    sawType = true;
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-        });
-
-        if (!sawType) {
-            finish();
-            registerGoogleUser(acct.getEmail(), acct.getDisplayName());
-        }
-    }
 
     // display user type popup for Google registration
     public void registerGoogleUser(final String email, final String name) {
@@ -259,6 +216,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 b.putString("email", email);
                 i.putExtras(b);
                 startActivity(i);
+                Log.d("STARTED THIS????", "WHOA");
             }
         });
         // show User Type popup
@@ -313,14 +271,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                 updateUI(firebaseAuth.getCurrentUser());
                                 FirebaseUser user = firebaseAuth.getCurrentUser();
                                 updateUI(user);
-
-                                //Intent i = new Intent(LoginActivity.this, CustomerMainMenuActivity.class);
-                                //i.putExtra("Email", firebaseAuth.getCurrentUser().getEmail());
-                                //startActivity(i);
-//                                finish();
-//                                overridePendingTransition(0, 0);
-//                                startActivity(getIntent());
-//                                overridePendingTransition(0, 0);
                             } else {
 
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -329,26 +279,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         }
                     });
         updateUI(firebaseAuth.getCurrentUser());
-    }
-
-    void linkWithGoogle() {
-        firebaseAuth.getCurrentUser().linkWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("HEY", "linkWithCredential:success");
-                            FirebaseUser user = task.getResult().getUser();
-                            updateUI(user);
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // ...
-                    }
-                });
-
     }
 
     public void main_register_button_click(View v) {

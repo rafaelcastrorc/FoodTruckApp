@@ -290,6 +290,7 @@ public class CustomerMainMenuActivity extends AppCompatActivity implements Googl
                                     Toast.LENGTH_LONG).show();
 
                             mAuth.signOut();
+                            LoginActivity.signOut();
                             Intent i = new Intent(CustomerMainMenuActivity.this, LoginActivity.class);
                             startActivity(i);
                             finish();
@@ -344,6 +345,7 @@ public class CustomerMainMenuActivity extends AppCompatActivity implements Googl
         Intent i = new Intent(CustomerMainMenuActivity.this, LoginActivity.class);
         startActivity(i);
         finish();
+        LoginActivity.signOut();
     }
 
     /**
